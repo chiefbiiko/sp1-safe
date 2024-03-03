@@ -6,3 +6,5 @@ edition = "2021"
 
 [dependencies]
 sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git" }
+
+tiny-keccak = { version = "2.0.2", features = ["keccak"], git = "https://github.com/sp1-patches/tiny-keccak.git", branch = "master" }

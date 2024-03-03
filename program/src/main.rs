@@ -3,20 +3,27 @@
 #![no_main]
 sp1_zkvm::entrypoint!(main);
 
-pub fn main() {
-    // NOTE: values of n larger than 186 will overflow the u128 type,
-    // resulting in output that doesn't match fibonacci sequence.
-    // However, the resulting proof will still be valid!
-    let n = sp1_zkvm::io::read::<u32>();
-    let mut a: u128 = 0;
-    let mut b: u128 = 1;
-    let mut sum: u128;
-    for _ in 1..n {
-        sum = a + b;
-        a = b;
-        b = sum;
-    }
+use tiny_keccak::Keccak;
 
-    sp1_zkvm::io::write(&a);
-    sp1_zkvm::io::write(&b);
+fn keccak256_2(a: &[u8], b: &[u8], out: &mut [u8; 32]) {
+    let mut keccak256 = Keccak::v256();
+    keccak256.update(a);
+    keccak256.update(b);
+    keccak256.finalize(&mut out);
+}
+//HASHING
+// let mut keccak256 = Keccak::v256();
+// let mut output = [0u8; 32];
+// keccak256.update(b"hello");
+// keccak256.update(b" ");
+// keccak256.update(b"world");
+// keccak256.finalize(&mut output);
+
+pub fn main() {
+
+    // let scratch_root...
+    // let rolling_root...
+
+
+
 }
