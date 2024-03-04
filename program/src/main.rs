@@ -8,8 +8,9 @@ use serde::{Deserialize, Serialize};
 use sp1_ethereum_trie::{
     keccak::KeccakHasher,
     EIP1186Layout, StorageProof,
+    Trie, TrieDBBuilder
 };
-use trie_db::{Trie, TrieDBBuilder};
+// use trie_db::{Trie, TrieDBBuilder};
 // use primitive_types::{H256, U256};
 // use rlp::{Decodable, Rlp};
 // use rlp_derive::RlpDecodable;

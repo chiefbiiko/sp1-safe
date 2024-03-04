@@ -17,6 +17,7 @@ mod storage_proof;
 mod tests;
 
 pub use storage_proof::{MemoryDB, StorageProof};
+pub use trie_db::{Trie, TrieDBBuilder};
 
 /// Trie layout for EIP-1186 state proof nodes.
 #[derive(Default, Clone)]
