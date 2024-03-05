@@ -10,14 +10,13 @@ use sp1_ethereum_trie::{
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Inputs {
-    pub expected_value: Vec<u8>,
-    pub block_number: u32,
-    pub state_root: [u8; 32],
-    pub storage_root: [u8; 32],
-    pub account_key: [u8; 32],
-    pub storage_key: [u8; 32],
-    pub account_proof: Vec<Vec<u8>>,
-    pub storage_proof: Vec<Vec<u8>>,
+    pub state_root: [u8; 32], // eth_getBlockBy*::response.stateRoot
+    pub storage_root: [u8; 32], // eth_getProof::response.storageHash
+    pub account_key: [u8; 32], // keccak256(address)
+    // 5 is the slot of the signedMessages mapping within Safe storage
+    pub storage_key: [u8; 32], // keccak256(msg_hash + uint256(5))
+    pub account_proof: Vec<Vec<u8>>, // eth_getProof::response.accountProof
+    pub storage_proof: Vec<Vec<u8>>, // eth_getProof::response.storageProof.proof
 }
 
 pub fn main() {
@@ -30,7 +29,7 @@ pub fn main() {
     let db = StorageProof::new(inputs.storage_proof).into_memory_db::<KeccakHasher>();
     let trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&db, &_storage_root).build();
     let val = trie.get(&inputs.storage_key).expect("storage trie read failed").expect("target storage node is none");
-    assert_eq!(val, inputs.expected_value, "");
+    assert_eq!(val, vec![1u8], "msg not signed");
 
     // verify account proof
     let db = StorageProof::new(inputs.account_proof).into_memory_db::<KeccakHasher>();
@@ -38,7 +37,7 @@ pub fn main() {
     let ok = trie.contains(&inputs.account_key).expect("account check failed");
     assert!(ok, "account proof failed");
 
-    // claimed block number and proven state root
-    sp1_zkvm::io::write::<u32>(&inputs.block_number);
+    // proven state root
+    // TODO also output keccak256(storage_key + account_key)
     sp1_zkvm::io::write_slice(&inputs.state_root);
 }
