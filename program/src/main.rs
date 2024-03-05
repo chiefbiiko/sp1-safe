@@ -5,16 +5,17 @@ sp1_zkvm::entrypoint!(main);
 
 use serde::{Deserialize, Serialize};
 use sp1_ethereum_trie::{
-    keccak::KeccakHasher, EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256
+    keccak::{keccak_256, KeccakHasher}, EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256
 };
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Inputs {
-    pub state_root: [u8; 32], // eth_getBlockBy*::response.stateRoot
-    pub storage_root: [u8; 32], // eth_getProof::response.storageHash
-    pub account_key: [u8; 32], // keccak256(address)
-    // 5 is the slot of the signedMessages mapping within Safe storage
-    pub storage_key: [u8; 32], // keccak256(msg_hash + uint256(5))
+    pub msg_hash: [u8; 32],          // Safe::getMessageHash(msg)
+    pub state_root: [u8; 32],        // eth_getBlockBy*::response.stateRoot
+    pub storage_root: [u8; 32],      // eth_getProof::response.storageHash
+    pub account_key: [u8; 32],       // keccak256(address)
+    // slot of the signedMessages mapping within Safe storage equals 5
+    pub storage_key: [u8; 32],       // keccak256(msg_hash + uint256(5))
     pub account_proof: Vec<Vec<u8>>, // eth_getProof::response.accountProof
     pub storage_proof: Vec<Vec<u8>>, // eth_getProof::response.storageProof.proof
 }
@@ -38,6 +39,6 @@ pub fn main() {
     assert!(ok, "account proof failed");
 
     // proven state root
-    // TODO also output keccak256(storage_key + account_key)
     sp1_zkvm::io::write_slice(&inputs.state_root);
+    sp1_zkvm::io::write_slice(&keccak_256(TODO)) //TODO keccak256(storage_key + account_key)
 }
