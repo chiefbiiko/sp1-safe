@@ -7,18 +7,20 @@ const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf
 fn main() {
     // Generate proof.
     let mut stdin = SP1Stdin::new();
-    let n = 186u32;
-    stdin.write(&n);
+    // let n = 186u32;
+    // stdin.write(&n);
+    //TODO construct and write input
+
     // NOTE only executing instead of proving/verifying while dev
     // let mut proof = SP1Prover::prove(ELF, stdin).expect("proving failed");
     // let a = proof.stdout.read::<u128>();
     // let b = proof.stdout.read::<u128>();
     let mut stdout = SP1Prover::execute(ELF, stdin).expect("execution failed");
-    let a = stdout.read::<u32>(); 
-    let b = stdout.read::<u32>();
+    let state_root = stdout.read::<[u8; 32]>(); 
+    let blind_safe = stdout.read::<[u8; 32]>();
 
-    println!("a: {}", a);
-    println!("b: {}", b);
+    println!("state root: {:02X?}", state_root);
+    println!("blind safe: {:02X?}", blind_safe);
 
     // // Verify and save proof.
     // SP1Verifier::verify(ELF, &proof).expect("verification failed");
