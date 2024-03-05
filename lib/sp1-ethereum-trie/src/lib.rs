@@ -7,6 +7,7 @@ extern crate alloc;
 
 use core::marker::PhantomData;
 use hash_db::Hasher;
+use primitive_types::H256;
 use trie_db::TrieLayout;
 
 mod node_codec;
