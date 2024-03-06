@@ -39,7 +39,9 @@ pub type MemoryDB<H> = memory_db::MemoryDB<H, memory_db::HashKey<H>, trie_db::DB
 impl StorageProof {
     /// Constructs a storage proof from a subset of encoded trie nodes in a storage backend.
     pub fn new(trie_nodes: impl IntoIterator<Item = Vec<u8>>) -> Self {
-        StorageProof { trie_nodes: BTreeSet::from_iter(trie_nodes) }
+        StorageProof {
+            trie_nodes: BTreeSet::from_iter(trie_nodes),
+        }
     }
 
     /// Returns a new empty proof.
@@ -47,7 +49,9 @@ impl StorageProof {
     /// An empty proof is capable of only proving trivial statements (ie. that an empty set of
     /// key-value pairs exist in storage).
     pub fn empty() -> Self {
-        StorageProof { trie_nodes: BTreeSet::new() }
+        StorageProof {
+            trie_nodes: BTreeSet::new(),
+        }
     }
 
     /// Returns whether this is an empty proof.
@@ -104,7 +108,9 @@ pub struct StorageProofNodeIterator {
 
 impl StorageProofNodeIterator {
     fn new(proof: StorageProof) -> Self {
-        StorageProofNodeIterator { inner: proof.trie_nodes.into_iter() }
+        StorageProofNodeIterator {
+            inner: proof.trie_nodes.into_iter(),
+        }
     }
 }
 

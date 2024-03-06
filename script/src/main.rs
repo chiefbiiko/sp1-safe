@@ -1,8 +1,8 @@
 //! A simple script to generate and verify the proof of a given program.
 
+use const_hex;
 use sp1_core::{SP1Prover, SP1Stdin, SP1Verifier};
 use sp1_safe_basics::Inputs;
-use const_hex;
 mod util;
 use util::fetch_inputs;
 
@@ -20,8 +20,14 @@ fn bytes32(x: Vec<u8>) -> [u8; 32] {
 async fn main() {
     // Assemble and write inputs
     let mut stdin = SP1Stdin::new();
-    let safe = bytes20(const_hex::decode(std::env::var("SAFE").expect("must set env var SAFE=0x...")).expect("not hex"));
-    let msg_hash = bytes32(const_hex::decode(std::env::var("MSG_HASH").expect("must set env var MSG_HASH=0x...")).expect("not hex"));
+    let safe = bytes20(
+        const_hex::decode(std::env::var("SAFE").expect("must set env var SAFE=0x..."))
+            .expect("not hex"),
+    );
+    let msg_hash = bytes32(
+        const_hex::decode(std::env::var("MSG_HASH").expect("must set env var MSG_HASH=0x..."))
+            .expect("not hex"),
+    );
     let inputs = fetch_inputs(safe.into(), msg_hash.into()).await;
     stdin.write::<Inputs>(&inputs);
 
@@ -31,7 +37,7 @@ async fn main() {
     // let a = proof.stdout.read::<u128>();
     // let b = proof.stdout.read::<u128>();
     let mut stdout = SP1Prover::execute(ELF, stdin).expect("execution failed");
-    let state_root = stdout.read::<[u8; 32]>(); 
+    let state_root = stdout.read::<[u8; 32]>();
     let blind_safe = stdout.read::<[u8; 32]>();
 
     println!("state root: {:02X?}", state_root);

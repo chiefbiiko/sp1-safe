@@ -15,9 +15,9 @@ mod storage_proof;
 #[cfg(test)]
 mod tests;
 
+pub use primitive_types::H256;
 pub use storage_proof::{MemoryDB, StorageProof};
 pub use trie_db::{Trie, TrieDBBuilder};
-pub use primitive_types::H256;
 
 /// Trie layout for EIP-1186 state proof nodes.
 #[derive(Default, Clone)]

@@ -3,15 +3,15 @@
 //! SignMessage library without doxing the Safe and/or its owners. Still
 //! "signed" hereby means approved by at least $threshold owners of the Safe.
 //! The circuit takes a message hash, corresponding EIP1186 storage proof, and
-//! state root as inputs, and has two outputs: the proven state root and a 
+//! state root as inputs, and has two outputs: the proven state root and a
 //! hash of the storage and account keys. The output state root must be used to
 //! calculate the corresponding block hash which in turn must be checked for
 //! authenticity on-chain using the blockhash opcode given the block number at
 //! which the storage proof was generated. The latter output hash serves as a
 //! challenge point that allows associating given proof to a particular
-//! Safe by recomputing the hash given the account and storage keys. The 
-//! message hash must incorporate a nullifier to guard against rainbow table 
-//! precomputations. 
+//! Safe by recomputing the hash given the account and storage keys. The
+//! message hash must incorporate a nullifier to guard against rainbow table
+//! precomputations.
 
 #![no_main]
 sp1_zkvm::entrypoint!(main);
@@ -21,7 +21,7 @@ use sp1_ethereum_trie::{
     keccak::{keccak_256, KeccakHasher},
     EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256,
 };
-use sp1_safe_basics::{bytes64,Inputs};
+use sp1_safe_basics::{bytes64, Inputs};
 
 // #[derive(Clone, Debug, Serialize, Deserialize)]
 // pub struct Inputs {

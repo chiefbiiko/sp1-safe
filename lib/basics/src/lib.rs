@@ -3,7 +3,9 @@ extern crate alloc;
 use alloc::vec::Vec;
 use serde::{Deserialize, Serialize};
 
-pub const SAFE_SIGNED_MESSAGES_SLOT: [u8; 32]  = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5];
+pub const SAFE_SIGNED_MESSAGES_SLOT: [u8; 32] = [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5,
+];
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Inputs {

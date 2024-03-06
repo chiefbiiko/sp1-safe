@@ -32,7 +32,9 @@ fn test_can_verify_eip_1186_proofs() {
         hex!("f86d9d3c3738deb88e49108e7a5bd83c14ad65b5ba598e2932551dc9b9ad1879b84df84b10874ef05b2fe9d8c8a056e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421a0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470").to_vec(),
     ];
 
-    let root = H256(hex!("024c056bc5db60d71c7908c5fad6050646bd70fd772ff222702d577e2af2e56b"));
+    let root = H256(hex!(
+        "024c056bc5db60d71c7908c5fad6050646bd70fd772ff222702d577e2af2e56b"
+    ));
 
     let db = StorageProof::new(proof).into_memory_db::<KeccakHasher>();
     let trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&db, &root).build();
@@ -45,11 +47,15 @@ fn test_can_verify_eip_1186_proofs() {
     assert_eq!(account.balance, U256::from(&hex!("4ef05b2fe9d8c8")[..]));
     assert_eq!(
         account.code_hash,
-        H256::from(hex!("c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"))
+        H256::from(hex!(
+            "c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+        ))
     );
     assert_eq!(
         account.storage_root,
-        H256::from(hex!("56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421"))
+        H256::from(hex!(
+            "56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421"
+        ))
     );
     assert_eq!(account.nonce, 0x10);
 }

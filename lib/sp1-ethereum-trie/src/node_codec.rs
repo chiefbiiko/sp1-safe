@@ -97,7 +97,7 @@ where
                         },
                     }),
                 }
-            },
+            }
             // branch - first 16 are nodes, 17th is a value (or empty).
             Prototype::List(17) => {
                 let mut nodes = [
@@ -131,7 +131,7 @@ where
                         }
                     },
                 })
-            },
+            }
             // an empty branch index.
             Prototype::Data(0) => Ok(NodePlan::Empty),
             // something went wrong.
@@ -175,7 +175,7 @@ where
             ChildReference::Inline(inline_data, len) => {
                 let bytes = &AsRef::<[u8]>::as_ref(&inline_data)[..len];
                 stream.append_raw(bytes, 1)
-            },
+            }
         };
         stream.out().to_vec()
     }
@@ -192,7 +192,7 @@ where
                     ChildReference::Inline(inline_data, len) => {
                         let bytes = &inline_data[..*len];
                         stream.append_raw(bytes, 1)
-                    },
+                    }
                 },
                 None => stream.append_empty_data(),
             };
