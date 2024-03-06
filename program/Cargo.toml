@@ -8,4 +8,4 @@ edition = "2021"
 sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git" }
 # serde = { version = "1.0.196", features = ["derive"] }
 sp1-ethereum-trie = { path = "../lib/sp1-ethereum-trie" }
-sp1-safe-primitives = { path = "../lib/primitives" }
+sp1-safe-basics = { path = "../lib/basics" }

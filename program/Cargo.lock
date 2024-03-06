@@ -620,7 +620,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sp1-safe-primitives"
+name = "sp1-safe-basics"
 version = "0.1.0"
 dependencies = [
  "serde",
@@ -631,7 +631,7 @@ name = "sp1-safe-program"
 version = "0.1.0"
 dependencies = [
  "sp1-ethereum-trie",
- "sp1-safe-primitives",
+ "sp1-safe-basics",
  "sp1-zkvm",
 ]
 

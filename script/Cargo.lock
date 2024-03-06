@@ -3447,7 +3447,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sp1-safe-primitives"
+name = "sp1-safe-basics"
 version = "0.1.0"
 dependencies = [
  "serde",
@@ -3461,8 +3461,7 @@ dependencies = [
  "ethers",
  "sp1-core",
  "sp1-helper",
- "sp1-safe-primitives",
- "tiny-keccak",
+ "sp1-safe-basics",
 ]
 
 [[package]]

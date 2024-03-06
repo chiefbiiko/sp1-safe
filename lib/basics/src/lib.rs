@@ -3,6 +3,8 @@ extern crate alloc;
 use alloc::vec::Vec;
 use serde::{Deserialize, Serialize};
 
+pub const SAFE_SIGNED_MESSAGES_SLOT: [u8; 32]  = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5];
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Inputs {
     pub msg_hash: [u8; 32],     // Safe::getMessageHash(msg)
@@ -13,4 +15,9 @@ pub struct Inputs {
     pub storage_key: [u8; 32],       // keccak256(msg_hash + uint256(5))
     pub account_proof: Vec<Vec<u8>>, // eth_getProof::response.accountProof
     pub storage_proof: Vec<Vec<u8>>, // eth_getProof::response.storageProof.proof
+}
+
+pub fn bytes64(a: [u8; 32], b: [u8; 32]) -> [u8; 64] {
+    // https://stackoverflow.com/a/76573243
+    unsafe { core::mem::transmute::<[[u8; 32]; 2], [u8; 64]>([a, b]) }
 }

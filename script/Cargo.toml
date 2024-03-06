@@ -8,8 +8,7 @@ edition = "2021"
 sp1-core = { git = "https://github.com/succinctlabs/sp1.git" }
 ethers = "2.0.13"
 anyhow = "1.0.80"
-sp1-safe-primitives = { path = "../lib/primitives" }
-tiny-keccak = { version = "2.0.2", features = ["keccak"] }
+sp1-safe-basics = { path = "../lib/basics" }
 
 [build-dependencies]
 sp1-helper = { git = "https://github.com/succinctlabs/sp1.git" }

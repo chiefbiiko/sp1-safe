@@ -21,7 +21,7 @@ use sp1_ethereum_trie::{
     keccak::{keccak_256, KeccakHasher},
     EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256,
 };
-use sp1_safe_primitives::Inputs;
+use sp1_safe_basics::{bytes64,Inputs};
 
 // #[derive(Clone, Debug, Serialize, Deserialize)]
 // pub struct Inputs {
@@ -35,10 +35,10 @@ use sp1_safe_primitives::Inputs;
 //     pub storage_proof: Vec<Vec<u8>>, // eth_getProof::response.storageProof.proof
 // }
 
-fn bytes64(a: [u8; 32], b: [u8; 32]) -> [u8; 64] {
-    // https://stackoverflow.com/a/76573243
-    unsafe { core::mem::transmute::<[[u8; 32]; 2], [u8; 64]>([a, b]) }
-}
+// fn bytes64(a: [u8; 32], b: [u8; 32]) -> [u8; 64] {
+//     // https://stackoverflow.com/a/76573243
+//     unsafe { core::mem::transmute::<[[u8; 32]; 2], [u8; 64]>([a, b]) }
+// }
 
 pub fn main() {
     let inputs = sp1_zkvm::io::read::<Inputs>();
