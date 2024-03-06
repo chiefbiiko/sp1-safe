@@ -9,7 +9,9 @@ if (!process.env.SAFE || !process.env.MSG || !process.env.PRIVATE_KEY) {
 }
 
 async function main() {
-  const provider = new ethers.JsonRpcProvider(process.env.RPC)
+  const provider = new ethers.JsonRpcProvider(
+    process.env.RPC ?? "https://rpc.gnosis.gateway.fm"
+  )
 
   const signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider)
 
