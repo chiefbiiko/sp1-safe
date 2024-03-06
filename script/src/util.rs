@@ -1,12 +1,9 @@
-// use ethers::prelude::*;
-// use alloy_primitives::{Address, FixedBytes};
+use anyhow::Result;
 use ethers::{
-    providers::{Middleware,Provider},
+    providers::Provider,
     types::{Address, H256},
 };
-use anyhow::Result;
-use hex;
-use sp1_safe_program::Inputs;
+use sp1_safe_primitives::Inputs;
 
 // pub struct Inputs {
 //     pub msg_hash: [u8; 32],     // Safe::getMessageHash(msg)
