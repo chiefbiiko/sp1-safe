@@ -1,6 +1,6 @@
 use anyhow::Result;
 use ethers::{
-    providers::Provider,
+    providers::{Middleware, Provider},
     types::{Address, H256},
 };
 use sp1_safe_primitives::Inputs;
@@ -18,11 +18,15 @@ use sp1_safe_primitives::Inputs;
 
 pub async fn fetch_inputs(safe: Address, msg_hash: H256) -> Result<Inputs> {
     let provider = Provider::try_from("https://rpc.gnosis.gateway.fm")?;
-    let _safe = hex::decode(&safe);
-    let _msg_hash = hex::decode(&msg_hash);
-
 
     let chain_id = provider.get_chainid().await?;
     let block_number = provider.get_block_number().await?;
     let tx_pool_content = provider.txpool_content().await?;
+    
+    let inputs = Inputs {
+        msg_hash: msg_hash.into(),
+        // state_root: 
+    }
+
+    Err(())
 }
