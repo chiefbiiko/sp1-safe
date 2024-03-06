@@ -4,6 +4,7 @@ use ethers::{
     types::{Address, Bytes, H256}, utils::keccak256,
 };
 use sp1_safe_basics::{bytes64, Inputs, SAFE_SIGNED_MESSAGES_SLOT};
+use zerocopy::AsBytes;
 
 // pub struct Inputs {
 //     pub msg_hash: [u8; 32],     // Safe::getMessageHash(msg)
@@ -35,9 +36,9 @@ pub async fn fetch_inputs(safe: Address, msg_hash: H256) -> Result<Inputs> {
         storage_root: proof.storage_hash.into(),
         account_key,
         storage_key,
-        account_proof: proof.account_proof.iter().map(|&bytes| bytes.as_bytes()).collect() ,
+        account_proof: proof.account_proof.iter().map(|&bytes| bytes.as_bytes().to_vec()).collect(),
         storage_proof: proof.storage_proof,
-    }
+    };
 
     Err(())
 }

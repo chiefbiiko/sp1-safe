@@ -9,6 +9,7 @@ sp1-core = { git = "https://github.com/succinctlabs/sp1.git" }
 ethers = "2.0.13"
 anyhow = "1.0.80"
 sp1-safe-basics = { path = "../lib/basics" }
+zerocopy = "0.7.32"
 
 [build-dependencies]
 sp1-helper = { git = "https://github.com/succinctlabs/sp1.git" }
