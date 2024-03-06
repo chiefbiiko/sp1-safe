@@ -1,11 +1,16 @@
 [workspace]
 [package]
 version = "0.1.0"
-name = "sp1-sload-script"
+name = "sp1-safe-script"
 edition = "2021"
 
 [dependencies]
 sp1-core = { git = "https://github.com/succinctlabs/sp1.git" }
+# alloy-primitives = "0.6.4"
+ethers = "2.0.13"
+anyhow = "1.0.80"
+hex =  "0.4.3"
+sp1-safe-program = { path = "../program" }
 
 [build-dependencies]
 sp1-helper = { git = "https://github.com/succinctlabs/sp1.git" }
