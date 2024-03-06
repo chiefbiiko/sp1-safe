@@ -1,4 +1,4 @@
-const { default: Safe, Web3Adapter } = require("@safe-global/protocol-kit")
+const { default: Safe, EthersAdapter } = require("@safe-global/protocol-kit")
 const SafeApiKit = require("@safe-global/api-kit")
 const ethers = require("ethers")
 
