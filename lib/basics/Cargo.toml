@@ -5,4 +5,5 @@ name = "sp1-safe-basics"
 edition = "2021"
 
 [dependencies]
+anyhow = "1.0.80"
 serde = { version = "1.0.196", features = ["derive"], default-features = false }

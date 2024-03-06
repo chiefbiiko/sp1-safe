@@ -623,6 +623,7 @@ dependencies = [
 name = "sp1-safe-basics"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "serde",
 ]
 
