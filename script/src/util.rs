@@ -6,9 +6,8 @@ use ethers::{
 use sp1_safe_basics::{bytes64, Inputs, SAFE_SIGNED_MESSAGES_SLOT};
 use zerocopy::AsBytes;
 
-pub async fn fetch_inputs(safe: Address, msg_hash: H256) -> Inputs {
-    let provider =
-        Provider::try_from("https://rpc.gnosis.gateway.fm").expect("rpc provider failed");
+pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Inputs {
+    let provider = Provider::try_from(rpc).expect("rpc provider failed");
 
     let account_key = keccak256(&safe);
     let storage_key = keccak256(bytes64(msg_hash.into(), SAFE_SIGNED_MESSAGES_SLOT));
@@ -27,7 +26,7 @@ pub async fn fetch_inputs(safe: Address, msg_hash: H256) -> Inputs {
         .await
         .expect("fetching proof failed");
 
-    let inputs = Inputs {
+    Inputs {
         msg_hash: msg_hash.into(),
         state_root: header.state_root.into(),
         storage_root: proof.storage_hash.into(),
@@ -43,7 +42,13 @@ pub async fn fetch_inputs(safe: Address, msg_hash: H256) -> Inputs {
             .iter()
             .map(|b| b.as_bytes().to_vec())
             .collect(),
-    };
+    }
+}
 
-    inputs
+pub fn bytes20(x: Vec<u8>) -> [u8; 20] {
+    x.try_into().expect("invalid address")
+}
+
+pub fn bytes32(x: Vec<u8>) -> [u8; 32] {
+    x.try_into().expect("invalid hash")
 }
