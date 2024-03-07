@@ -17,7 +17,9 @@ async function main() {
     }
   )
 
-  const msgHash = await safe.getMessageHash(process.env.MSG)
+  const msgHash = await safe.getMessageHash(
+    Buffer.from(process.env.MSG, "utf8")
+  )
 
   console.log("msgHash", msgHash)
 }

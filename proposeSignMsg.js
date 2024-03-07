@@ -24,17 +24,18 @@ async function main() {
     ethAdapter,
     safeAddress: process.env.SAFE
   })
-  const rawData = new ethers.Interface(["function signMessage(bytes calldata _data)"])
-  .encodeFunctionData("signMessage", [
-    Buffer.from(process.env.MSG, "utf8")
-  ])
+  const rawData = new ethers.Interface([
+    "function signMessage(bytes calldata _data)"
+  ]).encodeFunctionData("signMessage", [Buffer.from(process.env.MSG, "utf8")])
   const safeTransactionData = {
     to: SIGN_MSG_LIB,
     data: rawData,
     operation: 1, // delegateCall
     value: "0"
   }
-  const safeTx = await safeSigner.createTransaction({ transactions: [safeTransactionData] })
+  const safeTx = await safeSigner.createTransaction({
+    transactions: [safeTransactionData]
+  })
 
   const apiKit = new SafeApiKit({
     chainId: 100
@@ -50,7 +51,7 @@ async function main() {
     safeAddress: process.env.SAFE,
     safeTransactionData: safeTx.data,
     safeTxHash,
-    senderAddress: signer.address,//await owner1Signer.getAddress(),
+    senderAddress: signer.address, //await owner1Signer.getAddress(),
     senderSignature: senderSignature.data
   })
 
