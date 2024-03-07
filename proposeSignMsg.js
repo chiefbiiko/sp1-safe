@@ -1,5 +1,5 @@
 const { default: Safe, EthersAdapter } = require("@safe-global/protocol-kit")
-const SafeApiKit = require("@safe-global/api-kit")
+const { default: SafeApiKit } = require("@safe-global/api-kit")
 const ethers = require("ethers")
 
 const SIGN_MSG_LIB = "0xd53cd0aB83D845Ac265BE939c57F53AD838012c9"
