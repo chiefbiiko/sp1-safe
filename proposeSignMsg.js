@@ -48,7 +48,7 @@ async function main() {
 
   await apiKit.proposeTransaction({
     safeAddress: process.env.SAFE,
-    safeTransactionData: safeTransaction.data,
+    safeTransactionData: safeTx.data,
     safeTxHash,
     senderAddress: await owner1Signer.getAddress(),
     senderSignature: senderSignature.data
