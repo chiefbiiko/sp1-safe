@@ -24,8 +24,8 @@ async function main() {
     ethAdapter,
     safeAddress: process.env.SAFE
   })
-
-  const rawData = config.registry.interface.encodeFunctionData("signMessage", [
+  const rawData = new ethers.Interface(["function signMessage(bytes calldata _data)"])
+  .encodeFunctionData("signMessage", [
     Buffer.from(process.env.MSG, "utf8")
   ])
   const safeTransactionData = {
