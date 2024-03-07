@@ -34,7 +34,7 @@ async function main() {
     operation: 1, // delegateCall
     value: "0"
   }
-  const safeTx = await safeSigner.createTransaction({ safeTransactionData })
+  const safeTx = await safeSigner.createTransaction({ transactions: [safeTransactionData] })
 
   const apiKit = new SafeApiKit({
     chainId: 100
