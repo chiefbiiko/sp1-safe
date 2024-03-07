@@ -47,7 +47,7 @@ async function main() {
   const senderSignature = await safeSigner.signHash(safeTxHash)
 
   await apiKit.proposeTransaction({
-    safeAddress,
+    safeAddress: process.env.SAFE,
     safeTransactionData: safeTransaction.data,
     safeTxHash,
     senderAddress: await owner1Signer.getAddress(),
