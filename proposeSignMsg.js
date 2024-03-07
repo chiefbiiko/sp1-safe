@@ -50,7 +50,7 @@ async function main() {
     safeAddress: process.env.SAFE,
     safeTransactionData: safeTx.data,
     safeTxHash,
-    senderAddress: await owner1Signer.getAddress(),
+    senderAddress: signer.address,//await owner1Signer.getAddress(),
     senderSignature: senderSignature.data
   })
 
