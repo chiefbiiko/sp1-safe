@@ -4,7 +4,7 @@ use alloc::vec::Vec;
 use serde::{Deserialize, Serialize};
 
 pub const SAFE_SIGNED_MESSAGES_SLOT: [u8; 32] = [
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7,
 ];
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
