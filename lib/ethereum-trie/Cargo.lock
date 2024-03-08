@@ -69,6 +69,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5443807d6dff69373d433ab9ef5378ad8df50ca6298caf15de6e52e24aaf54d5"
 
 [[package]]
+name = "ethereum-trie"
+version = "0.1.0"
+dependencies = [
+ "hash-db",
+ "hash256-std-hasher",
+ "hex",
+ "hex-literal",
+ "memory-db",
+ "parity-scale-codec",
+ "primitive-types",
+ "rlp",
+ "rlp-derive",
+ "tiny-keccak",
+ "trie-db",
+]
+
+[[package]]
 name = "fixed-hash"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -371,23 +388,6 @@ name = "smallvec"
 version = "1.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e6ecd384b10a64542d77071bd64bd7b231f4ed5940fba55e98c3de13824cf3d7"
-
-[[package]]
-name = "sp1-ethereum-trie"
-version = "0.1.0"
-dependencies = [
- "hash-db",
- "hash256-std-hasher",
- "hex",
- "hex-literal",
- "memory-db",
- "parity-scale-codec",
- "primitive-types",
- "rlp",
- "rlp-derive",
- "tiny-keccak",
- "trie-db",
-]
 
 [[package]]
 name = "static_assertions"
