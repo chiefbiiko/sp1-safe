@@ -7,5 +7,7 @@ edition = "2021"
 [dependencies]
 sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git" }
 # serde = { version = "1.0.196", features = ["derive"] }
-sp1-ethereum-trie = { path = "../lib/sp1-ethereum-trie" }
+ethereum-trie = { path = "../lib/ethereum-trie" }
 sp1-safe-basics = { path = "../lib/basics" }
+# alloy-trie = { git = "https://github.com/alloy-rs/trie.git" }
+# alloy-rlp = { git = "https://github.com/alloy-rs/rlp.git" }

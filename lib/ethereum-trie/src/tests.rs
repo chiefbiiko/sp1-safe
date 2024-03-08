@@ -18,8 +18,8 @@ struct Account {
 }
 
 #[test]
-fn test_can_verify_eip_1186_proofs() {
-    // source?: https://medium.com/@chiqing/eip-1186-explained-the-standard-for-getting-account-proof-444bc1e12e03
+fn test_can_verify_eip_1186_account_proofs() {
+    // source?: https://freedium.cfd/https://medium.com/@chiqing/eip-1186-explained-the-standard-for-getting-account-proof-444bc1e12e03
     let key = keccak_256(&hex!("b856af30b938b6f52e5bff365675f358cd52f91b"));
     let proof = vec![
         hex!("f90211a021162657aa1e0af5eef47130ffc3362cb675ebbccfc99ee38ef9196144623507a073dec98f4943e2ab00f5751c23db67b65009bb3cb178d33f5aa93f0c08d583dda0d85b4e33773aaab742db880f8b64ea71f348c6eccb0a56854571bbd3db267f24a0bdcca489de03a49f109c1a2e7d3bd4e644d72de38b7b26dca2f8d3f112110c6fa05c7e8fdff6de07c4cb9ca6bea487a6e5be04af538c25480ce30761901b17e4bfa0d9891f4870e745509cfe17a31568f870b367a36329c892f1b2a37bf59e547183a0af08f747d2ea66efa5bcd03729a95f56297ef9b1e8533ac0d3c7546ebefd2418a0a107595919d4b102afaa0d9b91d9f554f83f0ad61a1e04487e5091543eb81db8a0a0725da6da3b62f88fc573a3fd0dd9dea9cba1750786021da836fd95b7295636a0fd7a768700af3caadaf52a08a23ab0b71ca52830f2b88b1a6b23a52f9ee05507a059434ae837706d7d317e4f7d03cd91f94ed0465fa8b99eaf18ca363bb318c7b3a09e9b831a5f59b781efd5dae8bea30bfd81b9fd5ea231d6b7e82da495c95dd35da0e72d02a01ed9bc928d94cad59ae0695f45120b7fbdbce43a2239a7e5bc81f731a0184bfb9a4051cbaa79917183d004c8d574d7ed5becaf9614c650ed40e8d123d9a0fa4797dc4a35af07f1cd6955318e3ff59578d4df32fd2174ed35f6c4db3471f9a0fec098d1fee8e975b5e78e19003699cf7cd746f47d03692d8e11c5fd58ba92a680").to_vec(),
@@ -58,4 +58,24 @@ fn test_can_verify_eip_1186_proofs() {
         ))
     );
     assert_eq!(account.nonce, 0x10);
+}
+
+#[test]
+fn test_can_verify_eip_1186_storage_proofs() {
+    println!("safe version storage key slot 0 {}", hex::encode(keccak_256(&hex!("0000000000000000000000000000000000000000000000000000000000000000"))));
+
+    // source?: https://freedium.cfd/https://medium.com/@chiqing/verify-ethereum-smart-contract-state-with-proof-1a8a0b4c8008
+    let key: [u8; 32] = hex!("26cea30422618ab81af2eb015dca1e31cb79a6d5bdecbd8bbddcf53a6d902fc2");
+    let proof = vec![
+        hex!("f90131a0db84880ea6ca86b1065c9a2c61033daff2455d0e3a10867ff300b4863218a18aa07d7afd2ba5ad4c7085699c7505cf9cb67ea074b7116c7b2073f56736498e52d0a0150507169b2f23aa57226a33553af0684d7ee8ebfec67cbe90693640bfe94d19808080a04616444ecc68fd60c58a3705a3dbd7a178af8dbf50e2be26bf9b2e94e89db4a3a026e732b882408cd7b9e39ed706992d0526f0d60193f666181124e807baff6d7fa06512473128eb2f4b680fdcfd7e3d05ec0ad9bdccbfe10dbea0e8519945ce8df780a02cd9a8f9c26e2a581de890b50b387477748c69d7ddcbab84ec280e201ded7b4980a0b92bbcfcacad3b833b4d2a4993069af365b8ae1fb94abe5cd3f89d97ee911462a0f0be3262950058a03bc547c666135e195c9108f123de8111226f5938fbdfae8d808080").to_vec(),
+        hex!("").to_vec(),
+    ];
+
+    let root = H256(hex!(
+        "9276dd802bae68f79e2c91fe580a53599603818804ede9c7dab86eaae4e97eee"
+    ));
+
+    let db = StorageProof::new(proof).into_memory_db::<KeccakHasher>();
+    let trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&db, &root).build();
+    let result = trie.get(&key).unwrap().unwrap();
 }

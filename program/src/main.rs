@@ -16,7 +16,7 @@
 #![no_main]
 sp1_zkvm::entrypoint!(main);
 
-use sp1_ethereum_trie::{
+use ethereum_trie::{
     keccak::{keccak_256, KeccakHasher},
     EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256,
 };

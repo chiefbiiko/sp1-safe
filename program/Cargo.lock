@@ -198,6 +198,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5443807d6dff69373d433ab9ef5378ad8df50ca6298caf15de6e52e24aaf54d5"
 
 [[package]]
+name = "ethereum-trie"
+version = "0.1.0"
+dependencies = [
+ "hash-db",
+ "hash256-std-hasher",
+ "memory-db",
+ "parity-scale-codec",
+ "primitive-types",
+ "rlp",
+ "tiny-keccak",
+ "trie-db",
+]
+
+[[package]]
 name = "ff"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -592,20 +606,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e6ecd384b10a64542d77071bd64bd7b231f4ed5940fba55e98c3de13824cf3d7"
 
 [[package]]
-name = "sp1-ethereum-trie"
-version = "0.1.0"
-dependencies = [
- "hash-db",
- "hash256-std-hasher",
- "memory-db",
- "parity-scale-codec",
- "primitive-types",
- "rlp",
- "tiny-keccak",
- "trie-db",
-]
-
-[[package]]
 name = "sp1-precompiles"
 version = "0.1.0"
 source = "git+https://github.com/succinctlabs/sp1.git#ef6887b76f451da6f703ee9802cf88f182ebc32c"
@@ -631,7 +631,7 @@ dependencies = [
 name = "sp1-safe-program"
 version = "0.1.0"
 dependencies = [
- "sp1-ethereum-trie",
+ "ethereum-trie",
  "sp1-safe-basics",
  "sp1-zkvm",
 ]
@@ -704,9 +704,9 @@ checksum = "55937e1799185b12863d447f42597ed69d9928686b8d88a1df17376a097d8369"
 [[package]]
 name = "tiny-keccak"
 version = "2.0.2"
-source = "git+https://github.com/sp1-patches/tiny-keccak.git?branch=master#7ff8a065b9f1414adb60d9aef3859f28705863ea"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2c9d3793400a45f954c52e73d068316d76b6f4e36977e3fcebb13a2721e80237"
 dependencies = [
- "cfg-if",
  "crunchy",
 ]
 
