@@ -9,5 +9,6 @@ sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git" }
 # serde = { version = "1.0.196", features = ["derive"] }
 ethereum-trie = { path = "../lib/ethereum-trie" }
 sp1-safe-basics = { path = "../lib/basics" }
-alloy-trie = { git = "https://github.com/alloy-rs/trie.git" }
+# alloy-trie = { git = "https://github.com/alloy-rs/trie.git" }
 # alloy-rlp = { git = "https://github.com/alloy-rs/rlp.git" }
+trie-eip1186 = { version = "0.5.0", default-features = false, git = "https://github.com/paritytech/trie.git"}
