@@ -20,16 +20,10 @@ pub struct Inputs {
 }
 
 pub fn bytes64(a: [u8; 32], b: [u8; 32]) -> [u8; 64] {
-    // https://stackoverflow.com/a/76573243
-    // unsafe { core::mem::transmute::<[[u8; 32]; 2], [u8; 64]>([a, b]) }
-
-    // [a,b].iter().flat_map(|a| a.iter().map(|b| b.to_owned())).collect::<Vec<u8>>().try_into().expect("unreachable")
-
     let mut out: [u8; 64] = [0; 64];
     for i in 0..32 {
         out[i] = a[i];
         out[i + 32] = b[i];
     }
-
     out
 }
