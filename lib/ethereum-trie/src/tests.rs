@@ -38,6 +38,7 @@ fn test_can_verify_eip_1186_account_proofs() {
 
     let db = StorageProof::new(proof).into_memory_db::<KeccakHasher>();
     let trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&db, &root).build();
+    println!("built trie {:?}", &trie);
     let result = trie.get(&key).unwrap().unwrap();
 
     // the raw account data stored in the state proof:
@@ -75,5 +76,6 @@ fn test_can_verify_eip_1186_storage_proofs() {
 
     let db = StorageProof::new(proof).into_memory_db::<KeccakHasher>();
     let trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&db, &root).build();
+    println!("built trie {:?}", &trie);
     let result = trie.get(&key).unwrap().unwrap();
 }

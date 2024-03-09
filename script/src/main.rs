@@ -22,7 +22,8 @@ async fn main() {
             .expect("not hex"),
     );
     let inputs = fetch_inputs(&rpc, safe.into(), msg_hash.into()).await;
-    println!("storage key {}", const_hex::encode(inputs.storage_key));
+    println!("account key: {:02X?}", &inputs.account_key);
+    println!("storage key: {:02X?}", &inputs.storage_key);
     let mut stdin = SP1Stdin::new();
     stdin.write::<Inputs>(&inputs);
 

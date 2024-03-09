@@ -3,6 +3,15 @@
 
 Prove a Safe multisig over a message in zkzk (w/o doxing the Safe and/or its owners).
 
+Debug `ethereum-trie`:
+
+```
+cd ./lib/ethereum-trie
+cargo test -- --nocapture
+```
+
+Debug the `sp1` program:
+
 ```sh
 cd ./script
 
