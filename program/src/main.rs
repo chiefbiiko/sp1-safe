@@ -9,9 +9,9 @@
 //! authenticity on-chain using the blockhash opcode given the block number at
 //! which the storage proof was generated. The latter output hash serves as a
 //! challenge point that allows associating given proof to a particular
-//! Safe by recomputing the hash given the account and storage keys. The
-//! message hash must incorporate a nullifier to guard against rainbow table
-//! precomputations.
+//! Safe and message by recomputing the hash given the account and storage 
+//! keys. The message hash must incorporate a nullifier to guard against 
+//! rainbow table precomputations.
 
 #![no_main]
 sp1_zkvm::entrypoint!(main);
