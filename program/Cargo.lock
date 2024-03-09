@@ -201,14 +201,14 @@ checksum = "5443807d6dff69373d433ab9ef5378ad8df50ca6298caf15de6e52e24aaf54d5"
 name = "ethereum-trie"
 version = "0.1.0"
 dependencies = [
- "hash-db 0.16.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hash-db",
  "hash256-std-hasher",
  "memory-db",
  "parity-scale-codec",
  "primitive-types",
  "rlp",
  "tiny-keccak",
- "trie-db 0.28.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "trie-db",
 ]
 
 [[package]]
@@ -278,11 +278,6 @@ name = "hash-db"
 version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8e7d7786361d7425ae2fe4f9e407eb0efaa0840f5212d109cc018c40c35c6ab4"
-
-[[package]]
-name = "hash-db"
-version = "0.16.0"
-source = "git+https://github.com/paritytech/trie.git#542829a8195c12b67eef05e9020ec7a6d9313c3f"
 
 [[package]]
 name = "hash256-std-hasher"
@@ -397,7 +392,7 @@ version = "0.32.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "808b50db46293432a45e63bc15ea51e0ab4c0a1647b8eb114e31a3e698dd6fbe"
 dependencies = [
- "hash-db 0.16.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hash-db",
 ]
 
 [[package]]
@@ -639,7 +634,6 @@ dependencies = [
  "ethereum-trie",
  "sp1-safe-basics",
  "sp1-zkvm",
- "trie-eip1186",
 ]
 
 [[package]]
@@ -739,30 +733,11 @@ version = "0.28.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ff28e0f815c2fea41ebddf148e008b077d2faddb026c9555b29696114d602642"
 dependencies = [
- "hash-db 0.16.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "hash-db",
  "hashbrown 0.13.2",
  "log",
  "rustc-hex",
  "smallvec",
-]
-
-[[package]]
-name = "trie-db"
-version = "0.28.0"
-source = "git+https://github.com/paritytech/trie.git#542829a8195c12b67eef05e9020ec7a6d9313c3f"
-dependencies = [
- "hash-db 0.16.0 (git+https://github.com/paritytech/trie.git)",
- "log",
- "smallvec",
-]
-
-[[package]]
-name = "trie-eip1186"
-version = "0.5.0"
-source = "git+https://github.com/paritytech/trie.git#542829a8195c12b67eef05e9020ec7a6d9313c3f"
-dependencies = [
- "hash-db 0.16.0 (git+https://github.com/paritytech/trie.git)",
- "trie-db 0.28.0 (git+https://github.com/paritytech/trie.git)",
 ]
 
 [[package]]
