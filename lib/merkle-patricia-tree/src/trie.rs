@@ -5,7 +5,12 @@ use crate::node::Node;
 use sha3::{Digest, Keccak256};
 use std::str;
 
-static KECCAK256_RLP: &str = "KECCAK256_RLP_S";
+// static KECCAK256_RLP: &str = "KECCAK256_RLP_S";
+
+static KECCAK256_RLP: [u8; 32] = [
+    0x56, 0xe8, 0x1f, 0x17, 0x1b, 0xcc, 0x55, 0xa6, 0xff, 0x83, 0x45, 0xe6, 0x92, 0xc0, 0xf8, 0x6e,
+    0x5b, 0x48, 0xe0, 0x1b, 0x99, 0x6c, 0xad, 0xc0, 0x01, 0x62, 0x2f, 0xb5, 0xe3, 0x63, 0xb4, 0x21,
+];
 
 fn empty_branch_nodes() -> [Box<Node>; 16] {
     [
@@ -37,7 +42,7 @@ pub struct MerklePatriciaTree {
 impl MerklePatriciaTree {
     pub fn new() -> MerklePatriciaTree {
         MerklePatriciaTree {
-            root: KECCAK256_RLP.as_bytes().to_vec(),
+            root: KECCAK256_RLP.to_vec(),
             db: HashMap::new(),
             root_node: Node::Blank,
         }
@@ -277,7 +282,7 @@ mod tests {
     #[test]
     fn should_be_an_empty_trie() {
         let trie = MerklePatriciaTree::new();
-        assert!(trie.root == KECCAK256_RLP.as_bytes().to_vec());
+        assert!(trie.root == KECCAK256_RLP.to_vec());
         assert!(trie.db.is_empty());
     }
 

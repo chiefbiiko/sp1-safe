@@ -3,7 +3,7 @@
 extern crate alloc;
 
 use alloc::vec::Vec;
-use alloy_trie::{ HashBuilder, Nibbles};
+use alloy_trie::{HashBuilder, Nibbles};
 use tiny_keccak::{Hasher, Keccak};
 
 pub fn keccak256(input: &[u8]) -> alloy_primitives::FixedBytes<32> {
@@ -13,6 +13,31 @@ pub fn keccak256(input: &[u8]) -> alloy_primitives::FixedBytes<32> {
     k.finalize(&mut out);
     out.into()
 }
+
+// use patricia_merkle_tree::PatriciaMerkleTree;
+// use sha3::Keccak256;
+// use sha3::Digest;
+
+// pub fn keccak256(input: &[u8]) -> [u8; 32] {
+//     // let mut out = [0u8; 32];
+//     let mut k = Keccak256::default();
+//     k.update(input);
+//     k.finalize().into()
+// }
+
+// pub fn mpt_root(proof: Vec<Vec<u8>>) -> Vec<u8> {
+//     let mut trie = PatriciaMerkleTree::<&[u8], &[u8], Keccak256>::new();
+//      let n = proof.len()
+//      let i = 0
+//     for node in proof {
+//         let k = keccak256(&node);
+//         trie.insert(
+//             &k,    // hashed storage key
+//             &node, // raw rlp
+//         );
+//     }
+//     trie.compute_hash().as_slice().to_vec()
+// }
 
 pub fn mpt_root(proof: Vec<Vec<u8>>) -> [u8; 32] {
     let mut hb = HashBuilder::default();
