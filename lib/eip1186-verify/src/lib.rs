@@ -19,29 +19,47 @@ pub fn keccak256(input: &[u8]) -> alloy_primitives::FixedBytes<32> {
 }
 
 pub fn mpt_root(proof: Vec<Vec<u8>>) -> [u8; 32] {
-    // going to build tree from leaf to root
     let mut hb = HashBuilder::default();
     hb.print_stack();
-    // set leaf - that is the last proof array item
-    let mut i = proof.len() - 1;
-    let v = &proof[i];
-    let k = keccak256(v);
-    let n = Nibbles::unpack(k);
-    println!("setting leaf");
-    hb.add_leaf(n, v);
-    hb.print_stack();
-    i = i - 1;
 
-    // set remaining branch nodes
-    while i >= 0 {
+    // // set leaf - that is the last proof array item
+    // let mut i = proof.len() - 1;
+    // let v = &proof[i];
+    // let k = keccak256(v);
+    // let n = Nibbles::unpack(k);
+    // println!("setting leaf");
+    // hb.add_leaf(n, v);
+    // hb.print_stack();
+    // i = i - 1;
+
+    // // set remaining branch nodes
+    // while i >= 0 {
+    //     let v = &proof[i];
+    //     let k = keccak256(v);
+    //     let n = Nibbles::unpack(k);
+    //     println!("setting branch");
+    //     hb.add_branch(n, k, true); //children_are_in_trie
+    //     hb.print_stack();
+    //     i = i - 1;
+    // }
+
+    //NOTE same as above but branch/leaf insertion reversed
+    // set branch nodes
+    for i in 0..(proof.len() - 2) {
         let v = &proof[i];
         let k = keccak256(v);
         let n = Nibbles::unpack(k);
         println!("setting branch");
         hb.add_branch(n, k, true); //children_are_in_trie
         hb.print_stack();
-        i = i - 1;
     }
+    // set leaf - that is the last proof array item
+    let v = &proof[proof.len() - 1];
+    let k = keccak256(v);
+    let n = Nibbles::unpack(k);
+    println!("setting leaf");
+    hb.add_leaf(n, v);
+    hb.print_stack();
 
     // get root
     let root = hb.root();
