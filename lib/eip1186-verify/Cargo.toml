@@ -6,7 +6,8 @@ description = "Ethereum EIP-1886 verifier"
 authors = ["chiefbiiko"]
 
 [dependencies]
-# alloy-rlp = { version = "0.3", features = ["arrayvec"] }
+merkle-patricia-tree = { path = "../merkle-patricia-tree" }
+alloy-rlp = { version = "0.3", features = ["arrayvec"] }
 alloy-trie = { version = "0.3", features = ["serde"] }
 tiny-keccak = { version = "2.0.2", features = ["keccak"] }
 # tiny-keccak = { version = "2.0.2", features = ["keccak"], optional = true, git = "https://github.com/sp1-patches/tiny-keccak.git" }

@@ -3,11 +3,7 @@
 extern crate alloc;
 
 use alloc::vec::Vec;
-use alloy_trie::{
-    // trie::{HashBuilder, Nibbles}
-    HashBuilder,
-    Nibbles,
-};
+use alloy_trie::{ HashBuilder, Nibbles};
 use tiny_keccak::{Hasher, Keccak};
 
 pub fn keccak256(input: &[u8]) -> alloy_primitives::FixedBytes<32> {
@@ -21,29 +17,6 @@ pub fn keccak256(input: &[u8]) -> alloy_primitives::FixedBytes<32> {
 pub fn mpt_root(proof: Vec<Vec<u8>>) -> [u8; 32] {
     let mut hb = HashBuilder::default();
     hb.print_stack();
-
-    // // set leaf - that is the last proof array item
-    // let mut i = proof.len() - 1;
-    // let v = &proof[i];
-    // let k = keccak256(v);
-    // let n = Nibbles::unpack(k);
-    // println!("setting leaf");
-    // hb.add_leaf(n, v);
-    // hb.print_stack();
-    // i = i - 1;
-
-    // // set remaining branch nodes
-    // while i >= 0 {
-    //     let v = &proof[i];
-    //     let k = keccak256(v);
-    //     let n = Nibbles::unpack(k);
-    //     println!("setting branch");
-    //     hb.add_branch(n, k, true); //children_are_in_trie
-    //     hb.print_stack();
-    //     i = i - 1;
-    // }
-
-    //NOTE same as above but branch/leaf insertion reversed
     // set branch nodes
     for i in 0..(proof.len() - 2) {
         let v = &proof[i];
@@ -60,12 +33,34 @@ pub fn mpt_root(proof: Vec<Vec<u8>>) -> [u8; 32] {
     println!("setting leaf");
     hb.add_leaf(n, v);
     hb.print_stack();
-
     // get root
     let root = hb.root();
     println!("root {:02X?}", &root);
     root.try_into().expect("unreachable")
 }
+
+//=========
+// use merkle_patricia_tree::MerklePatriciaTree;
+// pub fn mpt_root(proof: Vec<Vec<u8>>) -> [u8; 32] {
+//     //   let mut trie = MerklePatriciaTree::new();
+//     // trie.update(
+//     //   &String::from("doge").into_bytes(),
+//     //   &String::from("coin").into_bytes(),
+//     // );
+//     // let current_root = trie.root;
+//     // let doge = trie.get(&String::from("coin").into_bytes());
+//     let mut trie = MerklePatriciaTree::new();
+//     println!("rolling root {:02X?}", &trie.root);
+//     for node in proof {
+//         let k = keccak256(&node);
+//         trie.update(
+//             &k,    // hashed storage key
+//             &node, // raw rlp
+//         );
+//         println!("rolling root {:02X?}", &trie.root);
+//     }
+//     trie.root.try_into().expect("unreachable")
+// }
 
 #[cfg(test)]
 mod tests {
