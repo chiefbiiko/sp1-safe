@@ -3,16 +3,47 @@
 extern crate alloc;
 
 use alloc::vec::Vec;
-use alloy_trie::{HashBuilder, Nibbles};
+
 use tiny_keccak::{Hasher, Keccak};
 
-pub fn keccak256(input: &[u8]) -> alloy_primitives::FixedBytes<32> {
+use eth_trie::MemoryDB;
+use eth_trie::{EthTrie, Trie, TrieError};
+use std::sync::Arc;
+
+pub fn keccak256(input: &[u8]) -> [u8; 32] {
     let mut out = [0u8; 32];
     let mut k = Keccak::v256();
     k.update(input);
     k.finalize(&mut out);
     out.into()
 }
+
+// use std::sync::Arc;
+
+pub fn mpt_root(proof: Vec<Vec<u8>>) -> [u8; 32] {
+    let memdb = Arc::new(MemoryDB::new(true));
+    let mut trie = EthTrie::new(memdb.clone());
+    for node in proof {
+        let k = keccak256(&node);
+        trie.insert(
+            &k,    // hashed storage key
+            &node, // raw rlp
+        )
+        .expect("trie insert");
+    }
+    trie.root_hash().expect("root hash").into()
+}
+
+// use alloy_trie::{HashBuilder, Nibbles};
+// use tiny_keccak::{Hasher, Keccak};
+
+// pub fn keccak256(input: &[u8]) -> alloy_primitives::FixedBytes<32> {
+//     let mut out = [0u8; 32];
+//     let mut k = Keccak::v256();
+//     k.update(input);
+//     k.finalize(&mut out);
+//     out.into()
+// }
 
 // use patricia_merkle_tree::PatriciaMerkleTree;
 // use sha3::Keccak256;
@@ -39,30 +70,30 @@ pub fn keccak256(input: &[u8]) -> alloy_primitives::FixedBytes<32> {
 //     trie.compute_hash().as_slice().to_vec()
 // }
 
-pub fn mpt_root(proof: Vec<Vec<u8>>) -> [u8; 32] {
-    let mut hb = HashBuilder::default();
-    hb.print_stack();
-    // set branch nodes
-    for i in 0..(proof.len() - 2) {
-        let v = &proof[i];
-        let k = keccak256(v);
-        let n = Nibbles::unpack(k);
-        println!("setting branch");
-        hb.add_branch(n, k, true); //children_are_in_trie
-        hb.print_stack();
-    }
-    // set leaf - that is the last proof array item
-    let v = &proof[proof.len() - 1];
-    let k = keccak256(v);
-    let n = Nibbles::unpack(k);
-    println!("setting leaf");
-    hb.add_leaf(n, v);
-    hb.print_stack();
-    // get root
-    let root = hb.root();
-    println!("root {:02X?}", &root);
-    root.try_into().expect("unreachable")
-}
+// pub fn mpt_root(proof: Vec<Vec<u8>>) -> [u8; 32] {
+//     let mut hb = HashBuilder::default();
+//     hb.print_stack();
+//     // set branch nodes
+//     for i in 0..(proof.len() - 2) {
+//         let v = &proof[i];
+//         let k = keccak256(v);
+//         let n = Nibbles::unpack(k);
+//         println!("setting branch");
+//         hb.add_branch(n, k, true); //children_are_in_trie
+//         hb.print_stack();
+//     }
+//     // set leaf - that is the last proof array item
+//     let v = &proof[proof.len() - 1];
+//     let k = keccak256(v);
+//     let n = Nibbles::unpack(k);
+//     println!("setting leaf");
+//     hb.add_leaf(n, v);
+//     hb.print_stack();
+//     // get root
+//     let root = hb.root();
+//     println!("root {:02X?}", &root);
+//     root.try_into().expect("unreachable")
+// }
 
 //=========
 // use merkle_patricia_tree::MerklePatriciaTree;
@@ -107,8 +138,11 @@ mod tests {
 
         let root = mpt_root(proof);
 
+        println!("=====================");
         println!("root {:02X?}", &root);
+        println!("=====================");
         println!("xp root {:02X?}", &expected_root);
+        println!("=====================");
 
         assert_eq!(root, expected_root);
     }
