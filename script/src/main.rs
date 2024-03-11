@@ -22,8 +22,6 @@ async fn main() {
             .expect("not hex"),
     );
     let inputs = fetch_inputs(&rpc, safe.into(), msg_hash.into()).await;
-    println!("account key: {:02X?}", &inputs.account_key);
-    println!("storage key: {:02X?}", &inputs.storage_key);
     let mut stdin = SP1Stdin::new();
     stdin.write::<Inputs>(&inputs);
 
@@ -33,8 +31,7 @@ async fn main() {
 
     let state_root = stdout.read::<[u8; 32]>();
     let blind_safe = stdout.read::<[u8; 32]>();
-    println!("state root: {:02X?}", state_root);
-    println!("blind safe: {:02X?}", blind_safe);
+    println!("safe multisig storage proof ok: state_root={} blind_safe={}", const_hex::encode(state_root), const_hex::encode(blind_safe));
 
     // Verify and save proof
     // SP1Verifier::verify(ELF, &proof).expect("verification failed");

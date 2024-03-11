@@ -6,16 +6,11 @@ description = "Ethereum EIP-1886 verifier"
 authors = ["chiefbiiko"]
 
 [dependencies]
-# merkle-patricia-tree = { path = "../merkle-patricia-tree" }
 alloy-rlp = { version = "0.3", features = ["arrayvec"] }
 alloy-trie = { version = "0.3", features = ["serde"] }
+alloy-primitives = "0.6.4"
 tiny-keccak = { version = "2.0.2", features = ["keccak"] }
 # tiny-keccak = { version = "2.0.2", features = ["keccak"], optional = true, git = "https://github.com/sp1-patches/tiny-keccak.git" }
-alloy-primitives = "0.6.4"
-sha3 = "0.10.6"
-patricia-merkle-tree = { git = "https://github.com/lambdaclass/merkle_patricia_tree.git" }
-
-eth_trie = { git = "https://github.com/carver/eth-trie.rs.git" }
 
 [dev-dependencies]
 hex = "0.4.3"
