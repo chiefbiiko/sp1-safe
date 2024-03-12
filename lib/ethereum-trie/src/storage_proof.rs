@@ -18,7 +18,6 @@
 //! Storage Proof abstraction
 
 use alloc::{collections::BTreeSet, vec::Vec};
-use codec::{Decode, Encode};
 use hash_db::{HashDB, Hasher};
 
 /// A proof that some set of key-value pairs are included in the storage trie. The proof contains
@@ -28,7 +27,7 @@ use hash_db::{HashDB, Hasher};
 /// The proof consists of the set of serialized nodes in the storage trie accessed when looking up
 /// the keys covered by the proof. Verifying the proof requires constructing the partial trie from
 /// the serialized nodes and performing the key lookups.
-#[derive(Debug, PartialEq, Eq, Clone, Encode, Decode)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct StorageProof {
     trie_nodes: BTreeSet<Vec<u8>>,
 }
