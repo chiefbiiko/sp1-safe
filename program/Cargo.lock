@@ -204,7 +204,6 @@ dependencies = [
  "hash-db",
  "hash256-std-hasher",
  "memory-db",
- "parity-scale-codec",
  "primitive-types",
  "rlp",
  "tiny-keccak",
