@@ -6,5 +6,6 @@ edition = "2021"
 
 [dependencies]
 sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git" }
+poseidon-rs = { git = "https://github.com/succinctlabs/poseidon-rs.git" }
 sp1-safe-basics = { path = "../lib/basics" }
 ethereum-trie = { path = "../lib/ethereum-trie" }

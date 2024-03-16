@@ -1,6 +1,3 @@
-extern crate alloc;
-
-use alloc::vec::Vec;
 use serde::{Deserialize, Serialize};
 
 pub const SAFE_SIGNED_MESSAGES_SLOT: [u8; 32] = [
