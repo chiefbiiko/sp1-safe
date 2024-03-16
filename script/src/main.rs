@@ -1,7 +1,7 @@
-//! A simple script to generate and verify the proof of a given program.
+//! A simple script to generate the proof of the sp1-safe program.
 
 use const_hex;
-use sp1_core::{SP1Prover, SP1Stdin, SP1Verifier};
+use sp1_core::{SP1Prover, SP1Stdin/*, SP1Verifier*/};
 use sp1_safe_basics::Inputs;
 mod util;
 use util::{bytes20, bytes32, fetch_inputs};
@@ -31,7 +31,7 @@ async fn main() {
 
     let state_root = stdout.read::<[u8; 32]>();
     let blind_safe = stdout.read::<[u8; 32]>();
-    println!("safe multisig storage proof ok: state_root={} blind_safe={}", const_hex::encode(state_root), const_hex::encode(blind_safe));
+    println!("safe multisig storage proof ok:\nstate_root={}\nblind_safe={}", const_hex::encode(state_root), const_hex::encode(blind_safe));
 
     // Verify and save proof
     // SP1Verifier::verify(ELF, &proof).expect("verification failed");

@@ -27,6 +27,7 @@ pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Inputs {
         .expect("fetching proof failed");
 
     Inputs {
+        safe: safe.into(),
         msg_hash: msg_hash.into(),
         state_root: header.state_root.into(),
         storage_root: proof.storage_hash.into(),

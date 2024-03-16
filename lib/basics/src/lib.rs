@@ -6,6 +6,7 @@ pub const SAFE_SIGNED_MESSAGES_SLOT: [u8; 32] = [
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Inputs {
+    pub safe: [u8; 20],
     pub msg_hash: [u8; 32],     // Safe::getMessageHash(msg)
     pub state_root: [u8; 32],   // eth_getBlockBy*::response.stateRoot
     pub storage_root: [u8; 32], // eth_getProof::response.storageHash

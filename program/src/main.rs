@@ -16,21 +16,26 @@
 #![no_main]
 sp1_zkvm::entrypoint!(main);
 
+#[macro_use]
+extern crate ff;
+use ff::*;
+
 use ethereum_trie::{
     keccak::{keccak_256, KeccakHasher},
     EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256,
 };
+use poseidon_rs::{Fr, Poseidon};
 use sp1_safe_basics::{bytes64, Inputs};
 
 pub fn main() {
     let inputs = sp1_zkvm::io::read::<Inputs>();
-    let _state_root = H256(inputs.state_root);
-    let _storage_root = H256(inputs.storage_root);
+    let state_root = H256(inputs.state_root);
+    let storage_root = H256(inputs.storage_root);
     let storage_trie_key = keccak_256(&inputs.storage_key);
 
     // Verify storage proof
     let db = StorageProof::new(inputs.storage_proof).into_memory_db::<KeccakHasher>();
-    let trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&db, &_storage_root).build();
+    let trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&db, &storage_root).build();
     let val = trie
         .get(&storage_trie_key)
         .expect("storage trie read failed")
@@ -40,15 +45,29 @@ pub fn main() {
 
     // Verify account proof
     let db = StorageProof::new(inputs.account_proof).into_memory_db::<KeccakHasher>();
-    let trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&db, &_state_root).build();
+    let trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&db, &state_root).build();
     let ok = trie
         .contains(&inputs.account_key)
         .expect("account check failed");
     assert!(ok, "account proof failed");
 
     sp1_zkvm::io::write_slice(&inputs.state_root);
-    sp1_zkvm::io::write_slice(&keccak_256(&bytes64(
-        inputs.storage_key,
-        inputs.account_key,
-    )))
+    // sp1_zkvm::io::write_slice(&keccak_256(&bytes64(
+    //     inputs.storage_key,
+    //     inputs.account_key,
+    // )));
+    let safe_fr = Fr::from_str("1").expect("Fr from safe address failed");
+    // let b2: Fr = Fr::from_str(
+    //     "12242166908188651009877250812424843524687801523336557272219921456462821518061",
+    // )
+    // .unwrap();
+    // let mut big_arr: Vec<Fr> = Vec::new();
+    // big_arr.push(b1.clone());
+    // big_arr.push(b2.clone());
+    // let poseidon = Poseidon::new();
+
+    // c.bench_function("hash", |b| {
+    //     b.iter(|| poseidon.hash(big_arr.clone()).unwrap())
+    // });
+
 }
