@@ -16,22 +16,14 @@
 #![no_main]
 sp1_zkvm::entrypoint!(main);
 
-// #[macro_use]
-// extern crate ff_ce;
-// use ff_ce::*;
-// use light_poseidon::{Poseidon, PoseidonBytesHasher};
-// use ark_bn254::Fr;
 use light_poseidon::{Poseidon, PoseidonHasher};
 use ark_bn254::Fr;
 use ark_ff::{BigInteger, PrimeField};
-// use ark_ff::{BigInteger, PrimeField};
-
 use ethereum_trie::{
     keccak::{keccak_256, KeccakHasher},
     EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256,// U256
 };
-// use poseidon_rs::{ Poseidon};
-use sp1_safe_basics::{/*concat_bytes64*/ Inputs, lpad_bytes32};
+use sp1_safe_basics::{Inputs, lpad_bytes32};
 
 pub fn main() {
     let inputs = sp1_zkvm::io::read::<Inputs>();
@@ -61,29 +53,7 @@ pub fn main() {
     let fr1 = Fr::from_be_bytes_mod_order(&lpad_bytes32(inputs.safe));
 let fr2 = Fr::from_be_bytes_mod_order(&inputs.msg_hash);
 let challenge: [u8;32] = poseidon.hash(&[fr1, fr2]).expect("poseidon hash failed").into_bigint().to_bytes_be().try_into().expect("converting prime field to bytes failed");
-    // let challenge = poseidon.hash_bytes_be(&[&lpad_bytes32(inputs.safe), &inputs.msg_hash]).unwrap();
 
     sp1_zkvm::io::write_slice(&inputs.state_root);
-    // sp1_zkvm::io::write_slice(&keccak_256(&bytes64(
-    //     inputs.storage_key,
-    //     inputs.account_key,
-    // )));
-    // U256::from_big_endian()
-
     sp1_zkvm::io::write_slice(&challenge);
-
-    // let safe_fr = Fr::from_str("1").expect("Fr from safe address failed");
-    // let b2: Fr = Fr::from_str(
-    //     "12242166908188651009877250812424843524687801523336557272219921456462821518061",
-    // )
-    // .unwrap();
-    // let mut big_arr: Vec<Fr> = Vec::new();
-    // big_arr.push(b1.clone());
-    // big_arr.push(b2.clone());
-    // let poseidon = Poseidon::new();
-
-    // c.bench_function("hash", |b| {
-    //     b.iter(|| poseidon.hash(big_arr.clone()).unwrap())
-    // });
-
 }

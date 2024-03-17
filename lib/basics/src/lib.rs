@@ -1,9 +1,7 @@
 use ethers::{
     providers::{Middleware, Provider},
     types::{Address, H256},
-    // utils::keccak256,
 };
-// use sp1_safe_basics::{concat_bytes64, Inputs, SAFE_SIGNED_MESSAGES_SLOT};
 use zerocopy::AsBytes;
 use serde::{Deserialize, Serialize};
 use tiny_keccak::{Hasher, Keccak};
@@ -34,12 +32,8 @@ pub fn coerce_bytes32(x: Vec<u8>) -> [u8; 32] {
 }
 
 pub fn concat_bytes64(a: [u8; 32], b: [u8; 32]) -> [u8; 64] {
-    let mut out: [u8; 64] = [0; 64];
-    for i in 0..32 {
-        out[i] = a[i];
-        out[i + 32] = b[i];
-    }
-    out
+    // https://stackoverflow.com/a/76573243
+    unsafe { core::mem::transmute::<[[u8; 32]; 2], [u8; 64]>([a, b]) }
 }
 
 pub fn lpad_bytes32(x: [u8;20]) -> [u8; 32] {

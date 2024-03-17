@@ -3,8 +3,6 @@
 use const_hex;
 use sp1_core::{SP1Prover, SP1Stdin/*, SP1Verifier*/};
 use sp1_safe_basics::{Inputs, coerce_bytes20, coerce_bytes32, fetch_inputs};
-// mod util;
-// use util::{bytes20, bytes32, fetch_inputs};
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
