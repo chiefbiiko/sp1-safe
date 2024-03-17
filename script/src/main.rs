@@ -1,8 +1,8 @@
 //! A simple script to generate the proof of the sp1-safe program.
 
 use const_hex;
-use sp1_core::{SP1Prover, SP1Stdin/*, SP1Verifier*/};
-use sp1_safe_basics::{Inputs, coerce_bytes20, coerce_bytes32, fetch_inputs};
+use sp1_core::{SP1Prover, SP1Stdin /*, SP1Verifier*/};
+use sp1_safe_basics::{coerce_bytes20, coerce_bytes32, fetch_inputs, Inputs};
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
@@ -29,7 +29,11 @@ async fn main() {
 
     let state_root = stdout.read::<[u8; 32]>();
     let blind_safe = stdout.read::<[u8; 32]>();
-    println!("safe multisig storage proof ok:\nstate_root={}\nblind_safe={}", const_hex::encode(state_root), const_hex::encode(blind_safe));
+    println!(
+        "safe multisig storage proof ok:\nstate_root={}\nblind_safe={}",
+        const_hex::encode(state_root),
+        const_hex::encode(blind_safe)
+    );
 
     // Verify and save proof
     // SP1Verifier::verify(ELF, &proof).expect("verification failed");

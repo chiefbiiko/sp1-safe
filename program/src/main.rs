@@ -9,21 +9,21 @@
 //! authenticity on-chain using the blockhash opcode given the block number at
 //! which the storage proof was generated. The latter output hash serves as a
 //! challenge point that allows associating given proof to a particular
-//! Safe and message by recomputing the hash given the account and storage 
-//! keys. The message hash must incorporate a nullifier to guard against 
+//! Safe and message by recomputing the hash given the account and storage
+//! keys. The message hash must incorporate a nullifier to guard against
 //! rainbow table precomputations.
 
 #![no_main]
 sp1_zkvm::entrypoint!(main);
 
-use light_poseidon::{Poseidon, PoseidonHasher};
 use ark_bn254::Fr;
 use ark_ff::{BigInteger, PrimeField};
 use ethereum_trie::{
     keccak::{keccak_256, KeccakHasher},
-    EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256,// U256
+    EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256,
 };
-use sp1_safe_basics::{Inputs, lpad_bytes32};
+use light_poseidon::{Poseidon, PoseidonHasher};
+use sp1_safe_basics::{lpad_bytes32, Inputs};
 
 pub fn main() {
     let inputs = sp1_zkvm::io::read::<Inputs>();
@@ -51,8 +51,14 @@ pub fn main() {
 
     let mut poseidon = Poseidon::<Fr>::new_circom(2).expect("poseidon init failed");
     let fr1 = Fr::from_be_bytes_mod_order(&lpad_bytes32(inputs.safe));
-let fr2 = Fr::from_be_bytes_mod_order(&inputs.msg_hash);
-let challenge: [u8;32] = poseidon.hash(&[fr1, fr2]).expect("poseidon hash failed").into_bigint().to_bytes_be().try_into().expect("converting prime field to bytes failed");
+    let fr2 = Fr::from_be_bytes_mod_order(&inputs.msg_hash);
+    let challenge: [u8; 32] = poseidon
+        .hash(&[fr1, fr2])
+        .expect("poseidon hash failed")
+        .into_bigint()
+        .to_bytes_be()
+        .try_into()
+        .expect("converting field elements to bytes failed");
 
     sp1_zkvm::io::write_slice(&inputs.state_root);
     sp1_zkvm::io::write_slice(&challenge);

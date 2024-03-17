@@ -2,9 +2,9 @@ use ethers::{
     providers::{Middleware, Provider},
     types::{Address, H256},
 };
-use zerocopy::AsBytes;
 use serde::{Deserialize, Serialize};
 use tiny_keccak::{Hasher, Keccak};
+use zerocopy::AsBytes;
 
 pub const SAFE_SIGNED_MESSAGES_SLOT: [u8; 32] = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7,
@@ -36,18 +36,18 @@ pub fn concat_bytes64(a: [u8; 32], b: [u8; 32]) -> [u8; 64] {
     unsafe { core::mem::transmute::<[[u8; 32]; 2], [u8; 64]>([a, b]) }
 }
 
-pub fn lpad_bytes32(x: [u8;20]) -> [u8; 32] {
-    core::array::from_fn(|i| if i < 12 { 0u8 } else { x[i-12] })
-  }
+pub fn lpad_bytes32(x: [u8; 20]) -> [u8; 32] {
+    core::array::from_fn(|i| if i < 12 { 0u8 } else { x[i - 12] })
+}
 
-      /// Performs a Keccak-256 hash on the given input.
-      pub fn keccak256<T: AsRef<[u8]>>(input: T) -> [u8; 32] {
-        let mut out = [0u8; 32];
-        let mut k = Keccak::v256();
-        k.update(input.as_ref());
-        k.finalize(&mut out);
-        out
-    }
+/// Performs a Keccak-256 hash on the given input.
+pub fn keccak256<T: AsRef<[u8]>>(input: T) -> [u8; 32] {
+    let mut out = [0u8; 32];
+    let mut k = Keccak::v256();
+    k.update(input.as_ref());
+    k.finalize(&mut out);
+    out
+}
 
 pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Inputs {
     let provider = Provider::try_from(rpc).expect("rpc provider failed");
