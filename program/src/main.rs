@@ -17,12 +17,12 @@
 sp1_zkvm::entrypoint!(main);
 
 #[macro_use]
-extern crate ff;
-use ff::*;
+extern crate ff_ce;
+use ff_ce::*;
 
 use ethereum_trie::{
     keccak::{keccak_256, KeccakHasher},
-    EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256,
+    EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256, U256
 };
 use poseidon_rs::{Fr, Poseidon};
 use sp1_safe_basics::{bytes64, Inputs};
@@ -56,6 +56,7 @@ pub fn main() {
     //     inputs.storage_key,
     //     inputs.account_key,
     // )));
+    // U256::from_big_endian()
     let safe_fr = Fr::from_str("1").expect("Fr from safe address failed");
     // let b2: Fr = Fr::from_str(
     //     "12242166908188651009877250812424843524687801523336557272219921456462821518061",
@@ -64,7 +65,7 @@ pub fn main() {
     // let mut big_arr: Vec<Fr> = Vec::new();
     // big_arr.push(b1.clone());
     // big_arr.push(b2.clone());
-    // let poseidon = Poseidon::new();
+    let poseidon = Poseidon::new();
 
     // c.bench_function("hash", |b| {
     //     b.iter(|| poseidon.hash(big_arr.clone()).unwrap())

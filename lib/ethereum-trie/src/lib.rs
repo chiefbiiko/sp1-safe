@@ -15,7 +15,7 @@ mod storage_proof;
 #[cfg(test)]
 mod tests;
 
-pub use primitive_types::H256;
+pub use primitive_types::{H256, U256};
 pub use storage_proof::{MemoryDB, StorageProof};
 pub use trie_db::{Trie, TrieDBBuilder};
 
