@@ -2,9 +2,9 @@
 
 use const_hex;
 use sp1_core::{SP1Prover, SP1Stdin/*, SP1Verifier*/};
-use sp1_safe_basics::Inputs;
-mod util;
-use util::{bytes20, bytes32, fetch_inputs};
+use sp1_safe_basics::{Inputs, coerce_bytes20, coerce_bytes32, fetch_inputs};
+// mod util;
+// use util::{bytes20, bytes32, fetch_inputs};
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
@@ -13,11 +13,11 @@ async fn main() {
     sp1_core::utils::setup_logger();
     // Assemble and write inputs
     let rpc = std::env::var("RPC").unwrap_or("https://rpc.gnosis.gateway.fm".to_string());
-    let safe = bytes20(
+    let safe = coerce_bytes20(
         const_hex::decode(std::env::var("SAFE").expect("must set env var SAFE=0x..."))
             .expect("not hex"),
     );
-    let msg_hash = bytes32(
+    let msg_hash = coerce_bytes32(
         const_hex::decode(std::env::var("MSG_HASH").expect("must set env var MSG_HASH=0x..."))
             .expect("not hex"),
     );

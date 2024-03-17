@@ -6,9 +6,9 @@ edition = "2021"
 
 [dependencies]
 sp1-core = { git = "https://github.com/succinctlabs/sp1.git" }
-ethers = "2.0.13"
+# ethers = "2.0.13"
 sp1-safe-basics = { path = "../lib/basics" }
-zerocopy = "0.7.32"
+# zerocopy = "0.7.32"
 tokio = { version = "1.36.0", features = ["rt-multi-thread", "macros"] }
 const-hex = "1.11.1"
 
