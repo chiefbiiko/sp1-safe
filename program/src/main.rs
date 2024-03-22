@@ -19,19 +19,18 @@ sp1_zkvm::entrypoint!(main);
 use ark_bn254::Fr;
 use ark_ff::{BigInteger, PrimeField};
 use ethereum_trie::{
-    keccak::{keccak_256, KeccakHasher},
+    keccak::{/*keccak_256,*/ KeccakHasher},
     EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256,
 };
 use light_poseidon::{Poseidon, PoseidonHasher};
-use sp1_safe_basics::{lpad_bytes32, Inputs};
+use sp1_safe_basics::{lpad_bytes32, Inputs, keccak256};
 
 pub fn main() {
     let inputs = sp1_zkvm::io::read::<Inputs>();
-    let state_root = H256(inputs.state_root);
+ 
+    // verify storage proof ~ storage_root
     let storage_root = H256(inputs.storage_root);
-    let storage_trie_key = keccak_256(&inputs.storage_key);
-
-    // Verify storage proof
+    let storage_trie_key = keccak256(&inputs.storage_key);
     let db = StorageProof::new(inputs.storage_proof).into_memory_db::<KeccakHasher>();
     let trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&db, &storage_root).build();
     let val = trie
@@ -41,7 +40,8 @@ pub fn main() {
     // Safe's SignMessageLib marks messages as "signed" with a literal 1
     assert_eq!(val[0], 1u8, "msg not signed");
 
-    // Verify account proof
+    // verify account proof ~ state_root
+    let state_root = H256(inputs.state_root);
     let db = StorageProof::new(inputs.account_proof).into_memory_db::<KeccakHasher>();
     let trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&db, &state_root).build();
     let ok = trie
@@ -49,10 +49,15 @@ pub fn main() {
         .expect("account check failed");
     assert!(ok, "account proof failed");
 
+    // recalc blockhash using header_rlp incl proven state_root
+    let mut header_rlp = inputs.header_rlp.clone();
+    header_rlp[91..123].copy_from_slice(state_root.as_bytes());
+    let blockhash = keccak256(&header_rlp);
+
     let mut poseidon = Poseidon::<Fr>::new_circom(2).expect("poseidon init failed");
     // _mod_order might reduce fr2 i.e. it has 2 msg_hash preimages aka collision;
     // since the 20-byte safe address cannot exceed bn254's scalar field _mod_order 
-    // is always a noop for fr1 - fr1 has strictly 1 safe preimage: no collisions;
+    // is always a noop for fr1 i.e. fr1 has strictly 1 safe preimage: no collisions;
     // consequently "cross-account" collisions can never occur
     let fr1 = Fr::from_be_bytes_mod_order(&lpad_bytes32(inputs.safe));
     let fr2 = Fr::from_be_bytes_mod_order(&inputs.msg_hash);
@@ -64,6 +69,6 @@ pub fn main() {
         .try_into()
         .expect("converting field elements to bytes failed");
 
-    sp1_zkvm::io::write_slice(&inputs.state_root);
+    sp1_zkvm::io::write_slice(&blockhash);
     sp1_zkvm::io::write_slice(&challenge);
 }
