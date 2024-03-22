@@ -7,12 +7,9 @@ use sp1_safe_basics::{concat_bytes64, keccak256, Inputs, SAFE_SIGNED_MESSAGES_SL
 use zerocopy::AsBytes;
 
 pub async fn fetch_params(rpc: &str, safe: Address, msg_hash: H256) -> (u64, Inputs) {
-    let provider = Provider::try_from(rpc).expect("rpc provider failed");
-
-    let state_trie_key = keccak256(&safe);
     let storage_key = keccak256(&concat_bytes64(msg_hash.into(), SAFE_SIGNED_MESSAGES_SLOT));
-    let storage_trie_key = keccak256(&storage_key);
 
+    let provider = Provider::try_from(rpc).expect("rpc provider failed");
     let latest = provider
         .get_block_number()
         .await
@@ -27,17 +24,16 @@ pub async fn fetch_params(rpc: &str, safe: Address, msg_hash: H256) -> (u64, Inp
         .await
         .expect("fetching proof failed");
 
-    let header_rlp = rlp_encode_header(&block);
-
     (
         latest.as_u64(),
         Inputs {
             safe: safe.into(),
             msg_hash: msg_hash.into(),
+            header_rlp: rlp_encode_header(&block),
             state_root: block.state_root.into(),
             storage_root: proof.storage_hash.into(),
-            state_trie_key,
-            storage_trie_key,
+            state_trie_key: keccak256(&safe),
+            storage_trie_key: keccak256(&storage_key),
             account_proof: proof
                 .account_proof
                 .iter()
@@ -48,7 +44,6 @@ pub async fn fetch_params(rpc: &str, safe: Address, msg_hash: H256) -> (u64, Inp
                 .iter()
                 .map(|b| b.as_bytes().to_vec())
                 .collect(),
-            header_rlp,
         },
     )
 }
