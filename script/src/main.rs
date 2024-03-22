@@ -27,12 +27,12 @@ async fn main() {
     // let mut proof = SP1Prover::prove(ELF, stdin).expect("proving failed");
     let mut stdout = SP1Prover::execute(ELF, stdin).expect("execution failed");
 
-    let state_root = stdout.read::<[u8; 32]>();
-    let blind_safe = stdout.read::<[u8; 32]>();
+    let blockhash = stdout.read::<[u8; 32]>();
+    let challenge = stdout.read::<[u8; 32]>();
     println!(
-        "safe multisig storage proof ok:\nstate_root={}\nblind_safe={}",
-        const_hex::encode(state_root),
-        const_hex::encode(blind_safe)
+        "safe multisig storage proof ok:\nblockhash={}\nchallenge={}",
+        const_hex::encode(blockhash),
+        const_hex::encode(challenge)
     );
 
     // Verify and save proof

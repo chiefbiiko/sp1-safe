@@ -13,15 +13,16 @@ pub const SAFE_SIGNED_MESSAGES_SLOT: [u8; 32] = [
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Inputs {
-    pub safe: [u8; 20],
-    pub msg_hash: [u8; 32],     // Safe::getMessageHash(msg)
+    pub safe: [u8; 20],         // Safe address
+    pub msg_hash: [u8; 32],     // Custom msg hash
     pub state_root: [u8; 32],   // eth_getBlockBy*::response.stateRoot
     pub storage_root: [u8; 32], // eth_getProof::response.storageHash
-    pub account_key: [u8; 32],  // keccak256(address)
-    pub storage_key: [u8; 32],       // keccak256(msg_hash + uint256(5))
+    pub account_key: [u8; 32],  // keccak256(safe)
+    pub storage_key: [u8; 32],       // keccak256(msg_hash + uint256(7))
     pub account_proof: Vec<Vec<u8>>, // eth_getProof::response.accountProof
     pub storage_proof: Vec<Vec<u8>>, // eth_getProof::response.storageProof.proof
     pub header_rlp: Vec<u8>,         // RLP-encoded header
+    // pub block_number: u64,           // Anchor block number
 }
 
 pub fn coerce_bytes20(x: Vec<u8>) -> [u8; 20] {
@@ -75,6 +76,10 @@ pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Inputs {
     let header_rlp =  rlp_encode_header(&block);
     println!("computed blockhash {:?}", H256(keccak256(&header_rlp)));
     println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+    // println!("state_root {:?}", &block.state_root);
+    // println!("header_rlp {:?}", const_hex::encode(&header_rlp));
+    // // println!("index of state_root in header_rlp {:?}", &block.state_root);
+    // println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 
     Inputs {
         safe: safe.into(),
