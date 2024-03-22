@@ -4,7 +4,7 @@ mod util;
 use const_hex;
 use sp1_core::{SP1Prover, SP1Stdin /*, SP1Verifier*/};
 use sp1_safe_basics::{coerce_bytes20, coerce_bytes32, Inputs};
-use util::fetch_inputs;
+use util::fetch_params;
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
@@ -21,7 +21,7 @@ async fn main() {
         const_hex::decode(std::env::var("MSG_HASH").expect("must set env var MSG_HASH=0x..."))
             .expect("not hex"),
     );
-    let inputs = fetch_inputs(&rpc, safe.into(), msg_hash.into()).await;
+    let (anchor, inputs) = fetch_params(&rpc, safe.into(), msg_hash.into()).await;
     let mut stdin = SP1Stdin::new();
     stdin.write::<Inputs>(&inputs);
 
@@ -31,10 +31,21 @@ async fn main() {
 
     let blockhash = stdout.read::<[u8; 32]>();
     let challenge = stdout.read::<[u8; 32]>();
+
     println!(
-        "safe multisig storage proof ok:\nblockhash={}\nchallenge={}",
-        const_hex::encode(blockhash),
-        const_hex::encode(challenge)
+        "Safe multisig storage proof verification passed
+=== proof params ===
+Safe address: 0x{}
+msg hash: 0x{}
+block number: {}
+=== proof outputs ===
+blockhash: 0x{}
+challenge: 0x{}",
+        const_hex::encode(&safe),
+        const_hex::encode(&msg_hash),
+        anchor,
+        const_hex::encode(&blockhash),
+        const_hex::encode(&challenge)
     );
 
     // Verify and save proof

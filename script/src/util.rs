@@ -6,7 +6,7 @@ use rlp::RlpStream;
 use sp1_safe_basics::{concat_bytes64, keccak256, Inputs, SAFE_SIGNED_MESSAGES_SLOT};
 use zerocopy::AsBytes;
 
-pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Inputs {
+pub async fn fetch_params(rpc: &str, safe: Address, msg_hash: H256) -> (u64, Inputs) {
     let provider = Provider::try_from(rpc).expect("rpc provider failed");
 
     let state_trie_key = keccak256(&safe);
@@ -27,28 +27,30 @@ pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Inputs {
         .await
         .expect("fetching proof failed");
 
-    println!("actual block.hash {:?}", &block.hash.unwrap());
     let header_rlp = rlp_encode_header(&block);
 
-    Inputs {
-        safe: safe.into(),
-        msg_hash: msg_hash.into(),
-        state_root: block.state_root.into(),
-        storage_root: proof.storage_hash.into(),
-        state_trie_key,
-        storage_trie_key,
-        account_proof: proof
-            .account_proof
-            .iter()
-            .map(|b| b.as_bytes().to_vec())
-            .collect(),
-        storage_proof: proof.storage_proof[0]
-            .proof
-            .iter()
-            .map(|b| b.as_bytes().to_vec())
-            .collect(),
-        header_rlp, //WIP
-    }
+    (
+        latest.as_u64(),
+        Inputs {
+            safe: safe.into(),
+            msg_hash: msg_hash.into(),
+            state_root: block.state_root.into(),
+            storage_root: proof.storage_hash.into(),
+            state_trie_key,
+            storage_trie_key,
+            account_proof: proof
+                .account_proof
+                .iter()
+                .map(|b| b.as_bytes().to_vec())
+                .collect(),
+            storage_proof: proof.storage_proof[0]
+                .proof
+                .iter()
+                .map(|b| b.as_bytes().to_vec())
+                .collect(),
+            header_rlp,
+        },
+    )
 }
 
 // https://ethereum.stackexchange.com/a/67332
