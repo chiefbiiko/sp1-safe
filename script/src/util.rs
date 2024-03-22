@@ -9,8 +9,9 @@ use sp1_safe_basics::{SAFE_SIGNED_MESSAGES_SLOT, Inputs, keccak256, concat_bytes
 pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Inputs {
     let provider = Provider::try_from(rpc).expect("rpc provider failed");
 
-    let account_key = keccak256(&safe);
+    let state_trie_key = keccak256(&safe);
     let storage_key = keccak256(&concat_bytes64(msg_hash.into(), SAFE_SIGNED_MESSAGES_SLOT));
+    let storage_trie_key = keccak256(&storage_key);
 
     let latest = provider
         .get_block_number()
@@ -26,24 +27,24 @@ pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Inputs {
         .await
         .expect("fetching proof failed");
 
-    println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-    println!("block.hash {:?}", &block.hash.unwrap());
+    // println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+    println!("actual block.hash {:?}", &block.hash.unwrap());
     let header_rlp =  rlp_encode_header(&block);
-    println!("computed blockhash {:?}", H256(keccak256(&header_rlp)));
-    println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-    println!("state_root {:?}", &block.state_root);
-    println!("header_rlp len {:?}", &header_rlp.len());
-    println!("header_rlp {:?}", const_hex::encode(&header_rlp));
-    // println!("index of state_root in header_rlp {:?}", &block.state_root);
-    println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+    // println!("computed blockhash {:?}", H256(keccak256(&header_rlp)));
+    // println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+    // println!("state_root {:?}", &block.state_root);
+    // println!("header_rlp len {:?}", &header_rlp.len());
+    // println!("header_rlp {:?}", const_hex::encode(&header_rlp));
+    // // println!("index of state_root in header_rlp {:?}", &block.state_root);
+    // println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 
     Inputs {
         safe: safe.into(),
         msg_hash: msg_hash.into(),
         state_root: block.state_root.into(),
         storage_root: proof.storage_hash.into(),
-        account_key,
-        storage_key,
+        state_trie_key,
+        storage_trie_key,
         account_proof: proof
             .account_proof
             .iter()
