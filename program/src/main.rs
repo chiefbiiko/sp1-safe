@@ -50,9 +50,14 @@ pub fn main() {
     assert!(ok, "account proof failed");
 
     // recalc blockhash using header_rlp incl proven state_root
-    let mut header_rlp = inputs.header_rlp.clone();
-    header_rlp[91..123].copy_from_slice(state_root.as_bytes());
-    let blockhash = keccak256(&header_rlp);
+    // let mut header_rlp = inputs.header_rlp.clone();
+    // println!("state_root {:?}", &state_root);
+    // println!("header_rlp len {:?}", &header_rlp.len());
+    // println!("header_rlp {:?}", const_hex::encode(&header_rlp));
+    // println!("index of state_root in header_rlp {:?}", &block.state_root);
+    // header_rlp[91..123].copy_from_slice(state_root.as_bytes());
+    // let blockhash = keccak256(&header_rlp);
+    let blockhash = [0u8; 32];
 
     let mut poseidon = Poseidon::<Fr>::new_circom(2).expect("poseidon init failed");
     // _mod_order might reduce fr2 i.e. it has 2 msg_hash preimages aka collision;

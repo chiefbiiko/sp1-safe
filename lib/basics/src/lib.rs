@@ -76,10 +76,11 @@ pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Inputs {
     let header_rlp =  rlp_encode_header(&block);
     println!("computed blockhash {:?}", H256(keccak256(&header_rlp)));
     println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-    // println!("state_root {:?}", &block.state_root);
-    // println!("header_rlp {:?}", const_hex::encode(&header_rlp));
-    // // println!("index of state_root in header_rlp {:?}", &block.state_root);
-    // println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+    println!("state_root {:?}", &block.state_root);
+    println!("header_rlp len {:?}", &header_rlp.len());
+    println!("header_rlp {:?}", const_hex::encode(&header_rlp));
+    // println!("index of state_root in header_rlp {:?}", &block.state_root);
+    println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 
     Inputs {
         safe: safe.into(),
