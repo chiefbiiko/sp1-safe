@@ -1,10 +1,10 @@
 //! A simple script to generate the proof of the sp1-safe program.
 
 mod util;
-use util::fetch_inputs;
 use const_hex;
 use sp1_core::{SP1Prover, SP1Stdin /*, SP1Verifier*/};
-use sp1_safe_basics::{coerce_bytes20, coerce_bytes32/*, fetch_inputs*/, Inputs};
+use sp1_safe_basics::{coerce_bytes20, coerce_bytes32, Inputs};
+use util::fetch_inputs;
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 

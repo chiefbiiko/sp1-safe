@@ -18,21 +18,18 @@ sp1_zkvm::entrypoint!(main);
 
 use ark_bn254::Fr;
 use ark_ff::{BigInteger, PrimeField};
-use ethereum_trie::{
-    keccak::{/*keccak_256,*/ KeccakHasher},
-    EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256,
-};
+use ethereum_trie::{keccak::KeccakHasher, EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256};
 use light_poseidon::{Poseidon, PoseidonHasher};
-use sp1_safe_basics::{lpad_bytes32, Inputs, keccak256};
+use sp1_safe_basics::{keccak256, lpad_bytes32, Inputs};
 
 pub fn main() {
     let inputs = sp1_zkvm::io::read::<Inputs>();
- 
+
     // verify storage proof ~ storage_root
     let storage_root = H256(inputs.storage_root);
-    // let storage_trie_key = keccak256(&inputs.storage_key);
     let storage_db = StorageProof::new(inputs.storage_proof).into_memory_db::<KeccakHasher>();
-    let storage_trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&storage_db, &storage_root).build();
+    let storage_trie =
+        TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&storage_db, &storage_root).build();
     let storage_val = storage_trie
         .get(&inputs.storage_trie_key)
         .expect("storage trie read failed")
@@ -43,26 +40,21 @@ pub fn main() {
     // verify account proof ~ state_root
     let state_root = H256(inputs.state_root);
     let state_db = StorageProof::new(inputs.account_proof).into_memory_db::<KeccakHasher>();
-    let state_trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&state_db, &state_root).build();
+    let state_trie =
+        TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&state_db, &state_root).build();
     let proof_ok = state_trie
         .contains(&inputs.state_trie_key)
         .expect("account check failed");
     assert!(proof_ok, "storage proof verification failed");
 
     // recalc blockhash using header_rlp incl proven state_root
-    // let mut header_rlp = inputs.header_rlp.clone();
-    // println!("state_root {:?}", &state_root);
-    // println!("header_rlp len {:?}", &header_rlp.len());
-    // println!("header_rlp {:?}", const_hex::encode(&header_rlp));
-    // println!("index of state_root in header_rlp {:?}", &block.state_root);
     let mut header_rlp = inputs.header_rlp;
     header_rlp[91..123].copy_from_slice(state_root.as_bytes());
     let blockhash = keccak256(&header_rlp);
-    // let blockhash = [0u8; 32];
 
     let mut poseidon = Poseidon::<Fr>::new_circom(2).expect("poseidon init failed");
     // _mod_order might reduce fr2 i.e. it has 2 msg_hash preimages aka collision;
-    // since the 20-byte safe address cannot exceed bn254's scalar field _mod_order 
+    // since the 20-byte safe address cannot exceed bn254's scalar field _mod_order
     // is always a noop for fr1 i.e. fr1 has strictly 1 safe preimage: no collisions;
     // consequently "cross-account" collisions can never occur
     let fr1 = Fr::from_be_bytes_mod_order(&lpad_bytes32(inputs.safe));
