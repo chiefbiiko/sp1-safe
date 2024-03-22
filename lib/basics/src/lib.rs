@@ -17,8 +17,8 @@ pub struct Inputs {
     pub msg_hash: [u8; 32],     // Custom msg hash
     pub state_root: [u8; 32],   // eth_getBlockBy*::response.stateRoot
     pub storage_root: [u8; 32], // eth_getProof::response.storageHash
-    pub account_key: [u8; 32],  // keccak256(safe)
-    pub storage_key: [u8; 32],       // keccak256(msg_hash + uint256(7))
+    pub state_trie_key: [u8; 32],  // keccak256(safe)
+    pub storage_trie_key: [u8; 32],       // keccak256(msg_hash + uint256(7))
     pub account_proof: Vec<Vec<u8>>, // eth_getProof::response.accountProof
     pub storage_proof: Vec<Vec<u8>>, // eth_getProof::response.storageProof.proof
     pub header_rlp: Vec<u8>,         // RLP-encoded header

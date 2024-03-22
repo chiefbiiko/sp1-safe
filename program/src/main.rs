@@ -30,31 +30,32 @@ pub fn main() {
  
     // verify storage proof ~ storage_root
     let storage_root = H256(inputs.storage_root);
-    let storage_trie_key = keccak256(&inputs.storage_key);
-    let db = StorageProof::new(inputs.storage_proof).into_memory_db::<KeccakHasher>();
-    let trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&db, &storage_root).build();
-    let val = trie
-        .get(&storage_trie_key)
+    // let storage_trie_key = keccak256(&inputs.storage_key);
+    let storage_db = StorageProof::new(inputs.storage_proof).into_memory_db::<KeccakHasher>();
+    let storage_trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&storage_db, &storage_root).build();
+    let storage_val = storage_trie
+        .get(&inputs.storage_trie_key)
         .expect("storage trie read failed")
         .expect("target storage node is none");
     // Safe's SignMessageLib marks messages as "signed" with a literal 1
-    assert_eq!(val[0], 1u8, "msg not signed");
+    assert_eq!(storage_val[0], 1u8, "msg not signed");
 
     // verify account proof ~ state_root
     let state_root = H256(inputs.state_root);
-    let db = StorageProof::new(inputs.account_proof).into_memory_db::<KeccakHasher>();
-    let trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&db, &state_root).build();
-    let ok = trie
-        .contains(&inputs.account_key)
+    let state_db = StorageProof::new(inputs.account_proof).into_memory_db::<KeccakHasher>();
+    let state_trie = TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&state_db, &state_root).build();
+    let proof_ok = state_trie
+        .contains(&inputs.state_trie_key)
         .expect("account check failed");
-    assert!(ok, "account proof failed");
+    assert!(proof_ok, "storage proof verification failed");
 
     // recalc blockhash using header_rlp incl proven state_root
-    let mut header_rlp = inputs.header_rlp.clone();
+    // let mut header_rlp = inputs.header_rlp.clone();
     // println!("state_root {:?}", &state_root);
     // println!("header_rlp len {:?}", &header_rlp.len());
     // println!("header_rlp {:?}", const_hex::encode(&header_rlp));
     // println!("index of state_root in header_rlp {:?}", &block.state_root);
+    let mut header_rlp = inputs.header_rlp;
     header_rlp[91..123].copy_from_slice(state_root.as_bytes());
     let blockhash = keccak256(&header_rlp);
     // let blockhash = [0u8; 32];

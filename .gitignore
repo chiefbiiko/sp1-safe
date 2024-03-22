@@ -24,3 +24,7 @@ program/elf
 # node stuff
 node_modules
 package-lock.json
+
+# scratch stuff
+eth_getProof.sh
+lib/eip1186-verify
