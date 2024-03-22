@@ -1,5 +1,4 @@
 use ethers::{
-    utils,
     providers::{Middleware, Provider},
     types::{Address, H256, Block},
 };
@@ -73,7 +72,7 @@ pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Inputs {
 
     println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
     println!("block.hash {:?}", &block.hash.unwrap());
-    let header_rlp =  rlp_encode(&block);
+    let header_rlp =  rlp_encode_header(&block);
     println!("computed blockhash {:?}", H256(keccak256(&header_rlp)));
     println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 
@@ -100,50 +99,28 @@ pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Inputs {
 
 // https://ethereum.stackexchange.com/a/67332
 // https://github.com/ethereum/go-ethereum/blob/14eb8967be7acc54c5dc9a416151ac45c01251b6/core/types/block.go#L65
-// pub hash: Option<H256>,
-// block hash should be recomputable with the following header components:
-// pub parent_hash: H256,
-// pub uncles_hash: H256,
-// pub author: Option<H160>,
-// pub state_root: H256,
-// pub transactions_root: H256,
-// pub receipts_root: H256,
-// pub logs_bloom: Option<Bloom>,
-// pub difficulty: U256,
-// pub number: Option<U64>,
-// pub gas_limit: U256,
-// pub gas_used: U256,
-// pub timestamp: U256,
-// pub extra_data: Bytes,
-// pub mix_hash: Option<H256>,
-// pub nonce: Option<H64>,
-// pub base_fee_per_gas: Option<U256>,
-// pub withdrawals_root: Option<H256>,
-// pub blob_gas_used: Option<U256>,
-// pub excess_blob_gas: Option<U256>,
-// pub parent_beacon_block_root: Option<H256>,
-pub fn rlp_encode(block: &Block<H256>) -> Vec<u8> {
+pub fn rlp_encode_header(block: &Block<H256>) -> Vec<u8> {
     let mut rlp = RlpStream::new();
     rlp.begin_list(20);
     rlp.append(&block.parent_hash);
     rlp.append(&block.uncles_hash);
-    rlp.append(&block.author);
+    rlp.append(&block.author.expect("author"));
     rlp.append(&block.state_root);
     rlp.append(&block.transactions_root);
     rlp.append(&block.receipts_root);
-    rlp.append(&block.logs_bloom);
+    rlp.append(&block.logs_bloom.expect("logs_bloom"));
     rlp.append(&block.difficulty);
-    rlp.append(&block.number);
+    rlp.append(&block.number.expect("number"));
     rlp.append(&block.gas_limit);
     rlp.append(&block.gas_used);
     rlp.append(&block.timestamp);
     rlp.append(&block.extra_data.as_bytes().to_vec());
-    rlp.append(&block.mix_hash);
-    rlp.append(&block.nonce);
-    rlp.append(&block.base_fee_per_gas);         // london
-    rlp.append(&block.withdrawals_root);         // shanghai
-    rlp.append(&block.blob_gas_used);            // cancun
-    rlp.append(&block.excess_blob_gas);          // cancun
-    rlp.append(&block.parent_beacon_block_root); // cancun
+    rlp.append(&block.mix_hash.expect("mix_hash"));
+    rlp.append(&block.nonce.expect("nonce"));
+    rlp.append(&block.base_fee_per_gas.expect("base_fee_per_gas")); // london
+    rlp.append(&block.withdrawals_root.expect("withdrawals_root")); // shanghai
+    rlp.append(&block.blob_gas_used.expect("blob_gas_used"));       // cancun
+    rlp.append(&block.excess_blob_gas.expect("excess_blob_gas"));   // cancun
+    rlp.append(&block.parent_beacon_block_root.expect("parent_beacon_block_root")); // cancun
     rlp.out().freeze().into()
 }
