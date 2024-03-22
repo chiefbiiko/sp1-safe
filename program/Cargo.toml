@@ -5,9 +5,11 @@ name = "sp1-safe-program"
 edition = "2021"
 
 [dependencies]
-sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git" }
+sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git", tag = "v0.0.2" }
 sp1-safe-basics = { path = "../lib/basics" }
 ethereum-trie = { path = "../lib/ethereum-trie" }
 light-poseidon = "0.2.0"
 ark-bn254 = "0.4.0"
 ark-ff = "0.4.0"
+
+# const-hex = "1.11.1" #TMP
