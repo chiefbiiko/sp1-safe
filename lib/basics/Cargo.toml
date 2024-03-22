@@ -9,3 +9,4 @@ ethers = "2.0.13"
 serde = { version = "1.0.196", features = ["derive"], default-features = false }
 tiny-keccak = { version = "2.0.2", features = ["keccak"], git = "https://github.com/sp1-patches/tiny-keccak.git" }
 zerocopy = "0.7.32"
+rlp = { version = "0.5", features = ["derive"] }
