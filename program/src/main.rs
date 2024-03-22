@@ -50,6 +50,10 @@ pub fn main() {
     assert!(ok, "account proof failed");
 
     let mut poseidon = Poseidon::<Fr>::new_circom(2).expect("poseidon init failed");
+    // _mod_order might reduce fr2 i.e. it has 2 msg_hash preimages aka collision;
+    // since the 20-byte safe address cannot exceed bn254's scalar field _mod_order 
+    // is always a noop for fr1 - fr1 has strictly 1 safe preimage: no collisions;
+    // consequently "cross-account" collisions can never occur
     let fr1 = Fr::from_be_bytes_mod_order(&lpad_bytes32(inputs.safe));
     let fr2 = Fr::from_be_bytes_mod_order(&inputs.msg_hash);
     let challenge: [u8; 32] = poseidon
