@@ -1,10 +1,10 @@
 use ethers::{
     providers::{Middleware, Provider},
-    types::{Address, H256, Block},
+    types::{Address, Block, H256},
 };
 use rlp::RlpStream;
+use sp1_safe_basics::{concat_bytes64, keccak256, Inputs, SAFE_SIGNED_MESSAGES_SLOT};
 use zerocopy::AsBytes;
-use sp1_safe_basics::{SAFE_SIGNED_MESSAGES_SLOT, Inputs, keccak256, concat_bytes64};
 
 pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Inputs {
     let provider = Provider::try_from(rpc).expect("rpc provider failed");
@@ -27,16 +27,8 @@ pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Inputs {
         .await
         .expect("fetching proof failed");
 
-    // println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
     println!("actual block.hash {:?}", &block.hash.unwrap());
-    let header_rlp =  rlp_encode_header(&block);
-    // println!("computed blockhash {:?}", H256(keccak256(&header_rlp)));
-    // println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-    // println!("state_root {:?}", &block.state_root);
-    // println!("header_rlp len {:?}", &header_rlp.len());
-    // println!("header_rlp {:?}", const_hex::encode(&header_rlp));
-    // // println!("index of state_root in header_rlp {:?}", &block.state_root);
-    // println!("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+    let header_rlp = rlp_encode_header(&block);
 
     Inputs {
         safe: safe.into(),
@@ -55,7 +47,7 @@ pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Inputs {
             .iter()
             .map(|b| b.as_bytes().to_vec())
             .collect(),
-        header_rlp,//WIP
+        header_rlp, //WIP
     }
 }
 
@@ -81,8 +73,12 @@ pub fn rlp_encode_header(block: &Block<H256>) -> Vec<u8> {
     rlp.append(&block.nonce.expect("nonce"));
     rlp.append(&block.base_fee_per_gas.expect("base_fee_per_gas")); // london
     rlp.append(&block.withdrawals_root.expect("withdrawals_root")); // shanghai
-    rlp.append(&block.blob_gas_used.expect("blob_gas_used"));       // cancun
-    rlp.append(&block.excess_blob_gas.expect("excess_blob_gas"));   // cancun
-    rlp.append(&block.parent_beacon_block_root.expect("parent_beacon_block_root")); // cancun
+    rlp.append(&block.blob_gas_used.expect("blob_gas_used")); // cancun
+    rlp.append(&block.excess_blob_gas.expect("excess_blob_gas")); // cancun
+    rlp.append(
+        &block
+            .parent_beacon_block_root
+            .expect("parent_beacon_block_root"),
+    ); // cancun
     rlp.out().freeze().into()
 }
