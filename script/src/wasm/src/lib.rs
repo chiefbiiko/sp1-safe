@@ -1,6 +1,5 @@
 use sp1_core::{SP1Prover, SP1Stdin};
 use wasm_bindgen::prelude::*;
-use wasm_bindgen_test::wasm_bindgen_test;
 
 const ELF: &[u8] = include_bytes!("../../../../program/elf/riscv32im-succinct-zkvm-elf");
 
@@ -52,13 +51,20 @@ pub fn prove(inputs: &[u8]) -> Wrapper {
     return wrapper;
 }
 
-#[wasm_bindgen_test]
-pub fn test_prove() {
-    let witness = b"";
+#[cfg(test)]
+mod test {
+    use crate::prove;
+    use wasm_bindgen_test::wasm_bindgen_test;
+    wasm_bindgen_test::wasm_bindgen_test_configure!(run_in_browser);
 
-    let wrapper = prove(witness);
+    #[wasm_bindgen_test]
+    pub fn test_prove() {
+        let witness = b"";
 
-    assert_eq!(wrapper.blockhash().len(), 32);
-    assert_eq!(wrapper.challenge().len(), 32);
-    assert!(wrapper.proof().len() > 0);
+        let wrapper = prove(witness);
+
+        assert_eq!(wrapper.blockhash().len(), 32);
+        assert_eq!(wrapper.challenge().len(), 32);
+        assert!(wrapper.proof().len() > 0);
+    }
 }
