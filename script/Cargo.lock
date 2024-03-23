@@ -3568,7 +3568,7 @@ dependencies = [
 [[package]]
 name = "sp1-helper"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=v0.0.2#21ff9e4a656e84220b6962849a439255c625bc0f"
+source = "git+https://github.com/succinctlabs/sp1.git?tag=nightly-9504acd329f9d40824e49e16c517911cbc26c842#9504acd329f9d40824e49e16c517911cbc26c842"
 dependencies = [
  "cargo_metadata",
  "chrono",
@@ -3600,6 +3600,7 @@ dependencies = [
 name = "sp1-safe-script"
 version = "0.1.0"
 dependencies = [
+ "bincode",
  "const-hex",
  "ethers",
  "rlp",
