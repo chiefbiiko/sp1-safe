@@ -13,7 +13,8 @@ default = ["console_error_panic_hook"]
 [dependencies]
 wasm-bindgen = "0.2.84"
 
-sp1-core = { git = "https://github.com/succinctlabs/sp1.git", tag = "nightly-9504acd329f9d40824e49e16c517911cbc26c842" }
+# sp1-core = { git = "https://github.com/succinctlabs/sp1.git", tag = "nightly-9504acd329f9d40824e49e16c517911cbc26c842" }
+sp1-core = { git = "https://github.com/chiefbiiko/sp1.git", branch = "wasm-compat" }
 bincode = "1.3.3"
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
