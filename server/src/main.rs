@@ -24,7 +24,7 @@ async fn prove(body: web::Bytes) -> Result<HttpResponse> {
     let mut stdin = SP1Stdin::new();
     stdin.write::<Inputs>(&inputs);
 
-    let mut proofwio = SP1Prover::prove(ELF, stdin).expect("proving failed");
+    let mut proofwio = SP1Prover::prove(ELF, stdin)?;
 
     let blockhash = proofwio.stdout.read::<[u8; 32]>();
     let challenge = proofwio.stdout.read::<[u8; 32]>();
@@ -33,9 +33,9 @@ async fn prove(body: web::Bytes) -> Result<HttpResponse> {
         safe_address: params.safe_address,
         message_hash: params.message_hash,
         blocknumber: anchor,
-        blockhash: format!("0x{}", const_hex::encode(&blockhash)),
-        challenge: format!("0x{}", const_hex::encode(&challenge)),
-        proof: format!("0x{}", const_hex::encode(&bincode::serialize(&proofwio.proof)?)),
+        blockhash: format!("0x{}", const_hex::encode(blockhash)),
+        challenge: format!("0x{}", const_hex::encode(challenge)),
+        proof: format!("0x{}", const_hex::encode(bincode::serialize(&proofwio.proof)?)),
     };
 
     Ok(HttpResponse::Ok().json(res)) // <- send response
