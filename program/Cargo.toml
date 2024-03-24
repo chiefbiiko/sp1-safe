@@ -5,7 +5,7 @@ name = "sp1-safe-program"
 edition = "2021"
 
 [dependencies]
-sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git", tag = "v0.0.2" }
+sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git", tag = "nightly-5fa44d6589a4612fda531a119dad030e88f84015" }
 sp1-safe-basics = { path = "../lib/basics" }
 ethereum-trie = { path = "../lib/ethereum-trie" }
 light-poseidon = "0.2.0"

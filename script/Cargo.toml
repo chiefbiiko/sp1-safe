@@ -6,7 +6,7 @@ edition = "2021"
 
 [dependencies]
 const-hex = "1.11.1"
-sp1-core = { git = "https://github.com/succinctlabs/sp1.git", tag = "v0.0.2" }
+sp1-core = { git = "https://github.com/succinctlabs/sp1.git", tag = "nightly-5fa44d6589a4612fda531a119dad030e88f84015" }
 sp1-safe-basics = { path = "../lib/basics" }
 tokio = { version = "1.36.0", features = ["rt-multi-thread", "macros"] }
 
