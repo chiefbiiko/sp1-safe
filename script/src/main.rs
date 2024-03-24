@@ -25,9 +25,6 @@ async fn main() {
     let mut stdin = SP1Stdin::new();
     stdin.write::<Inputs>(&inputs);
 
-    let witness = bincode::serialize(&inputs).expect("bincode");
-    println!("witness {}", const_hex::encode(&witness));
-
     // Generate proof
     // let mut proof = SP1Prover::prove(ELF, stdin).expect("proving failed");
     let mut stdout = SP1Prover::execute(ELF, stdin).expect("execution failed");
