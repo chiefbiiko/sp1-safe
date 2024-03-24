@@ -3600,7 +3600,6 @@ dependencies = [
 name = "sp1-safe-script"
 version = "0.1.0"
 dependencies = [
- "bincode",
  "const-hex",
  "ethers",
  "rlp",
