@@ -1,0 +1,11 @@
+[workspace]
+[package]
+version = "0.1.0"
+name = "sp1-safe-fetch"
+edition = "2021"
+
+[dependencies]
+ethers = "2.0.13"
+rlp = { version = "0.5", features = ["derive"] }
+sp1-safe-basics = { path = "../basics" }
+zerocopy = "0.7.32"

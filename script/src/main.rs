@@ -3,7 +3,7 @@
 use const_hex;
 use sp1_core::{SP1Prover, SP1Stdin /*, SP1Verifier*/};
 use sp1_safe_basics::{coerce_bytes20, coerce_bytes32, Inputs};
-use sp1_safe_utils::fetch_params;
+use sp1_safe_fetch::fetch_params;
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
@@ -40,7 +40,7 @@ block number: {}
 === proof outputs ===
 blockhash: 0x{}
 challenge: 0x{}",
-// proof: 0x{}",
+        // proof: 0x{}",
         const_hex::encode(&safe),
         const_hex::encode(&msg_hash),
         anchor,
