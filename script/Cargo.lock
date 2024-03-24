@@ -3597,31 +3597,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "sp1-safe-fetch"
+version = "0.1.0"
+dependencies = [
+ "ethers",
+ "rlp",
+ "sp1-safe-basics",
+ "zerocopy",
+]
+
+[[package]]
 name = "sp1-safe-script"
 version = "0.1.0"
 dependencies = [
  "bincode",
  "const-hex",
- "ethers",
- "rlp",
  "serde",
  "sp1-core",
  "sp1-helper",
  "sp1-safe-basics",
- "sp1-safe-utils",
+ "sp1-safe-fetch",
  "tiny-keccak 2.0.2 (git+https://github.com/sp1-patches/tiny-keccak.git)",
  "tokio",
- "zerocopy",
-]
-
-[[package]]
-name = "sp1-safe-utils"
-version = "0.1.0"
-dependencies = [
- "ethers",
- "rlp",
- "sp1-safe-basics",
- "zerocopy",
 ]
 
 [[package]]
