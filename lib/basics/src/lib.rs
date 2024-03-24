@@ -18,6 +18,22 @@ pub struct Inputs {
     pub header_rlp: Vec<u8>,         // RLP-encoded header
 }
 
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct Sp1SafeParams {
+    safe_address: String,
+    message_hash: String,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct Sp1SafeResult {
+    safe_address: String,
+    message_hash: String,
+    blocknumber: u64,
+    blockhash: String,
+    challenge: String,
+    proof: String,
+}
+
 pub fn coerce_bytes20(x: Vec<u8>) -> [u8; 20] {
     x.try_into().expect("invalid address")
 }

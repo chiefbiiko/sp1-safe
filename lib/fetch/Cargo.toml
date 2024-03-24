@@ -5,6 +5,7 @@ name = "sp1-safe-fetch"
 edition = "2021"
 
 [dependencies]
+anyhow = "1.0.81"
 ethers = "2.0.13"
 rlp = { version = "0.5", features = ["derive"] }
 sp1-safe-basics = { path = "../basics" }

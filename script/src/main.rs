@@ -3,7 +3,7 @@
 use const_hex;
 use sp1_core::{SP1Prover, SP1Stdin /*, SP1Verifier*/};
 use sp1_safe_basics::{coerce_bytes20, coerce_bytes32, Inputs};
-use sp1_safe_fetch::fetch_params;
+use sp1_safe_fetch::fetch_inputs;
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
@@ -20,7 +20,9 @@ async fn main() {
         const_hex::decode(std::env::var("MSG_HASH").expect("must set env var MSG_HASH=0x..."))
             .expect("not hex"),
     );
-    let (anchor, inputs) = fetch_params(&rpc, safe.into(), msg_hash.into()).await;
+    let (anchor, inputs) = fetch_inputs(&rpc, safe.into(), msg_hash.into())
+        .await
+        .expect("fetch_inputs failed");
     let mut stdin = SP1Stdin::new();
     stdin.write::<Inputs>(&inputs);
 
