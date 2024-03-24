@@ -1,7 +1,7 @@
 use sp1_core::{SP1Prover, SP1Stdin};
 use wasm_bindgen::prelude::*;
 
-const ELF: &[u8] = include_bytes!("../../../../program/elf/riscv32im-succinct-zkvm-elf");
+const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
 #[wasm_bindgen]
 pub struct Wrapper {
