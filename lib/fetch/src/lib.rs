@@ -1,3 +1,4 @@
+use anyhow::{Context, Result};
 use ethers::{
     providers::{Middleware, Provider},
     types::{Address, Block, H256},
@@ -6,25 +7,17 @@ use rlp::RlpStream;
 use sp1_safe_basics::{concat_bytes64, keccak256, Inputs, SAFE_SIGNED_MESSAGES_SLOT};
 use zerocopy::AsBytes;
 
-pub async fn fetch_params(rpc: &str, safe: Address, msg_hash: H256) -> (u64, Inputs) {
+pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Result<(u64, Inputs)> {
     let storage_key = keccak256(&concat_bytes64(msg_hash.into(), SAFE_SIGNED_MESSAGES_SLOT));
 
-    let provider = Provider::try_from(rpc).expect("rpc provider failed");
-    let latest = provider
-        .get_block_number()
-        .await
-        .expect("fetching latest failed");
-    let block = provider
-        .get_block(latest)
-        .await
-        .expect("fetching block failed")
-        .expect("no such block");
+    let provider = Provider::try_from(rpc)?;
+    let latest = provider.get_block_number().await?;
+    let block = provider.get_block(latest).await?.context("no such block")?;
     let proof = provider
         .get_proof(safe, vec![storage_key.into()], Some(latest.into()))
-        .await
-        .expect("fetching proof failed");
+        .await?;
 
-    (
+    Ok((
         latest.as_u64(),
         Inputs {
             safe: safe.into(),
@@ -45,7 +38,7 @@ pub async fn fetch_params(rpc: &str, safe: Address, msg_hash: H256) -> (u64, Inp
                 .map(|b| b.as_bytes().to_vec())
                 .collect(),
         },
-    )
+    ))
 }
 
 // https://ethereum.stackexchange.com/a/67332
