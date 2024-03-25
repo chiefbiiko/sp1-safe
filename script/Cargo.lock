@@ -3614,6 +3614,7 @@ dependencies = [
  "bincode",
  "const-hex",
  "serde",
+ "serde_json",
  "sp1-core",
  "sp1-helper",
  "sp1-safe-basics",
