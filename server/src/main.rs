@@ -40,7 +40,8 @@ async fn index(params: Json<Sp1SafeParams>) -> Value {
         challenge: format!("0x{}", const_hex::encode(challenge)),
         proof: format!(
             "0x{}",
-            const_hex::encode(bincode::serialize(&proofwio.proof).expect("bincode"))
+            ""
+            // const_hex::encode(bincode::serialize(&proofwio.proof).expect("bincode"))
         ),
     })
 }
