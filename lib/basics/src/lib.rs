@@ -20,7 +20,7 @@ pub struct Inputs {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Sp1SafeParams {
-    pub chain_id: u32,
+    pub chain_id: u64,
     pub safe_address: String,
     pub message_hash: String,
 }
