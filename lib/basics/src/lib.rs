@@ -35,14 +35,6 @@ pub struct Sp1SafeResult {
     pub proof: String,
 }
 
-pub fn coerce_bytes20(x: Vec<u8>) -> [u8; 20] {
-    x.try_into().expect("invalid address")
-}
-
-pub fn coerce_bytes32(x: Vec<u8>) -> [u8; 32] {
-    x.try_into().expect("invalid hash")
-}
-
 pub fn concat_bytes64(a: [u8; 32], b: [u8; 32]) -> [u8; 64] {
     // https://stackoverflow.com/a/76573243
     unsafe { core::mem::transmute::<[[u8; 32]; 2], [u8; 64]>([a, b]) }
