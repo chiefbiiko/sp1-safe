@@ -1,4 +1,4 @@
-use actix_web::{middleware, web, App, Error, HttpRequest, HttpResponse, HttpServer};
+use actix_web::{http::StatusCode, middleware, web, App, Error, HttpRequest, HttpResponse, HttpServer, ResponseError};
 use anyhow::{anyhow, Result};
 // use serde::{Deserialize, Serialize};
 use sp1_core::{SP1Prover, SP1Stdin};
@@ -68,12 +68,12 @@ mod tests {
     #[actix_web::test]
     async fn test_index() {
         let app =
-            test::init_service(App::new().service(web::resource("/").route(web::post().to(index))))
+            test::init_service(App::new().service(web::resource("/").route(web::post().to(prove))))
                 .await;
 
         let req = test::TestRequest::post()
             .uri("/")
-            .set_json(MyObj {
+            .set_json(Sp1SafeParams {
                 chain_id: 100,
                 safe_address: "0x38Ba7f4278A1482FA0a7bC8B261a9A673336EDDc".to_owned(),
                 message_hash: "0xa225aed0c0283cef82b24485b8b28fb756fc9ce83d25e5cf799d0c8aa20ce6b7"
