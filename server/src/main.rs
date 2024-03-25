@@ -5,16 +5,15 @@ use rocket::serde::json::{json, Json, Value};
 use sp1_core::{SP1Prover, SP1Stdin};
 use sp1_safe_basics::{Inputs, Sp1SafeParams, Sp1SafeResult};
 use sp1_safe_fetch::fetch_inputs;
+use std::env;
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
-const SEPOLIA_RPC: &str = "https://rpc.sepolia.dev";
-const GNOSIS_RPC: &str = "https://rpc.gnosis.gateway.fm";
 
 #[post("/", data = "<params>")]
 async fn index(params: Json<Sp1SafeParams>) -> Value {
     let rpc = match params.chain_id {
-        100 => GNOSIS_RPC,
-        11155111 => SEPOLIA_RPC,
+        100 => env::var("GNOSIS_RPC").unwrap_or("https://rpc.gnosis.gateway.fm".to_string()),
+        11155111 => env::var("SEPOLIA_RPC").unwrap_or("https://rpc.sepolia.dev".to_string()),
         _ => panic!("invalid chain_id"),
     };
     let safe: [u8; 20] =
