@@ -1,0 +1,5 @@
+[default]
+address = "0.0.0.0"
+port = 4190
+ip_header = false
+limits = { json = "1 KiB" }
