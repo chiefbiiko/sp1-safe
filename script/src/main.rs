@@ -27,11 +27,11 @@ async fn main() {
     stdin.write::<Inputs>(&inputs);
 
     // Generate proof
-    // let mut proofwio = SP1Prover::prove(ELF, stdin).expect("proving failed");
-    let mut stdout = SP1Prover::execute(ELF, stdin).expect("execution failed");
+    let mut proofwio = SP1Prover::prove(ELF, stdin).expect("proving failed");
+    // let mut stdout = SP1Prover::execute(ELF, stdin).expect("execution failed");
 
-    let blockhash = stdout.read::<[u8; 32]>();
-    let challenge = stdout.read::<[u8; 32]>();
+    let blockhash = proofwio.stdout.read::<[u8; 32]>();
+    let challenge = proofwio.stdout.read::<[u8; 32]>();
 
     println!(
         "Safe multisig storage proof verification passed
