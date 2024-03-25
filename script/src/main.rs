@@ -12,7 +12,7 @@ const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf
 
 #[tokio::main]
 async fn main() {
-    sp1_core::utils::setup_logger();
+    // sp1_core::utils::setup_logger();
     // Assemble and write inputs
     // let out = std::env::var("OUT_FILE").expect("must set env var OUT_FILE=/tmp/xyz");
     let rpc = std::env::var("RPC").unwrap_or("https://rpc.gnosis.gateway.fm".to_string());
