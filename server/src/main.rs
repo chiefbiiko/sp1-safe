@@ -1,6 +1,5 @@
 #[macro_use]
 extern crate rocket;
-extern crate pretty_env_logger;
 
 use anyhow::{bail, Result};
 use rocket::{
@@ -60,5 +59,6 @@ async fn index(params: Json<Sp1SafeParams>) -> (Status, Value) {
 
 #[launch]
 fn rocket() -> _ {
+    env_logger::init();
     rocket::build().mount("/", routes![index])
 }
