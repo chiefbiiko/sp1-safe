@@ -4,7 +4,6 @@ extern crate rocket;
 use anyhow::{bail, Result};
 use rocket::{
     http::Status,
-    request::Request,
     serde::json::{json, Json, Value},
 };
 use sp1_core::{SP1Prover, SP1Stdin};
@@ -53,23 +52,13 @@ async fn index(params: Json<Sp1SafeParams>) -> (Status, Value) {
         Ok(res) => (Status::Ok, res),
         Err(err) => {
             log::error!("{}", err);
-            (
-                Status::BadRequest,
-                "{\"error\":\"t(ツ)_/ invalid chain_id\"}".into(),
-            )
+            (Status::BadRequest, "".into())
         }
     }
-}
-
-#[catch(500)]
-fn internal_server_error(_: &Request) -> &'static str {
-    "{\"error\":\"t(ツ)_/ invalid storage proof\"}"
 }
 
 #[launch]
 fn rocket() -> _ {
     env_logger::init();
-    rocket::build()
-        .register("/", catchers![internal_server_error])
-        .mount("/", routes![index])
+    rocket::build().mount("/", routes![index])
 }
