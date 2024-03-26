@@ -59,5 +59,26 @@ test_proving_not_ok() {
 #   assert_equal $err '"t(ツ)_/¯"'
 }
 
-test_proving_ok
+test_wrong_chain_id() {
+  printf "test_proving_ok\n"
+
+  resp_head=$(mktemp)
+  resp_body=$(mktemp)
+  # replace chain_id to point to non-existing contract storage
+  not_ok_params="$(echo "$params" | sed 's/100/999999999999999/')"
+
+  curl \
+    -sS \
+    -D $resp_head \
+    http:/localhost:4190/ \
+    -d "$not_ok_params" \
+  > $resp_body
+
+  assert_status $resp_head 500
+#   err=$(jq -r '.error' $resp_body)
+#   assert_equal $err '"t(ツ)_/¯"'
+}
+
+# test_proving_ok
 test_proving_not_ok
+# test_wrong_chain_id
