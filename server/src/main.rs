@@ -53,7 +53,12 @@ async fn index(params: Json<Sp1SafeParams>) -> (Status, Value) {
         Ok(res) => (Status::Ok, res),
         Err(err) => {
             log::error!("{}", err);
-            (Status::BadRequest, "".into())
+            (
+                Status::BadRequest,
+                json!({
+                    "error": "t(ツ)_/¯ invalid chain id"
+                }),
+            )
         }
     }
 }
