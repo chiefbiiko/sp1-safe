@@ -18,7 +18,7 @@ async fn prove(params: Json<Sp1SafeParams>) -> Result<Value> {
     log::info!("🏈 incoming request");
     let rpc = match params.chain_id {
         100 => env::var("GNOSIS_RPC").unwrap_or("https://rpc.gnosis.gateway.fm".to_string()),
-        11155111 => env::var("SEPOLIA_RPC").unwrap_or("https://rpc.sepolia.dev".to_string()),
+        11155111 => env::var("SEPOLIA_RPC").unwrap_or("https://1rpc.io/sepolia".to_string()),
         _ => bail!("invalid chain_id {}", params.chain_id),
     };
     let safe: [u8; 20] = const_hex::decode_to_array::<&str, 20>(&params.safe_address)?;
@@ -53,19 +53,12 @@ async fn index(params: Json<Sp1SafeParams>) -> (Status, Value) {
         Ok(res) => (Status::Ok, res),
         Err(err) => {
             log::error!("{}", err);
-            (Status::InternalServerError, "t(ツ)_/¯".into())
+            (Status::BadRequest, "t(ツ)_/¯".into())
         }
     }
 }
 
-#[catch(default)]
-fn catch_all() -> &'static str {
-    "t(ツ)_/¯"
-}
-
 #[launch]
 fn rocket() -> _ {
-    rocket::build()
-        .register("/", catchers![catch_all])
-        .mount("/", routes![index])
+    rocket::build().mount("/", routes![index])
 }

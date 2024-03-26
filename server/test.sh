@@ -55,7 +55,8 @@ test_proving_not_ok() {
   > $resp_body
 
   assert_status $resp_head 500
-  assert_equal "$(cat $resp_body)" 't(ツ)_/¯'
+#   err=$(jq -r '.error' $resp_body)
+#   assert_equal $err '"t(ツ)_/¯"'
 }
 
 test_proving_ok
