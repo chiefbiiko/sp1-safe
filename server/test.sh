@@ -2,6 +2,8 @@
 
 set -eExuo pipefail
 
+source ../lib/bashert.sh
+
 params="$(cat << EOF
 {
     "chain_id": 100,
@@ -11,4 +13,49 @@ params="$(cat << EOF
 EOF
 )"
 
-curl -H "content-type: application/json" -d "$params" http://localhost:4190/
+test_proving_ok() {
+  printf "test_proving_ok\n"
+
+  resp_head=$(mktemp)
+  resp_body=$(mktemp)
+
+  curl \
+    -sS \
+    -D $resp_head \
+    http:/localhost:4190/ \
+    -d "$params" \
+  > $resp_body
+
+  assert_status $resp_head 200
+
+  blocknumber=$(jq -r '.blocknumber' $resp_body)
+  blockhash=$(jq -r '.blockhash' $resp_body)
+  challenge=$(jq -r '.challenge' $resp_body)
+  proof=$(jq -r '.proof' $resp_body)
+
+  assert_gt $blocknumber 33119702
+  assert_match $blockhash '^0x[a-f0-9]{64}$'
+  assert_match $challenge '^0x[a-f0-9]{64}$'
+  assert_equal $proof '0x'
+}
+
+test_proving_not_ok() {
+  printf "test_proving_ok\n"
+
+  resp_head=$(mktemp)
+  resp_body=$(mktemp)
+  # replace chain_id to point to non-existing contract storage
+  not_ok_params="$(echo "$params" | sed 's/100/11155111/')"
+
+  curl \
+    -sS \
+    -D $resp_head \
+    http:/localhost:4190/ \
+    -d "$not_ok_params" \
+  > $resp_body
+
+  assert_status $resp_head 500
+}
+
+test_proving_ok
+test_proving_not_ok

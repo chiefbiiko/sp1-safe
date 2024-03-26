@@ -33,6 +33,7 @@ async fn index(params: Json<Sp1SafeParams>) -> Value {
     let challenge = proofwio.stdout.read::<[u8; 32]>();
 
     json!(Sp1SafeResult {
+        chain_id: params.chain_id,
         safe_address: params.safe_address.to_owned(),
         message_hash: params.message_hash.to_owned(),
         blocknumber: anchor,
@@ -40,38 +41,19 @@ async fn index(params: Json<Sp1SafeParams>) -> Value {
         challenge: format!("0x{}", const_hex::encode(challenge)),
         proof: format!(
             "0x{}",
-            ""
-            // const_hex::encode(bincode::serialize(&proofwio.proof).expect("bincode"))
+            "" // const_hex::encode(bincode::serialize(&proofwio.proof).expect("bincode"))
         ),
     })
 }
 
-#[launch]
-fn rocket() -> _ {
-    rocket::build().mount("/", routes![index])
+#[catch(default)]
+fn catch_all() -> &'static str {
+    "t(ツ)_/¯"
 }
 
-#[cfg(test)]
-mod test {
-    use super::*;
-    use rocket::{http::Status, local::blocking::Client};
-
-    #[test]
-    fn test_index() {
-        println!("hi1");
-        let client = Client::tracked(super::rocket()).expect("valid rocket instance");
-        println!("hi2");
-        let response = client
-            .post(uri!(super::index))
-            .json(&Sp1SafeParams {
-                chain_id: 100,
-                safe_address: "0x38Ba7f4278A1482FA0a7bC8B261a9A673336EDDc".to_owned(),
-                message_hash: "0xa225aed0c0283cef82b24485b8b28fb756fc9ce83d25e5cf799d0c8aa20ce6b7"
-                    .to_owned(),
-            })
-            .dispatch();
-        println!("hi3");
-        assert_eq!(response.status(), Status::Ok);
-        assert_eq!(response.into_string().unwrap(), "Hello, world!");
-    }
+#[launch]
+fn rocket() -> _ {
+    rocket::build()
+        .register("/", catchers![catch_all])
+        .mount("/", routes![index])
 }

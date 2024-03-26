@@ -39,6 +39,7 @@ async fn main() {
     println!(
         "{}",
         json!(Sp1SafeResult {
+            chain_id: 100,
             safe_address: format!("0x{}", const_hex::encode(safe)),
             message_hash: format!("0x{}", const_hex::encode(msg_hash)),
             blocknumber: anchor,
