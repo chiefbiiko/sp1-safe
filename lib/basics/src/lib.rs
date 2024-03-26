@@ -27,6 +27,7 @@ pub struct Sp1SafeParams {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Sp1SafeResult {
+    pub chain_id: u64,
     pub safe_address: String,
     pub message_hash: String,
     pub blocknumber: u64,
