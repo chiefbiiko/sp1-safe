@@ -63,13 +63,6 @@ async fn index(params: Json<Sp1SafeParams>) -> (Status, Value) {
     }
 }
 
-#[catch(400)]
-fn bad_request(_: &Request) -> Value {
-    json!({
-        "error": "t(ツ)_/¯ invalid chain id"
-    })
-}
-
 #[catch(500)]
 fn internal_server_error(_: &Request) -> Value {
     json!({
@@ -81,6 +74,6 @@ fn internal_server_error(_: &Request) -> Value {
 fn rocket() -> _ {
     env_logger::init();
     rocket::build()
-        .register("/", catchers![bad_request, internal_server_error])
+        .register("/", catchers![internal_server_error])
         .mount("/", routes![index])
 }
