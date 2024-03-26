@@ -4,6 +4,7 @@ extern crate rocket;
 use anyhow::{bail, Result};
 use rocket::{
     http::Status,
+    request::Request,
     serde::json::{json, Json, Value},
 };
 use sp1_core::{SP1Prover, SP1Stdin};
@@ -22,13 +23,13 @@ async fn prove(params: Json<Sp1SafeParams>) -> Result<Value> {
     };
     let safe: [u8; 20] = const_hex::decode_to_array::<&str, 20>(&params.safe_address)?;
     let msg_hash: [u8; 32] = const_hex::decode_to_array::<&str, 32>(&params.message_hash)?;
-    log::info!("💾 fetching inputs");
+    log::info!("🕳️ fetching inputs");
     let (anchor, inputs) = fetch_inputs(&rpc, safe.into(), msg_hash.into()).await?;
     let mut stdin = SP1Stdin::new();
     stdin.write::<Inputs>(&inputs);
-    log::info!("🧮 zk proving");
+    log::info!("🎰 zk proving");
     let mut proofwio = SP1Prover::prove(ELF, stdin)?;
-    log::info!("🥡 serving results");
+    log::info!("🎱 serving results");
     let blockhash = proofwio.stdout.read::<[u8; 32]>();
     let challenge = proofwio.stdout.read::<[u8; 32]>();
     // let proofbin = bincode::serialize(&proofwio.proof)?;
@@ -52,13 +53,23 @@ async fn index(params: Json<Sp1SafeParams>) -> (Status, Value) {
         Ok(res) => (Status::Ok, res),
         Err(err) => {
             log::error!("{}", err);
-            (Status::BadRequest, "t(ツ)_/¯".into())
+            (
+                Status::BadRequest,
+                "{\"error\":\"t(ツ)_/ invalid chain_id\"}".into(),
+            )
         }
     }
+}
+
+#[catch(500)]
+fn internal_server_error(_: &Request) -> &'static str {
+    "{\"error\":\"t(ツ)_/ invalid storage proof\"}"
 }
 
 #[launch]
 fn rocket() -> _ {
     env_logger::init();
-    rocket::build().mount("/", routes![index])
+    rocket::build()
+        .register("/", catchers![internal_server_error])
+        .mount("/", routes![index])
 }
