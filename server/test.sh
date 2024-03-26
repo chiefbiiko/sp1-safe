@@ -55,6 +55,8 @@ test_proving_not_ok() {
   > $resp_body
 
   assert_status $resp_head 500
+  err="$(jq -r '.error' $resp_body)"
+  assert_equal "$err" 't(ツ)_/¯ invalid storage proof'
 }
 
 test_wrong_chain_id() {
@@ -73,6 +75,8 @@ test_wrong_chain_id() {
   > $resp_body
 
   assert_status $resp_head 400
+    err="$(jq -r '.error' $resp_body)"
+  assert_equal "$err" 't(ツ)_/¯ invalid chain id'
 }
 
 test_proving_ok
