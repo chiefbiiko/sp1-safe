@@ -27,6 +27,9 @@ console_error_panic_hook = { version = "0.1.7", optional = true }
 wasm-bindgen-test = "0.3.34"
 const-hex = "1.11.1"
 
+[build-dependencies]
+sp1-helper = { git = "https://github.com/succinctlabs/sp1.git", branch = "wasm-compat" }
+
 [profile.release]
 # Tell `rustc` to optimize for small code size.
 opt-level = "s"
