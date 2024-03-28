@@ -68,7 +68,7 @@ jobs:
         with:
           node-version: 21
 
-      - name: get the current version tag
+      - name: Get the current version tag
         run: echo "PUSHED_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
       - name: Get the release notes
@@ -95,10 +95,10 @@ jobs:
           draft: false
           prerelease: true
 
-      - name: prep a release upload url artifact
+      - name: Prep a release upload url artifact
         run: echo "${{ steps.create_release.outputs.upload_url }}" > ./release_upload_url.txt
 
-      - name: upload the release upload url artifact
+      - name: Upload the release upload url artifact
         uses: actions/upload-artifact@v2.2.2
         with:
           name: release_upload_url
@@ -138,7 +138,7 @@ jobs:
       - name: Build the server
         run: cargo build --manifest-path ./server/Cargo.toml --release
 
-      - name: gzipup the binary
+      - name: Gzip the binary
         run: gzip -c ./server/target/release/sp1-safe-server > ./sp1-safe-server.gz
 
       - name: Publish the linux server binary
@@ -147,7 +147,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ env.RELEASE_UPLOAD_URL }}
           asset_path: ./sp1-safe-server.gz
           asset_name: sp1-safe-server-${{ env.PUSHED_TAG }}-x86_64-unknown-linux-gnu.gz
           asset_content_type: application/gzip
@@ -158,7 +158,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          upload_url: ${{ env.RELEASE_UPLOAD_URL }}
           asset_path: ./sp1-safe-server.gz
           asset_name: sp1-safe-server-${{ env.PUSHED_TAG }}-x86_64-apple-darwin.gz
           asset_content_type: application/gzip
