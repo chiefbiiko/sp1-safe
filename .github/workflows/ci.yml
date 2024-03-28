@@ -62,6 +62,12 @@ jobs:
     needs: check-changelog
     runs-on: ubuntu-22.04
     steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 21
+
       - name: get the current version tag
         run: echo "PUSHED_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
@@ -109,10 +115,6 @@ jobs:
           - macos-13
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 21
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@nightly
