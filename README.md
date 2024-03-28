@@ -31,3 +31,13 @@ Run the server:
 cargo build --manifest-path ./server/Cargo.toml --release
 RUST_LOG=info ./server/target/release/sp1-safe-server
 ```
+
+---
+
+Run the server as a systemd service:
+<!-- https://0pointer.net/blog/dynamic-users-with-systemd.html -->
+```sh
+cp ./server/sp1-safe-server.service /etc/systemd/system/sp1-safe-server.service
+systemctl daemon-reload
+systemctl start sp1-safe-server.service
+```
