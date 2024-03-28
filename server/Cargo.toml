@@ -13,3 +13,6 @@ rocket = {version = "0.5.0", features = ["json"] }
 sp1-core = { git = "https://github.com/succinctlabs/sp1.git", tag = "nightly-5fa44d6589a4612fda531a119dad030e88f84015" }
 sp1-safe-basics = { path = "../lib/basics" }
 sp1-safe-fetch = { path = "../lib/fetch" }
+
+[build-dependencies]
+sp1-helper = { git = "https://github.com/succinctlabs/sp1.git", tag = "nightly-5fa44d6589a4612fda531a119dad030e88f84015" }
