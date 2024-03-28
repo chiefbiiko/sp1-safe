@@ -1,6 +1,8 @@
 # sp1-safe
 
-Prove a Safe multisig over a message in zkzk (w/o doxing the Safe and/or its owners).
+Prove a Safe multisig over a message in zk.
+
+---
 
 Build the RISC-V ELF binary:
 
@@ -25,7 +27,7 @@ RUST_BACKTRACE=full \
 
 ---
 
-Run the server:
+Build and run the server:
 
 ```sh
 cargo build --manifest-path ./server/Cargo.toml --release
@@ -34,10 +36,15 @@ RUST_LOG=info ./server/target/release/sp1-safe-server
 
 ---
 
-Run the server as a systemd service:
+Fetch a prebuilt `sp1-safe-server` binary and run it as a systemd service:
 <!-- https://0pointer.net/blog/dynamic-users-with-systemd.html -->
 ```sh
-cp ./server/sp1-safe-server.service /etc/systemd/system/sp1-safe-server.service
+case "$(uname -a)" in
+  Linux*)  os=linux  ;;
+  Darwin*) os=darwin ;;
+esac
+curl -sSfL https://TODO-$os.gz | gunzip > /usr/local/bin/sp1-safe-server
+curl -sSfL https://raw.githubusercontent.com/chiefbiiko/sp1-safe/main/server/sp1-safe-server.service | sudo tee /etc/systemd/system/sp1-safe-server.service
 systemctl daemon-reload
 systemctl start sp1-safe-server.service
 ```
