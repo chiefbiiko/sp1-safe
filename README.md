@@ -13,7 +13,7 @@ cargo prove build
 
 ---
 
-Run the `sp1` program:
+Run an example:
 
 ```sh
 cd ./script
@@ -40,10 +40,10 @@ Fetch a prebuilt `sp1-safe-server` binary and run it as a systemd service:
 <!-- https://0pointer.net/blog/dynamic-users-with-systemd.html -->
 ```sh
 case "$(uname -a)" in
-  Linux*)  os=linux  ;;
-  Darwin*) os=darwin ;;
+  Linux*)  target=x86_64-unknown-linux-gnu  ;;
+  Darwin*) target=x86_64-apple-darwin ;;
 esac
-curl -sSfL https://TODO-$os.gz | gunzip > /usr/local/bin/sp1-safe-server
+curl -sSfL https://TODOsp1-safe-server-v0.0.0-$os.gz | gunzip > /usr/local/bin/sp1-safe-server
 curl -sSfL https://raw.githubusercontent.com/chiefbiiko/sp1-safe/main/server/sp1-safe-server.service | sudo tee /etc/systemd/system/sp1-safe-server.service
 systemctl daemon-reload
 systemctl start sp1-safe-server.service
