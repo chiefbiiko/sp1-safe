@@ -43,7 +43,7 @@ case "$(uname -a)" in
   Linux*)  target=x86_64-unknown-linux-gnu  ;;
   Darwin*) target=x86_64-apple-darwin ;;
 esac
-curl -sSfL https://TODOsp1-safe-server-v0.0.0-$os.gz | gunzip > /usr/local/bin/sp1-safe-server
+curl -sSfL https://TODOsp1-safe-server-v0.0.0-$target.gz | gunzip > /usr/local/bin/sp1-safe-server
 curl -sSfL https://raw.githubusercontent.com/chiefbiiko/sp1-safe/main/server/sp1-safe-server.service | sudo tee /etc/systemd/system/sp1-safe-server.service
 systemctl daemon-reload
 systemctl start sp1-safe-server.service
