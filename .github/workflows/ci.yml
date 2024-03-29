@@ -40,10 +40,18 @@ jobs:
       - name: Install the sp1 toolchain
         run: curl -L https://raw.githubusercontent.com/succinctlabs/sp1/main/sp1up/sp1up | bash
 
+      - name: Install cargo prove
+        run: |
+          git clone --depth 1 git@github.com:succinctlabs/sp1.git
+          cd sp1/cli
+          cargo install --locked --path .
+          cd ../..
+          cargo prove install-toolchain
+
       - name: Build program and server
         run: |
           cd ./program
-          $HOME/.sp1/bin/cargo-prove prove build
+          cargo prove build
           cd ..
           cargo build --manifest-path ./server/Cargo.toml --release
 
@@ -169,10 +177,18 @@ jobs:
       - name: Get the version tag
         run: echo "PUSHED_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
+      - name: Install cargo prove
+        run: |
+          git clone --depth 1 git@github.com:succinctlabs/sp1.git
+          cd sp1/cli
+          cargo install --locked --path .
+          cd ../..
+          cargo prove install-toolchain
+
       - name: Build the server
         run: |
           cd ./program
-          $HOME/.sp1/bin/cargo-prove prove build
+          cargo prove build
           cd ..
           cargo build --manifest-path ./server/Cargo.toml --release
 
