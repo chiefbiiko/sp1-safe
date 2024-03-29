@@ -3,14 +3,17 @@ extern crate rocket;
 
 use anyhow::{bail, Result};
 use rocket::{
+    data::{Limits, ToByteUnit},
     http::Status,
     request::Request,
     serde::json::{json, Json, Value},
+    Config,
 };
 use sp1_core::{SP1Prover, SP1Stdin};
 use sp1_safe_basics::{Inputs, Sp1SafeParams, Sp1SafeResult};
 use sp1_safe_fetch::fetch_inputs;
 use std::env;
+use std::net::Ipv4Addr;
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
@@ -72,8 +75,17 @@ fn internal_server_error(_: &Request) -> Value {
 
 #[launch]
 fn rocket() -> _ {
+    std::env::set_var("RUST_LOG", "info");
     env_logger::init();
-    rocket::build()
+    let config = Config {
+        port: 4190,
+        address: Ipv4Addr::new(0, 0, 0, 0).into(),
+        ip_header: None,
+        limits: Limits::default().limit("json", 256.bytes()),
+        ..Config::release_default()
+    };
+
+    rocket::custom(&config)
         .register("/", catchers![internal_server_error])
         .mount("/", routes![index])
 }
