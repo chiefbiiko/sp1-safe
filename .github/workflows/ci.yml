@@ -42,7 +42,7 @@ jobs:
 
       - name: Install cargo prove
         run: |
-          git clone --depth 1 git@github.com:succinctlabs/sp1.git
+          git clone --depth 1 https://github.com/succinctlabs/sp1.git
           cd sp1/cli
           cargo install --locked --path .
           cd ../..
@@ -179,7 +179,7 @@ jobs:
 
       - name: Install cargo prove
         run: |
-          git clone --depth 1 git@github.com:succinctlabs/sp1.git
+          git clone --depth 1 https://github.com/succinctlabs/sp1.git
           cd sp1/cli
           cargo install --locked --path .
           cd ../..
