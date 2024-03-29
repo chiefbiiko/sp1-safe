@@ -78,7 +78,9 @@ fn rocket() -> _ {
     std::env::set_var("RUST_LOG", "info");
     env_logger::init();
     let config = Config {
-        port: 4190,
+        port: std::env::var("PORT")
+            .map(|p| p.parse::<u16>().expect("invalid port"))
+            .unwrap_or(4190),
         address: Ipv4Addr::new(0, 0, 0, 0).into(),
         ip_header: None,
         limits: Limits::default().limit("json", 256.bytes()),
