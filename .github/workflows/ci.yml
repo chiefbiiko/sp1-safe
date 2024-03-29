@@ -25,7 +25,7 @@ jobs:
 
       - name: Install the sp1 toolchain
         run: |
-          curl -L https://sp1.succinct.xyz | bash
+          curl -L https://sp1.succinct.xyz | sudo bash
           source $HOME/.bashrc
           yes | sp1up
 
@@ -122,7 +122,7 @@ jobs:
 
       - name: Install the sp1 toolchain
         run: |
-          curl -L https://sp1.succinct.xyz | bash
+          curl -L https://sp1.succinct.xyz | sudo bash
           source $HOME/.bashrc
           yes | sp1up
 
