@@ -24,10 +24,7 @@ jobs:
         uses: dtolnay/rust-toolchain@nightly
 
       - name: Install the sp1 toolchain
-        run: |
-          curl -L https://sp1.succinct.xyz | sudo bash
-          source $HOME/.bashrc
-          yes | sp1up
+        run: curl -L https://raw.githubusercontent.com/succinctlabs/sp1/main/sp1up/sp1up | bash
 
       - name: Server testing
         run: |
@@ -121,10 +118,7 @@ jobs:
         uses: dtolnay/rust-toolchain@nightly
 
       - name: Install the sp1 toolchain
-        run: |
-          curl -L https://sp1.succinct.xyz | sudo bash
-          source $HOME/.bashrc
-          yes | sp1up
+        run: curl -L https://raw.githubusercontent.com/succinctlabs/sp1/main/sp1up/sp1up | bash
 
       - name: Download the release upload url artifact
         uses: actions/download-artifact@v2.0.8
