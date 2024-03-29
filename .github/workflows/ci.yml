@@ -43,7 +43,7 @@ jobs:
       - name: Build program and server
         run: |
           cd ./program
-          cargo prove build
+          $HOME/.sp1/bin/cargo-prove prove build
           cd ..
           cargo build --manifest-path ./server/Cargo.toml --release
 
@@ -172,7 +172,7 @@ jobs:
       - name: Build the server
         run: |
           cd ./program
-          cargo prove build
+          $HOME/.sp1/bin/cargo-prove prove build
           cd ..
           cargo build --manifest-path ./server/Cargo.toml --release
 
