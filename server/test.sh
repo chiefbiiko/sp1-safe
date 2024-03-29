@@ -2,7 +2,9 @@
 
 set -eExuo pipefail
 
-source ../lib/bashert.sh
+d=$(git rev-parse --show-toplevel)
+
+source $d/lib/bashert.sh
 
 params="$(cat << EOF
 {
