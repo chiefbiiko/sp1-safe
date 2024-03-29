@@ -16,19 +16,39 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Check rust-cache
+        uses: actions/cache@v3
         with:
-          node-version: 21
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+            ~/.rustup/
+          key: rust-nightly-2024-01-25-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: rust-nightly-2024-01-25-
 
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@nightly
+      - name: Install Rust nightly toolchain
+        id: rustc-toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly-2024-01-25
+          override: true
 
       - name: Install the sp1 toolchain
         run: curl -L https://raw.githubusercontent.com/succinctlabs/sp1/main/sp1up/sp1up | bash
 
+      - name: Build program and server
+        run: |
+          cd ./program
+          cargo prove build
+          cd ..
+          cargo build --manifest-path ./server/Cargo.toml --release
+
       - name: Server testing
         run: |
-          cargo build --manifest-path ./server/Cargo.toml --release
           RUST_LOG=info ./server/target/release/sp1-safe-server &
           ./server/test.sh
 
@@ -38,6 +58,8 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
 
       - name: Get the version tag
         run: echo "PUSHED_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
@@ -63,8 +85,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
-        with:
-          node-version: 21
 
       - name: Get the current version tag
         run: echo "PUSHED_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
@@ -114,8 +134,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@nightly
+      - name: Check rust-cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+            ~/.rustup/
+          key: rust-nightly-2024-01-25-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: rust-nightly-2024-01-25-
+
+      - name: Install Rust nightly toolchain
+        id: rustc-toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly-2024-01-25
+          override: true
 
       - name: Install the sp1 toolchain
         run: curl -L https://raw.githubusercontent.com/succinctlabs/sp1/main/sp1up/sp1up | bash
@@ -132,7 +170,11 @@ jobs:
         run: echo "PUSHED_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
       - name: Build the server
-        run: cargo build --manifest-path ./server/Cargo.toml --release
+        run: |
+          cd ./program
+          cargo prove build
+          cd ..
+          cargo build --manifest-path ./server/Cargo.toml --release
 
       - name: Gzip the binary
         run: gzip -c ./server/target/release/sp1-safe-server > ./sp1-safe-server.gz
