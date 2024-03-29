@@ -37,10 +37,10 @@ jobs:
           toolchain: nightly-2024-01-25
           override: true
 
-      - name: Install the sp1 toolchain
-        run: curl -L https://raw.githubusercontent.com/succinctlabs/sp1/main/sp1up/sp1up | bash
+      # - name: Install the sp1 toolchain
+      #   run: curl -L https://raw.githubusercontent.com/succinctlabs/sp1/main/sp1up/sp1up | bash
 
-      - name: Install cargo prove
+      - name: Install cargo prove and sp1 toolchain
         run: |
           git clone --depth 1 https://github.com/succinctlabs/sp1.git
           cd sp1/cli
@@ -50,14 +50,14 @@ jobs:
 
       - name: Build program and server
         run: |
-          cd ./program
-          cargo prove build
-          cd ..
+          # cd ./program
+          # cargo prove build
+          # cd ..
           cargo build --manifest-path ./server/Cargo.toml --release
 
       - name: Server testing
         run: |
-          RUST_LOG=info ./server/target/release/sp1-safe-server &
+          ./server/target/release/sp1-safe-server &
           ./server/test.sh
 
   check-changelog:
@@ -163,8 +163,8 @@ jobs:
           toolchain: nightly-2024-01-25
           override: true
 
-      - name: Install the sp1 toolchain
-        run: curl -L https://raw.githubusercontent.com/succinctlabs/sp1/main/sp1up/sp1up | bash
+      # - name: Install the sp1 toolchain
+      #   run: curl -L https://raw.githubusercontent.com/succinctlabs/sp1/main/sp1up/sp1up | bash
 
       - name: Download the release upload url artifact
         uses: actions/download-artifact@v2.0.8
@@ -177,7 +177,7 @@ jobs:
       - name: Get the version tag
         run: echo "PUSHED_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
-      - name: Install cargo prove
+      - name: Install cargo prove and sp1 toolchain
         run: |
           git clone --depth 1 https://github.com/succinctlabs/sp1.git
           cd sp1/cli
@@ -185,11 +185,11 @@ jobs:
           cd ../..
           cargo prove install-toolchain
 
-      - name: Build the server
+      - name: Build the program and server
         run: |
-          cd ./program
-          cargo prove build
-          cd ..
+          # cd ./program
+          # cargo prove build
+          # cd ..
           cargo build --manifest-path ./server/Cargo.toml --release
 
       - name: Gzip the binary

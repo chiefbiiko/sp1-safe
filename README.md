@@ -31,7 +31,7 @@ Build and run the server:
 
 ```sh
 cargo build --manifest-path ./server/Cargo.toml --release
-RUST_LOG=info ./server/target/release/sp1-safe-server
+./server/target/release/sp1-safe-server
 ```
 
 ---
