@@ -818,7 +818,7 @@ checksum = "3c5e1a9a646d36c3599cd173a41282daf47c44583ad367b8e6837255952e5c67"
 [[package]]
 name = "sp1-precompiles"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=nightly-5fa44d6589a4612fda531a119dad030e88f84015#5fa44d6589a4612fda531a119dad030e88f84015"
+source = "git+https://github.com/succinctlabs/sp1.git?tag=nightly#cb43fd74b24fad8ed24a4885499159de3680c89f"
 dependencies = [
  "anyhow",
  "bincode",
@@ -852,7 +852,7 @@ dependencies = [
 [[package]]
 name = "sp1-zkvm"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=nightly-5fa44d6589a4612fda531a119dad030e88f84015#5fa44d6589a4612fda531a119dad030e88f84015"
+source = "git+https://github.com/succinctlabs/sp1.git?tag=nightly#cb43fd74b24fad8ed24a4885499159de3680c89f"
 dependencies = [
  "bincode",
  "cfg-if",
