@@ -5,7 +5,6 @@ After=network-online.target
 Type=simple
 DynamicUser=yes
 Restart=on-failure
-Environment=RUST_LOG=info
 ExecStart=/usr/local/bin/sp1-safe-server
 [Install]
 WantedBy=multi-user.target
