@@ -67,8 +67,8 @@ async fn prove(params: Json<Sp1SafeParams>) -> (Status, Value) {
 }
 
 #[get("/status")]
-async fn status(params: Json<Sp1SafeParams>) -> (Status, Value) {
-    (Status::Ok, json!({  "status": "ok"   }))
+async fn status() -> (Status, Value) {
+    (Status::Ok, json!({ "status": "ok" }))
 }
 
 #[catch(500)]
