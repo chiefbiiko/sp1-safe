@@ -1,8 +1,10 @@
 # sp1-safe
 
-Prove a Safe multisig over a message in zk.
+[![ci](https://github.com/chiefbiiko/sp1-safe/workflows/ci/badge.svg)](https://github.com/chiefbiiko/sp1-safe/actions/workflows/ci.yml) [![release](https://img.shields.io/github/v/release/chiefbiiko/sp1-safe?include_prereleases)](https://github.com/chiefbiiko/sp1-safe/releases/latest)
 
----
+Prove a Safe multisig over a message in zk
+
+## Commands
 
 Build the RISC-V ELF binary:
 
@@ -13,7 +15,25 @@ cargo prove build
 
 ---
 
-Run an example:
+Propose a Safe message multisig:
+
+```sh
+RPC=https://yorpc.io SAFE=0x249....3423 PRIVATE_KEY=0x... MSG=halloc node ./lib/auxiliary/proposeSignMsg.js
+```
+
+Then confirm the Safe transaction with the required number of signers. Once executed you can proceed running the `script` or `server` binarires with the associated message hash...
+
+---
+
+Obtain a Safe message hash:
+
+```sh
+RPC=https://yorpc.io SAFE=0x249....3423 MSG=halloc node ./lib/auxiliary/msgHash.js
+```
+
+---
+
+Run the example script:
 
 ```sh
 cd ./script
@@ -47,4 +67,46 @@ curl -sSfL https://github.com/chiefbiiko/sp1-safe/releases/download/v0.0.0/sp1-s
 curl -sSfL https://raw.githubusercontent.com/chiefbiiko/sp1-safe/main/server/sp1-safe-server.service | sudo tee /etc/systemd/system/sp1-safe-server.service
 systemctl daemon-reload
 systemctl start sp1-safe-server.service
+```
+
+## Endpoints
+
+### `POST /prove`
+
+#### Request
+
+```json
+{
+  "chain_id": 11155111,
+  "safe_address": "0x...",
+  "message_hash": "0x..."
+}
+```
+
+#### Response
+
+`200`
+
+```json
+{
+  "chain_id": 11155111,
+  "safe_address": "0x...",
+  "message_hash": "0x...",
+  "blocknumber": 34234234,
+  "blockhash": "0x...",
+  "challenge": "0x...",
+  "proof": "0x" //NOTE empty bytes until sp1 evm verifier release
+}
+```
+
+---
+
+### `GET /status`
+
+#### Response
+
+`200`
+
+```json
+{ "status": "ok" }
 ```
