@@ -86,6 +86,8 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: check-changelog
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
