@@ -24,7 +24,7 @@ test_proving_ok() {
   curl \
     -sS \
     -D $resp_head \
-    http:/localhost:4190/prove \
+    http:/localhost:4190/proof \
     -d "$params" \
   > $resp_body
 
@@ -52,7 +52,7 @@ test_proving_not_ok() {
   curl \
     -sS \
     -D $resp_head \
-    http:/localhost:4190/prove \
+    http:/localhost:4190/proof \
     -d "$not_ok_params" \
   > $resp_body
 
@@ -72,7 +72,7 @@ test_wrong_chain_id() {
   curl \
     -sS \
     -D $resp_head \
-    http:/localhost:4190/prove \
+    http:/localhost:4190/proof \
     -d "$not_ok_params" \
   > $resp_body
 
