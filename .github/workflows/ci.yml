@@ -37,9 +37,6 @@ jobs:
           toolchain: nightly-2024-01-25
           override: true
 
-      # - name: Install the sp1 toolchain
-      #   run: curl -L https://raw.githubusercontent.com/succinctlabs/sp1/main/sp1up/sp1up | bash
-
       - name: Install cargo prove and sp1 toolchain
         run: |
           git clone --depth 1 https://github.com/succinctlabs/sp1.git
@@ -49,11 +46,7 @@ jobs:
           cargo prove install-toolchain
 
       - name: Build program and server
-        run: |
-          # cd ./program
-          # cargo prove build
-          # cd ..
-          cargo build --manifest-path ./server/Cargo.toml --release
+        run: cargo build --manifest-path ./server/Cargo.toml --release
 
       - name: Server testing
         run: |
@@ -163,9 +156,6 @@ jobs:
           toolchain: nightly-2024-01-25
           override: true
 
-      # - name: Install the sp1 toolchain
-      #   run: curl -L https://raw.githubusercontent.com/succinctlabs/sp1/main/sp1up/sp1up | bash
-
       - name: Download the release upload url artifact
         uses: actions/download-artifact@v2.0.8
         with:
@@ -186,11 +176,7 @@ jobs:
           cargo prove install-toolchain
 
       - name: Build the program and server
-        run: |
-          # cd ./program
-          # cargo prove build
-          # cd ..
-          cargo build --manifest-path ./server/Cargo.toml --release
+        run: cargo build --manifest-path ./server/Cargo.toml --release
 
       - name: Gzip the binary
         run: gzip -c ./server/target/release/sp1-safe-server > ./sp1-safe-server.gz
