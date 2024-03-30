@@ -2,7 +2,6 @@
 Description=sp1-safe proving server systemd service
 After=network-online.target
 [Service]
-Type=simple
 DynamicUser=yes
 Restart=on-failure
 ExecStart=/usr/local/bin/sp1-safe-server
