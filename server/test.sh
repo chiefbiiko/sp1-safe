@@ -24,7 +24,7 @@ test_proving_ok() {
   curl \
     -sS \
     -D $resp_head \
-    http:/localhost:4190/ \
+    http:/localhost:4190/prove \
     -d "$params" \
   > $resp_body
 
@@ -42,7 +42,7 @@ test_proving_ok() {
 }
 
 test_proving_not_ok() {
-  printf "test_proving_ok\n"
+  printf "test_proving_not_ok\n"
 
   resp_head=$(mktemp)
   resp_body=$(mktemp)
@@ -52,7 +52,7 @@ test_proving_not_ok() {
   curl \
     -sS \
     -D $resp_head \
-    http:/localhost:4190/ \
+    http:/localhost:4190/prove \
     -d "$not_ok_params" \
   > $resp_body
 
@@ -62,7 +62,7 @@ test_proving_not_ok() {
 }
 
 test_wrong_chain_id() {
-  printf "test_proving_ok\n"
+  printf "test_wrong_chain_id\n"
 
   resp_head=$(mktemp)
   resp_body=$(mktemp)
@@ -72,7 +72,7 @@ test_wrong_chain_id() {
   curl \
     -sS \
     -D $resp_head \
-    http:/localhost:4190/ \
+    http:/localhost:4190/prove \
     -d "$not_ok_params" \
   > $resp_body
 
@@ -81,6 +81,24 @@ test_wrong_chain_id() {
   assert_equal "$err" 't(ツ)_/¯ invalid chain id'
 }
 
+test_status() {
+  printf "test_status\n"
+
+  resp_head=$(mktemp)
+  resp_body=$(mktemp)
+
+  curl \
+    -sS \
+    -D $resp_head \
+    http:/localhost:4190/status \
+  > $resp_body
+
+  assert_status $resp_head 200
+  status="$(jq -r '.status' $resp_body)"
+  assert_equal "$status" 'ok'
+}
+
 test_proving_ok
 test_proving_not_ok
 test_wrong_chain_id
+test_status
