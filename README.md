@@ -71,7 +71,7 @@ systemctl start sp1-safe-server.service
 
 ## Endpoints
 
-### `POST /prove`
+### `POST /proof`
 
 #### Request
 

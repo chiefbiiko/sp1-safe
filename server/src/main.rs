@@ -17,7 +17,7 @@ use std::net::Ipv4Addr;
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
-async fn _prove(params: Json<Sp1SafeParams>) -> Result<Value> {
+async fn _proof(params: Json<Sp1SafeParams>) -> Result<Value> {
     log::info!("🏈 incoming request");
     let rpc = match params.chain_id {
         100 => env::var("GNOSIS_RPC").unwrap_or("https://rpc.gnosis.gateway.fm".to_string()),
@@ -50,9 +50,9 @@ async fn _prove(params: Json<Sp1SafeParams>) -> Result<Value> {
     }))
 }
 
-#[post("/prove", data = "<params>")]
-async fn prove(params: Json<Sp1SafeParams>) -> (Status, Value) {
-    match _prove(params).await {
+#[post("/proof", data = "<params>")]
+async fn proof(params: Json<Sp1SafeParams>) -> (Status, Value) {
+    match _proof(params).await {
         Ok(res) => (Status::Ok, res),
         Err(err) => {
             log::error!("{}", err);
@@ -94,5 +94,5 @@ fn rocket() -> _ {
 
     rocket::custom(&config)
         .register("/", catchers![internal_server_error])
-        .mount("/", routes![prove, status])
+        .mount("/", routes![proof, status])
 }
