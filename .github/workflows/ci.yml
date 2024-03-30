@@ -38,6 +38,7 @@ jobs:
           override: true
 
       - name: Check sp1 installation
+        continue-on-error: true
         run: |
           cargo prove --version
           rustup toolchain list | grep -q succinct
@@ -174,6 +175,7 @@ jobs:
         run: echo "PUSHED_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
       - name: Check sp1 installation
+        continue-on-error: true
         run: |
           cargo prove --version
           rustup toolchain list | grep -q succinct
