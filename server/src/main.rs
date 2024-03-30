@@ -9,9 +9,9 @@ use rocket::{
     serde::json::{json, Json, Value},
     Config,
 };
-use sp1_core::{SP1Prover, SP1Stdin};
 use sp1_safe_basics::{Inputs, Sp1SafeParams, Sp1SafeResult};
 use sp1_safe_fetch::fetch_inputs;
+use sp1_sdk::{SP1Prover, SP1Stdin};
 use std::env;
 use std::net::Ipv4Addr;
 

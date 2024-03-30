@@ -4,15 +4,15 @@ use const_hex;
 // use std::fs::File;
 // use std::io::prelude::*;
 use serde_json::json;
-use sp1_core::{SP1Prover, SP1Stdin /*, SP1Verifier*/};
 use sp1_safe_basics::{Inputs, Sp1SafeResult};
 use sp1_safe_fetch::fetch_inputs;
+use sp1_sdk::{SP1Prover, SP1Stdin /*, SP1Verifier*/};
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
 #[tokio::main]
 async fn main() {
-    sp1_core::utils::setup_logger();
+    sp1_sdk::utils::setup_logger();
     // Assemble and write inputs
     // let out = std::env::var("OUT_FILE").expect("must set env var OUT_FILE=/tmp/xyz");
     let rpc = std::env::var("RPC").unwrap_or("https://rpc.gnosis.gateway.fm".to_string());
@@ -45,11 +45,10 @@ async fn main() {
             blocknumber: anchor,
             blockhash: format!("0x{}", const_hex::encode(blockhash)),
             challenge: format!("0x{}", const_hex::encode(challenge)),
-            proof: "0x".to_string()
-            // format!(
-            //     "0x{}",
-            //     const_hex::encode(bincode::serialize(&proofwio.proof).expect("bincode"))
-            // ),
+            proof: "0x".to_string() // format!(
+                                    //     "0x{}",
+                                    //     const_hex::encode(bincode::serialize(&proofwio.proof).expect("bincode"))
+                                    // ),
         })
         .to_string()
     );
