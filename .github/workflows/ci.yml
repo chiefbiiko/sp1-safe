@@ -37,14 +37,7 @@ jobs:
           toolchain: nightly-2024-01-25
           override: true
 
-      - name: Check sp1 installation
-        continue-on-error: true
-        run: |
-          cargo prove --version
-          rustup toolchain list | grep -q succinct
-
-      - name: Maybe install cargo prove and sp1 toolchain
-        if: failure()
+      - name: Install cargo prove and sp1 toolchain
         run: |
           git clone --depth 1 https://github.com/succinctlabs/sp1.git
           cd sp1/cli
@@ -178,14 +171,7 @@ jobs:
       - name: Get the version tag
         run: echo "PUSHED_TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
-      - name: Check sp1 installation
-        continue-on-error: true
-        run: |
-          cargo prove --version
-          rustup toolchain list | grep -q succinct
-
-      - name: Maybe install cargo prove and sp1 toolchain
-        if: failure()
+      - name: Install cargo prove and sp1 toolchain
         run: |
           git clone --depth 1 https://github.com/succinctlabs/sp1.git
           cd sp1/cli
