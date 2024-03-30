@@ -93,7 +93,6 @@ fn rocket() -> _ {
     };
 
     rocket::custom(&config)
-        .register("/prove", catchers![internal_server_error])
-        .mount("/prove", routes![prove])
-        .mount("/status", routes![status])
+        .register("/", catchers![internal_server_error])
+        .mount("/", routes![prove, status])
 }
