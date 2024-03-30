@@ -53,7 +53,11 @@ jobs:
           cargo prove install-toolchain
 
       - name: Build program and server
-        run: cargo build --manifest-path ./server/Cargo.toml --release
+        run: |
+          cd ./program
+          cargo prove build
+          cd ..
+          cargo build --manifest-path ./server/Cargo.toml --release
 
       - name: Server testing
         run: |
@@ -190,7 +194,11 @@ jobs:
           cargo prove install-toolchain
 
       - name: Build the program and server
-        run: cargo build --manifest-path ./server/Cargo.toml --release
+        run: |
+          cd ./program
+          cargo prove build
+          cd ..
+          cargo build --manifest-path ./server/Cargo.toml --release
 
       - name: Gzip the binary
         run: gzip -c ./server/target/release/sp1-safe-server > ./sp1-safe-server.gz
