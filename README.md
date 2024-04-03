@@ -59,11 +59,15 @@ cargo build --manifest-path ./server/Cargo.toml --release
 Fetch a prebuilt `sp1-safe-server` binary and run it as a systemd service:
 <!-- https://0pointer.net/blog/dynamic-users-with-systemd.html -->
 ```sh
+VERSION=v0.0.0
 case "$(uname -a)" in
   Linux*)  target=x86_64-unknown-linux-gnu  ;;
   Darwin*) target=x86_64-apple-darwin ;;
 esac
-curl -sSfL https://github.com/chiefbiiko/sp1-safe/releases/download/v0.0.0/sp1-safe-server-v0.0.0-$target.gz | gunzip > /usr/local/bin/sp1-safe-server
+temp=$(mktemp)
+curl -sSfL https://github.com/chiefbiiko/sp1-safe/releases/download/$VERSION/sp1-safe-server-$VERSION-$target.gz | gunzip > $temp
+chmod +x $temp
+sudo cp $temp /usr/local/bin/sp1-safe-server
 curl -sSfL https://raw.githubusercontent.com/chiefbiiko/sp1-safe/main/server/sp1-safe-server.service | sudo tee /etc/systemd/system/sp1-safe-server.service
 systemctl daemon-reload
 systemctl start sp1-safe-server.service
