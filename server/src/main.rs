@@ -4,10 +4,11 @@ extern crate rocket;
 use anyhow::{bail, Result};
 use rocket::{
     data::{Limits, ToByteUnit},
-    http::Status,
+    fairing::{Fairing, Info, Kind},
+    http::{Header, Status},
     request::Request,
     serde::json::{json, Json, Value},
-    Config,
+    Config, Response,
 };
 use sp1_safe_basics::{Inputs, Sp1SafeParams, Sp1SafeResult};
 use sp1_safe_fetch::fetch_inputs;
@@ -78,6 +79,28 @@ fn internal_server_error(_: &Request) -> Value {
     })
 }
 
+pub struct CORS;
+
+#[rocket::async_trait]
+impl Fairing for CORS {
+    fn info(&self) -> Info {
+        Info {
+            name: "Add CORS headers to responses",
+            kind: Kind::Response,
+        }
+    }
+
+    async fn on_response<'r>(&self, _request: &'r Request<'_>, response: &mut Response<'r>) {
+        response.set_header(Header::new("access-control-allow-origin", "*"));
+        response.set_header(Header::new(
+            "access-control-allow-methods",
+            "POST, GET, OPTIONS",
+        ));
+        response.set_header(Header::new("access-control-allow-headers", "*"));
+        response.set_status(Status { code: 200 });
+    }
+}
+
 #[launch]
 fn rocket() -> _ {
     std::env::set_var("RUST_LOG", "info");
@@ -93,6 +116,7 @@ fn rocket() -> _ {
     };
 
     rocket::custom(&config)
+        .attach(CORS)
         .register("/", catchers![internal_server_error])
         .mount("/", routes![proof, status])
 }
