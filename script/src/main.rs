@@ -1,12 +1,10 @@
 //! A simple script to generate the proof of the sp1-safe program.
 
 use const_hex;
-// use std::fs::File;
-// use std::io::prelude::*;
 use serde_json::json;
 use sp1_safe_basics::{Inputs, Sp1SafeResult};
 use sp1_safe_fetch::fetch_inputs;
-use sp1_sdk::{SP1Prover, SP1Stdin /*, SP1Verifier*/};
+use sp1_sdk::{ProverClient, SP1Stdin};
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
@@ -31,10 +29,13 @@ async fn main() {
     stdin.write::<Inputs>(&inputs);
 
     // Generate proof
-    let mut proofwio = SP1Prover::prove(ELF, stdin).expect("proving failed");
+    // let mut proofwio = SP1Prover::prove(ELF, stdin).expect("proving failed");
+    let client = ProverClient::new();
+    let (pk, _vk) = client.setup(ELF);
+    let mut proofwpv = client.prove_groth16(&pk, stdin).expect("proving failed");
 
-    let blockhash = proofwio.stdout.read::<[u8; 32]>();
-    let challenge = proofwio.stdout.read::<[u8; 32]>();
+    let blockhash = proofwpv.public_values.read::<[u8; 32]>();
+    let challenge = proofwpv.public_values.read::<[u8; 32]>();
 
     println!(
         "{}",
@@ -45,31 +46,16 @@ async fn main() {
             blocknumber: anchor,
             blockhash: format!("0x{}", const_hex::encode(blockhash)),
             challenge: format!("0x{}", const_hex::encode(challenge)),
-            proof: "0x".to_string() // format!(
-                                    //     "0x{}",
-                                    //     const_hex::encode(bincode::serialize(&proofwio.proof).expect("bincode"))
-                                    // ),
+            proof: format!(
+                "0x{}",
+                const_hex::encode(bincode::serialize(&proofwpv.proof).expect("bincode"))
+            ),
         })
         .to_string()
     );
-    // let mut file = File::create(&out).expect("out file");
-    // file.write_all(
-    //     json!(Sp1SafeResult {
-    //         safe_address: format!("0x{}", const_hex::encode(safe)),
-    //         message_hash: format!("0x{}", const_hex::encode(msg_hash)),
-    //         blocknumber: anchor,
-    //         blockhash: format!("0x{}", const_hex::encode(blockhash)),
-    //         challenge: format!("0x{}", const_hex::encode(challenge)),
-    //         proof: format!(
-    //             "0x{}",
-    //             const_hex::encode(bincode::serialize(&proofwio.proof).expect("bincode"))
-    //         ),
-    //     }).to_string().as_bytes()
-    // ).expect("write file");
 
-    // Verify and save proof
-    // SP1Verifier::verify(ELF, &proof).expect("verification failed");
-    // proof
-    //     .save("proof-with-io.json")
-    //     .expect("saving proof failed");
+    // // Verify proof and public values
+    // client
+    //     .verify_groth16(&proofwpv, &vk)
+    //     .expect("verification failed");
 }

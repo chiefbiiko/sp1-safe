@@ -67,6 +67,6 @@ pub fn main() {
         .try_into()
         .expect("converting field elements to bytes failed");
 
-    sp1_zkvm::io::write_slice(&blockhash);
-    sp1_zkvm::io::write_slice(&challenge);
+    sp1_zkvm::io::commit_slice(&blockhash);
+    sp1_zkvm::io::commit_slice(&challenge);
 }
