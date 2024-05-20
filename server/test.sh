@@ -38,7 +38,7 @@ test_proving_ok() {
   assert_gt $block_number 33119702
   assert_match $block_hash '^0x[a-f0-9]{64}$'
   assert_match $challenge '^0x[a-f0-9]{64}$'
-  assert_equal $proof '0x'
+  assert_match $proof '^0x[a-f0-9]+$'
 }
 
 test_proving_not_ok() {
