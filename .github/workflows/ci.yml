@@ -26,7 +26,7 @@ jobs:
 
       - name: Install cargo prove and sp1 toolchain
         run: |
-          git clone --depth 1 https://github.com/succinctlabs/sp1.git
+          git clone --depth 1 --branch v1.0.1-testnet https://github.com/succinctlabs/sp1.git
           cd sp1/cli
           cargo install --locked --force --path .
           cd ../..
@@ -151,7 +151,7 @@ jobs:
 
       - name: Install cargo prove and sp1 toolchain
         run: |
-          git clone --depth 1 https://github.com/succinctlabs/sp1.git
+          git clone --depth 1 --branch v1.0.1-testnet https://github.com/succinctlabs/sp1.git
           cd sp1/cli
           cargo install --locked --force --path .
           cd ../..
