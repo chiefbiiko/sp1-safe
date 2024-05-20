@@ -4,6 +4,11 @@
 
 Prove a Safe multisig over a message in zk
 
+```
+# current program vkey hash
+204c75ac5c4d59f0736e83b050e05c25150be27445acfa31677c286e222019dd
+```
+
 ## Commands
 
 Build the RISC-V ELF binary:
