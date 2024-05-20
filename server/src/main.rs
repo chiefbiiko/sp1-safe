@@ -5,7 +5,7 @@ use anyhow::{bail, Result};
 use rocket::{
     data::{Limits, ToByteUnit},
     fairing::{Fairing, Info, Kind},
-    http::{Header, Status},
+    http::{Header, Method, Status},
     request::Request,
     serde::json::{json, Json, Value},
     Config, Response,
@@ -93,14 +93,20 @@ impl Fairing for CORS {
         }
     }
 
-    async fn on_response<'r>(&self, _request: &'r Request<'_>, response: &mut Response<'r>) {
+    async fn on_response<'r>(&self, request: &'r Request<'_>, response: &mut Response<'r>) {
         response.set_header(Header::new("access-control-allow-origin", "*"));
         response.set_header(Header::new(
             "access-control-allow-methods",
             "POST, GET, OPTIONS",
         ));
         response.set_header(Header::new("access-control-allow-headers", "*"));
-        response.set_status(Status { code: 200 });
+        response.set_status(Status {
+            code: if request.method() == Method::Options {
+                200
+            } else {
+                response.status().code
+            },
+        });
     }
 }
 
