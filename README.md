@@ -59,7 +59,7 @@ cargo build --manifest-path ./server/Cargo.toml --release
 Fetch a prebuilt `sp1-safe-server` binary and run it as a systemd service:
 <!-- https://0pointer.net/blog/dynamic-users-with-systemd.html -->
 ```sh
-VERSION=v0.0.0
+VERSION=v0.1.0
 case "$(uname -a)" in
   Linux*)  target=x86_64-unknown-linux-gnu  ;;
   Darwin*) target=x86_64-apple-darwin ;;
