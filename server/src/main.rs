@@ -47,8 +47,8 @@ async fn _proof(params: Json<Sp1SafeParams>) -> Result<Value> {
         chain_id: params.chain_id,
         safe_address: params.safe_address.to_owned(),
         message_hash: params.message_hash.to_owned(),
-        blocknumber: anchor,
-        blockhash: format!("0x{}", const_hex::encode(blockhash)),
+        block_number: anchor,
+        block_hash: format!("0x{}", const_hex::encode(blockhash)),
         challenge: format!("0x{}", const_hex::encode(challenge)),
         proof: format!("0x{}", const_hex::encode(proofbin)),
     }))

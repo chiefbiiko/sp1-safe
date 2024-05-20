@@ -30,8 +30,8 @@ pub struct Sp1SafeResult {
     pub chain_id: u64,
     pub safe_address: String,
     pub message_hash: String,
-    pub blocknumber: u64,
-    pub blockhash: String,
+    pub block_number: u64,
+    pub block_hash: String,
     pub challenge: String,
     pub proof: String,
 }

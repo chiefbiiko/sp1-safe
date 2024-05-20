@@ -41,8 +41,8 @@ async fn main() {
             chain_id: 100,
             safe_address: format!("0x{}", const_hex::encode(safe)),
             message_hash: format!("0x{}", const_hex::encode(msg_hash)),
-            blocknumber: anchor,
-            blockhash: format!("0x{}", const_hex::encode(blockhash)),
+            block_number: anchor,
+            block_hash: format!("0x{}", const_hex::encode(blockhash)),
             challenge: format!("0x{}", const_hex::encode(challenge)),
             proof: format!(
                 "0x{}",
