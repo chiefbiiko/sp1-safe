@@ -30,13 +30,13 @@ test_proving_ok() {
 
   assert_status $resp_head 200
 
-  blocknumber=$(jq -r '.blocknumber' $resp_body)
-  blockhash=$(jq -r '.blockhash' $resp_body)
+  block_number=$(jq -r '.block_number' $resp_body)
+  block_hash=$(jq -r '.block_hash' $resp_body)
   challenge=$(jq -r '.challenge' $resp_body)
   proof=$(jq -r '.proof' $resp_body)
 
-  assert_gt $blocknumber 33119702
-  assert_match $blockhash '^0x[a-f0-9]{64}$'
+  assert_gt $block_number 33119702
+  assert_match $block_hash '^0x[a-f0-9]{64}$'
   assert_match $challenge '^0x[a-f0-9]{64}$'
   assert_equal $proof '0x'
 }
