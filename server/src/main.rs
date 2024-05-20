@@ -75,6 +75,13 @@ async fn status() -> (Status, Value) {
     (Status::Ok, json!({ "status": "ok" }))
 }
 
+#[catch(400)]
+fn not_found(_: &Request) -> Value {
+    json!({
+        "error": "t(ツ)_/¯ invalid request params"
+    })
+}
+
 #[catch(500)]
 fn internal_server_error(_: &Request) -> Value {
     json!({
@@ -120,12 +127,12 @@ fn rocket() -> _ {
             .unwrap_or(4190),
         address: Ipv4Addr::new(0, 0, 0, 0).into(),
         ip_header: None,
-        limits: Limits::default().limit("json", 512.bytes()),
+        limits: Limits::default().limit("json", 256.bytes()),
         ..Config::release_default()
     };
 
     rocket::custom(&config)
         .attach(CORS)
-        .register("/", catchers![internal_server_error])
+        .register("/", catchers![internal_server_error, not_found])
         .mount("/", routes![proof, status])
 }
