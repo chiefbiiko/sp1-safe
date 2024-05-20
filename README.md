@@ -96,10 +96,10 @@ systemctl start sp1-safe-server.service
   "chain_id": 11155111,
   "safe_address": "0x...",
   "message_hash": "0x...",
-  "blocknumber": 34234234,
-  "blockhash": "0x...",
+  "block_number": 34234234,
+  "block_hash": "0x...",
   "challenge": "0x...",
-  "proof": "0x" //NOTE empty bytes until sp1 evm verifier release
+  "proof": "0x..."
 }
 ```
 
