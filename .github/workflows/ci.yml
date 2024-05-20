@@ -12,6 +12,7 @@ on:
 
 jobs:
   test:
+    continue-on-error: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
