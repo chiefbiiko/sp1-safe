@@ -56,9 +56,9 @@ test_proving_not_ok() {
     -d "$not_ok_params" \
   > $resp_body
 
-  assert_status $resp_head 400
+  assert_status $resp_head 500
   err="$(jq -r '.error' $resp_body)"
-  assert_equal "$err" 't(ツ)_/¯ invalid request params'
+  assert_equal "$err" 't(ツ)_/¯ invalid storage proof'
 }
 
 test_wrong_chain_id() {
