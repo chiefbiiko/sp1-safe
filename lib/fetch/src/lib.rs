@@ -7,25 +7,25 @@ use rlp::RlpStream;
 use sp1_safe_basics::{concat_bytes64, keccak256, Inputs, SAFE_SIGNED_MESSAGES_SLOT};
 use zerocopy::AsBytes;
 
-pub async fn fetch_inputs(rpc: &str, safe: Address, msg_hash: H256) -> Result<(u64, Inputs)> {
+pub async fn fetch_inputs(rpc: &str, safe_address: Address, msg_hash: H256) -> Result<(u64, Inputs)> {
     let storage_key = keccak256(&concat_bytes64(msg_hash.into(), SAFE_SIGNED_MESSAGES_SLOT));
 
     let provider = Provider::try_from(rpc)?;
     let latest = provider.get_block_number().await?;
     let block = provider.get_block(latest).await?.context("no such block")?;
     let proof = provider
-        .get_proof(safe, vec![storage_key.into()], Some(latest.into()))
+        .get_proof(safe_address, vec![storage_key.into()], Some(latest.into()))
         .await?;
 
     Ok((
         latest.as_u64(),
         Inputs {
-            safe: safe.into(),
+            safe_address: safe_address.into(),
             msg_hash: msg_hash.into(),
             header_rlp: rlp_encode_header(&block),
             state_root: block.state_root.into(),
             storage_root: proof.storage_hash.into(),
-            state_trie_key: keccak256(&safe),
+            state_trie_key: keccak256(&safe_address),
             storage_trie_key: keccak256(&storage_key),
             account_proof: proof
                 .account_proof
