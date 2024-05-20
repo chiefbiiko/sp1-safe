@@ -120,7 +120,7 @@ fn rocket() -> _ {
             .unwrap_or(4190),
         address: Ipv4Addr::new(0, 0, 0, 0).into(),
         ip_header: None,
-        limits: Limits::default().limit("json", 256.bytes()),
+        limits: Limits::default().limit("json", 512.bytes()),
         ..Config::release_default()
     };
 
