@@ -19,6 +19,11 @@ jobs:
       - name: Install target+toolchain specd in rust-toolchain +cache
         uses: actions-rust-lang/setup-rust-toolchain@v1
 
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - run: go version
+
       - name: Install cargo prove and sp1 toolchain
         run: |
           git clone --depth 1 https://github.com/succinctlabs/sp1.git
@@ -127,6 +132,11 @@ jobs:
 
       - name: Install target+toolchain specd in rust-toolchain +cache
         uses: actions-rust-lang/setup-rust-toolchain@v1
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - run: go version
 
       - name: Download the release upload url artifact
         uses: actions/download-artifact@v2.0.8
