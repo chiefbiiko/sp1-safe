@@ -10,9 +10,9 @@ const-hex = "1.11.1"
 env_logger = "0.11.3"
 log = "0.4.21"
 rocket = {version = "0.5.0", features = ["json"] }
-sp1-sdk = { git = "https://github.com/succinctlabs/sp1.git", tag = "v1.0.1-testnet" }
+sp1-sdk = { git = "https://github.com/succinctlabs/sp1.git", tag = "v1.0.4-testnet", features = ["plonk"] }
 sp1-safe-basics = { path = "../lib/basics" }
 sp1-safe-fetch = { path = "../lib/fetch" }
 
 [build-dependencies]
-sp1-helper = { git = "https://github.com/succinctlabs/sp1.git", tag = "v1.0.1-testnet" }
+sp1-helper = { git = "https://github.com/succinctlabs/sp1.git", tag = "v1.0.4-testnet" }
