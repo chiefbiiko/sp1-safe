@@ -30,7 +30,7 @@ async fn main() {
     // Generate proof
     let client = ProverClient::new();
     let (pk, _vk) = client.setup(ELF);
-    let mut proofwpv = client.prove_groth16(&pk, stdin).expect("proving failed");
+    let mut proofwpv = client.prove_plonk(&pk, stdin).expect("proving failed");
 
     let blockhash = proofwpv.public_values.read::<[u8; 32]>();
     let challenge = proofwpv.public_values.read::<[u8; 32]>();

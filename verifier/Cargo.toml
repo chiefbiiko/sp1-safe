@@ -10,4 +10,4 @@ path = "src/main.rs"
 
 [dependencies]
 const-hex = "1.11.1"
-sp1-sdk = { git = "https://github.com/succinctlabs/sp1.git", tag = "v1.0.1-testnet" }
+sp1-sdk = { git = "https://github.com/succinctlabs/sp1.git", tag = "v1.0.4-testnet", features = ["plonk"] }
