@@ -4,7 +4,7 @@ use const_hex;
 use serde_json::json;
 use sp1_safe_basics::{Inputs, Sp1SafeResult};
 use sp1_safe_fetch::fetch_inputs;
-use sp1_sdk::{ProverClient, SP1Stdin};
+use sp1_sdk::{ProverClient, SP1Stdin/*, HashableKey*/};
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
@@ -30,6 +30,7 @@ async fn main() {
     // Generate proof
     let client = ProverClient::new();
     let (pk, _vk) = client.setup(ELF);
+    // println!("✞✞✞✞✞ vk {}", const_hex::encode(&_vk.hash_bytes()));
     let mut proofwpv = client.prove_plonk(&pk, stdin).expect("proving failed");
 
     let blockhash = proofwpv.public_values.read::<[u8; 32]>();
@@ -54,6 +55,6 @@ async fn main() {
 
     // // Verify proof and public values
     // client
-    //     .verify_groth16(&proofwpv, &vk)
+    //     .verify_plonk(&proofwpv, &vk)
     //     .expect("verification failed");
 }
