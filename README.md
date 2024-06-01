@@ -6,7 +6,7 @@ Prove a Safe multisig over a message in zk
 
 ```
 # current program vkey hash
-342db4f26628504876548f513b012d5f57559851150e4196197b8d05660fc28f
+0x134ca905412f318701dc457a76c86ba26cebaf2b7044d5ad4041b73d0cc1b66b
 ```
 
 ## Commands
