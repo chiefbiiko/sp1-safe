@@ -1,3 +1,5 @@
+#![feature(lazy_cell)]
+
 #[macro_use]
 extern crate rocket;
 
@@ -12,11 +14,24 @@ use rocket::{
 };
 use sp1_safe_basics::{Inputs, Sp1SafeParams, Sp1SafeResult};
 use sp1_safe_fetch::fetch_inputs;
-use sp1_sdk::{ProverClient, SP1Stdin};
+use sp1_sdk::{HashableKey, ProverClient, SP1ProvingKey, SP1Stdin, SP1VerifyingKey};
 use std::env;
 use std::net::Ipv4Addr;
+use std::sync::LazyLock;
 
 const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
+
+struct Prover {
+    client: ProverClient,
+    pk: SP1ProvingKey,
+    vk: SP1VerifyingKey,
+}
+
+static PROVER: LazyLock<Prover> = LazyLock::new(|| {
+    let client = ProverClient::new();
+    let (pk, vk) = client.setup(ELF);
+    Prover { client, pk, vk }
+});
 
 async fn _proof(params: Json<Sp1SafeParams>) -> Result<Value> {
     log::info!("🏈 incoming request");
@@ -35,9 +50,10 @@ async fn _proof(params: Json<Sp1SafeParams>) -> Result<Value> {
     stdin.write::<Inputs>(&inputs);
 
     log::info!("🎰 zk proving");
-    let client = ProverClient::new();
-    let (pk, _vk) = client.setup(ELF);
-    let mut proofwpv = client.prove_plonk(&pk, stdin).expect("proving failed");
+    let mut proofwpv = PROVER
+        .client
+        .prove_plonk(&PROVER.pk, stdin)
+        .expect("proving failed");
 
     let blockhash = proofwpv.public_values.read::<[u8; 32]>();
     let challenge = proofwpv.public_values.read::<[u8; 32]>();
@@ -130,6 +146,8 @@ fn rocket() -> _ {
         limits: Limits::default().limit("json", 256.bytes()),
         ..Config::release_default()
     };
+
+    log::info!("vkey hash 0x{}", const_hex::encode(&PROVER.vk.hash_bytes()));
 
     rocket::custom(&config)
         .attach(CORS)
