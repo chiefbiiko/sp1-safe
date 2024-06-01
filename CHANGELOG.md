@@ -3,7 +3,7 @@
 
 ## `v0.1.1`
 
-2024-05-30 | SP1 update to tag `v1.0.4-testnet` incl. refactor from Groth16 to Plonk Solidity Verifier.
+2024-05-30 | SP1 update to tag `v1.0.5-testnet` incl. refactor from Groth16 to Plonk Solidity Verifier.
 
 ## `v0.1.0`
 
