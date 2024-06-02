@@ -5,8 +5,8 @@
 Prove a Safe multisig over a message in zk
 
 ```
-# current program vkey hash
-0x134ca905412f318701dc457a76c86ba26cebaf2b7044d5ad4041b73d0cc1b66b
+# current program vkey hash on the ampere machine
+0x3358220a0e1210f615022e614e5301c91348f744615544606838afdc41ad5725
 ```
 
 ## Commands
