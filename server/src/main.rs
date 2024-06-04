@@ -19,7 +19,7 @@ use std::env;
 use std::net::Ipv4Addr;
 use std::sync::LazyLock;
 
-const ELF: &[u8] = include_bytes!("../../elf/riscv32im-succinct-zkvm-elf");
+const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
 struct Prover {
     client: ProverClient,

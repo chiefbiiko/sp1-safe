@@ -6,7 +6,7 @@ use sp1_safe_basics::{Inputs, Sp1SafeResult};
 use sp1_safe_fetch::fetch_inputs;
 use sp1_sdk::{ProverClient, SP1Stdin/*, HashableKey*/};
 
-const ELF: &[u8] = include_bytes!("../../elf/riscv32im-succinct-zkvm-elf");
+const ELF: &[u8] = include_bytes!("../../program/elf/riscv32im-succinct-zkvm-elf");
 
 #[tokio::main]
 async fn main() {
