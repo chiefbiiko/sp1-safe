@@ -20,6 +20,7 @@ pgo-data.profdata
 
 # TMP elf
 program/elf
+elf
 
 # node stuff
 node_modules
