@@ -1,3 +1,4 @@
+[workspace]
 [package]
 name = "sp1-safe-server"
 version = "0.0.0"
@@ -16,3 +17,6 @@ sp1-safe-fetch = { path = "../lib/fetch" }
 
 [build-dependencies]
 sp1-helper = { git = "https://github.com/succinctlabs/sp1.git", tag = "v1.0.5-testnet" }
+
+[patch.crates-io]
+tiny-keccak = { git = "https://github.com/sp1-patches/tiny-keccak", branch = "patch-v2.0.2" }
