@@ -1,5 +1,9 @@
 # Changelog
 
+## `v0.1.2`
+
+2024-06-04 | Reorganize Cargo workspaces to correctly apply SP1 patch for tiny-keccak.
+
 
 ## `v0.1.1`
 
