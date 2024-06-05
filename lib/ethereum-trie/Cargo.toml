@@ -14,7 +14,7 @@ memory-db = { version = "0.32.0", default-features = false }
 rlp = { version = "0.5.1", default-features = false }
 primitive-types = { version = "0.12.0", default-features = false }
 hash256-std-hasher = { version = "0.15.2", optional = true }
-tiny-keccak = { version = "2.0.2", features = ["keccak"], optional = true }
+tiny-keccak = { git = "https://github.com/sp1-patches/tiny-keccak", branch = "patch-v2.0.2", features = ["keccak"], optional = true }
 
 [dev-dependencies]
 hex = "0.4.3"

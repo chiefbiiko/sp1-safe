@@ -11,7 +11,7 @@ serde_json = "1.0.114"
 sp1-sdk = { git = "https://github.com/succinctlabs/sp1.git", tag = "v1.0.5-testnet", features = ["plonk", "neon"] }
 sp1-safe-basics = { path = "../lib/basics" }
 sp1-safe-fetch = { path = "../lib/fetch" }
-tiny-keccak = "2.0.2" # { version = "2.0.2", features = ["keccak"], git = "https://github.com/sp1-patches/tiny-keccak.git" }
+tiny-keccak = { git = "https://github.com/sp1-patches/tiny-keccak.git", branch = "patch-v2.0.2", features = ["keccak"] }
 tokio = { version = "1.36.0", features = ["rt-multi-thread", "macros"] }
 
 [build-dependencies]

@@ -137,7 +137,6 @@ impl Fairing for CORS {
 fn rocket() -> _ {
     std::env::set_var("RUST_LOG", "info");
     sp1_sdk::utils::setup_logger();
-    env_logger::init();
     let config = Config {
         port: std::env::var("PORT")
             .map(|p| p.parse::<u16>().expect("invalid port"))

@@ -5,4 +5,4 @@ edition = "2021"
 
 [dependencies]
 serde = { version = "1.0.196", features = ["derive"], default-features = false }
-tiny-keccak = "2.0.2" # { version = "2.0.2", features = ["keccak"], git = "https://github.com/sp1-patches/tiny-keccak.git" }
+tiny-keccak = { git = "https://github.com/sp1-patches/tiny-keccak.git", branch = "patch-v2.0.2", features = ["keccak"] }
