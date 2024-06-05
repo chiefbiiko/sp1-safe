@@ -12,6 +12,7 @@ use rocket::{
     serde::json::{json, Json, Value},
     Config, Response,
 };
+use sp1_core::SP1CoreOpts;
 use sp1_safe_basics::{Inputs, Sp1SafeParams, Sp1SafeResult};
 use sp1_safe_fetch::fetch_inputs;
 use sp1_sdk::{HashableKey, ProverClient, SP1ProvingKey, SP1Stdin, SP1VerifyingKey};
@@ -137,6 +138,7 @@ impl Fairing for CORS {
 fn rocket() -> _ {
     std::env::set_var("RUST_LOG", "info");
     env_logger::init();
+    let sp1_core_opts = SP1CoreOpts::default();
     let config = Config {
         port: std::env::var("PORT")
             .map(|p| p.parse::<u16>().expect("invalid port"))
@@ -148,6 +150,11 @@ fn rocket() -> _ {
     };
 
     log::info!("vkey hash 0x{}", const_hex::encode(&PROVER.vk.hash_bytes()));
+    log::info!(
+        "shard size {}; shard batch size {}",
+        sp1_core_opts.shard_size,
+        sp1_core_opts.shard_batch_size
+    );
 
     rocket::custom(&config)
         .attach(CORS)
