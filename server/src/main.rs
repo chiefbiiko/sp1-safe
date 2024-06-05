@@ -12,7 +12,7 @@ use rocket::{
     serde::json::{json, Json, Value},
     Config, Response,
 };
-sp1_core::utils::SP1CoreOpts;
+use sp1_core::utils::SP1CoreOpts;
 use sp1_safe_basics::{Inputs, Sp1SafeParams, Sp1SafeResult};
 use sp1_safe_fetch::fetch_inputs;
 use sp1_sdk::{HashableKey, ProverClient, SP1ProvingKey, SP1Stdin, SP1VerifyingKey};
