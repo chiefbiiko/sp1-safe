@@ -1432,6 +1432,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "env_filter"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a009aa4810eb158359dda09d0c87378e4bbb89b5a801f016885a4707ba24f7ea"
+dependencies = [
+ "log",
+ "regex",
+]
+
+[[package]]
+name = "env_logger"
+version = "0.11.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "38b35839ba51819680ba087cd351788c9a3c476841207e0b8cee0b04722343b9"
+dependencies = [
+ "anstream",
+ "anstyle",
+ "env_filter",
+ "humantime",
+ "log",
+]
+
+[[package]]
 name = "equivalent"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2350,6 +2373,12 @@ name = "httpdate"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "df3b46402a9d5adb4c86a0cf463f42e19994e3ee891101b1841f30a545cb49a9"
+
+[[package]]
+name = "humantime"
+version = "2.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9a3a5bfb195931eeb336b2a7b4d761daec841b97f947d34394601737a7bba5e4"
 
 [[package]]
 name = "hyper"
@@ -5039,7 +5068,7 @@ dependencies = [
 [[package]]
 name = "sp1-core"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=v1.0.5-testnet#19ef89a4b8a509b7d765c46ff6e0a1c9a8fcbfb4"
+source = "git+https://github.com/chiefbiiko/sp1?branch=shards-envs#cb8284cca453cfac3b3a7ccfe58b4c80b96610a1"
 dependencies = [
  "anyhow",
  "arrayref",
@@ -5075,6 +5104,7 @@ dependencies = [
  "p3-symmetric",
  "p3-uni-stark",
  "p3-util",
+ "rand",
  "rayon-scan",
  "rrs-lib",
  "serde",
@@ -5097,7 +5127,7 @@ dependencies = [
 [[package]]
 name = "sp1-derive"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=v1.0.5-testnet#19ef89a4b8a509b7d765c46ff6e0a1c9a8fcbfb4"
+source = "git+https://github.com/chiefbiiko/sp1?branch=shards-envs#cb8284cca453cfac3b3a7ccfe58b4c80b96610a1"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -5107,7 +5137,7 @@ dependencies = [
 [[package]]
 name = "sp1-helper"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=v1.0.5-testnet#19ef89a4b8a509b7d765c46ff6e0a1c9a8fcbfb4"
+source = "git+https://github.com/chiefbiiko/sp1?branch=shards-envs#cb8284cca453cfac3b3a7ccfe58b4c80b96610a1"
 dependencies = [
  "cargo_metadata",
  "chrono",
@@ -5116,7 +5146,7 @@ dependencies = [
 [[package]]
 name = "sp1-primitives"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=v1.0.5-testnet#19ef89a4b8a509b7d765c46ff6e0a1c9a8fcbfb4"
+source = "git+https://github.com/chiefbiiko/sp1?branch=shards-envs#cb8284cca453cfac3b3a7ccfe58b4c80b96610a1"
 dependencies = [
  "itertools 0.12.1",
  "lazy_static",
@@ -5129,7 +5159,7 @@ dependencies = [
 [[package]]
 name = "sp1-prover"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=v1.0.5-testnet#19ef89a4b8a509b7d765c46ff6e0a1c9a8fcbfb4"
+source = "git+https://github.com/chiefbiiko/sp1?branch=shards-envs#cb8284cca453cfac3b3a7ccfe58b4c80b96610a1"
 dependencies = [
  "anyhow",
  "backtrace",
@@ -5171,7 +5201,7 @@ dependencies = [
 [[package]]
 name = "sp1-recursion-circuit"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=v1.0.5-testnet#19ef89a4b8a509b7d765c46ff6e0a1c9a8fcbfb4"
+source = "git+https://github.com/chiefbiiko/sp1?branch=shards-envs#cb8284cca453cfac3b3a7ccfe58b4c80b96610a1"
 dependencies = [
  "bincode",
  "itertools 0.12.1",
@@ -5194,7 +5224,7 @@ dependencies = [
 [[package]]
 name = "sp1-recursion-compiler"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=v1.0.5-testnet#19ef89a4b8a509b7d765c46ff6e0a1c9a8fcbfb4"
+source = "git+https://github.com/chiefbiiko/sp1?branch=shards-envs#cb8284cca453cfac3b3a7ccfe58b4c80b96610a1"
 dependencies = [
  "backtrace",
  "itertools 0.12.1",
@@ -5218,7 +5248,7 @@ dependencies = [
 [[package]]
 name = "sp1-recursion-core"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=v1.0.5-testnet#19ef89a4b8a509b7d765c46ff6e0a1c9a8fcbfb4"
+source = "git+https://github.com/chiefbiiko/sp1?branch=shards-envs#cb8284cca453cfac3b3a7ccfe58b4c80b96610a1"
 dependencies = [
  "arrayref",
  "backtrace",
@@ -5251,7 +5281,7 @@ dependencies = [
 [[package]]
 name = "sp1-recursion-derive"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=v1.0.5-testnet#19ef89a4b8a509b7d765c46ff6e0a1c9a8fcbfb4"
+source = "git+https://github.com/chiefbiiko/sp1?branch=shards-envs#cb8284cca453cfac3b3a7ccfe58b4c80b96610a1"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -5261,7 +5291,7 @@ dependencies = [
 [[package]]
 name = "sp1-recursion-gnark-ffi"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=v1.0.5-testnet#19ef89a4b8a509b7d765c46ff6e0a1c9a8fcbfb4"
+source = "git+https://github.com/chiefbiiko/sp1?branch=shards-envs#cb8284cca453cfac3b3a7ccfe58b4c80b96610a1"
 dependencies = [
  "bindgen",
  "cc",
@@ -5270,9 +5300,11 @@ dependencies = [
  "num-bigint 0.4.5",
  "p3-baby-bear",
  "p3-field",
+ "p3-symmetric",
  "rand",
  "serde",
  "serde_json",
+ "sp1-core",
  "sp1-recursion-compiler",
  "tempfile",
 ]
@@ -5280,7 +5312,7 @@ dependencies = [
 [[package]]
 name = "sp1-recursion-program"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=v1.0.5-testnet#19ef89a4b8a509b7d765c46ff6e0a1c9a8fcbfb4"
+source = "git+https://github.com/chiefbiiko/sp1?branch=shards-envs#cb8284cca453cfac3b3a7ccfe58b4c80b96610a1"
 dependencies = [
  "itertools 0.12.1",
  "p3-air",
@@ -5330,6 +5362,7 @@ dependencies = [
  "anyhow",
  "bincode",
  "const-hex",
+ "env_logger",
  "log",
  "rocket",
  "sp1-helper",
@@ -5341,7 +5374,7 @@ dependencies = [
 [[package]]
 name = "sp1-sdk"
 version = "0.1.0"
-source = "git+https://github.com/succinctlabs/sp1.git?tag=v1.0.5-testnet#19ef89a4b8a509b7d765c46ff6e0a1c9a8fcbfb4"
+source = "git+https://github.com/chiefbiiko/sp1?branch=shards-envs#cb8284cca453cfac3b3a7ccfe58b4c80b96610a1"
 dependencies = [
  "alloy-sol-types",
  "anyhow",
