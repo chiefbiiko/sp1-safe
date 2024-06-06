@@ -3,7 +3,7 @@ use ethers::{
     providers::{Middleware, Provider},
     types::{Address, Block, H256},
 };
-use rlp::RlpStream;
+use rlp::{RlpStream, Rlp};
 use sp1_safe_basics::{concat_bytes64, keccak256, Inputs, SAFE_SIGNED_MESSAGES_SLOT};
 use zerocopy::AsBytes;
 
@@ -32,6 +32,9 @@ pub async fn fetch_inputs(
         .map(|x| x.to_digit(16).expect("failed parsing storage nibble"))
         .collect::<Vec<u8>>();
 
+    let state_trie_key_ptrs = get_key_ptrs(proof.account_proof.clone());
+    let storage_trie_key_ptrs = get_key_ptrs(proof.storage_proof[0].proof.clone());
+
     Ok((
         latest.as_u64(),
         Inputs {
@@ -44,6 +47,8 @@ pub async fn fetch_inputs(
             // storage_trie_key: keccak256(&storage_key),
             state_trie_key_nibbles,
             storage_trie_key_nibbles,
+            state_trie_key_ptrs,
+            storage_trie_key_ptrs,
             account_proof: proof
                 .account_proof
                 .iter()
@@ -88,4 +93,42 @@ pub fn rlp_encode_header(block: &Block<H256>) -> Vec<u8> {
             .expect("parent_beacon_block_root"),
     ); // cancun
     rlp.out().freeze().into()
+}
+
+// pub fn get_key_ptrs(proof: Vec<&str>) -> Vec<usize> {
+pub fn get_key_ptrs(proof: Vec<Vec<u8>>) -> Vec<usize> {
+    let mut result = Vec::<usize>::new();
+    let mut key_index = 0;
+
+    // for (i, p) in proof.iter().enumerate() {
+    for (i, bytes) in proof.iter().enumerate() {
+        // let bytes = hex::decode(&p[2..]).expect("Decoding failed");
+        // let mut in_res: Vec<String> = Vec::new();
+        let mut in_res: Vec<Vec<u8>> = Vec::new();
+        let decoded_list = Rlp::new(&bytes);
+        for value in decoded_list.iter() {
+            // let hex_representation = format!("0x{}", hex::encode(value.data().unwrap()));
+            // in_res.push(hex_representation);
+            in_res.push(value.to_vec());
+        }
+
+        if in_res.len() > 2 {
+            //branch node
+            result.push(key_index);
+            key_index += 1;
+        } else if i != proof.len() - 1 && in_res.len() == 2 {
+            //extension node
+            // let extension = &in_res[0][2..];
+            let bytes = &in_res[0];
+            // let bytes = hex::decode(extension).expect("Decoding failed");
+            let decoded: String = rlp::decode(&bytes).expect("Decoding failed");
+            result.push(key_index);
+            key_index += decoded.len();
+        } else if i == proof.len() - 1 && in_res.len() == 2 {
+            //leaf node
+            result.push(key_index);
+        }
+    }
+
+    result
 }
