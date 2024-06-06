@@ -18,12 +18,16 @@ pub const SAFE_SIGNED_MESSAGES_SLOT: [u8; 32] = [
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Inputs {
-    pub safe_address: [u8; 20],      // Safe address
-    pub msg_hash: [u8; 32],          // Custom msg hash
-    pub state_root: [u8; 32],        // eth_getBlockBy*::response.stateRoot
-    pub storage_root: [u8; 32],      // eth_getProof::response.storageHash
-    pub state_trie_key: [u8; 32],    // keccak256(safe)
-    pub storage_trie_key: [u8; 32],  // keccak256(msg_hash + uint256(7))
+    pub safe_address: [u8; 20], // Safe address
+    pub msg_hash: [u8; 32],     // Custom msg hash
+    pub state_root: [u8; 32],   // eth_getBlockBy*::response.stateRoot
+    pub storage_root: [u8; 32], // eth_getProof::response.storageHash
+    // pub state_trie_key: [u8; 32],    // keccak256(safe)
+    // pub storage_trie_key: [u8; 32],  // keccak256(msg_hash + uint256(7))
+    //NOTE state_trie_key_nibbles == aerius::account_key_nibbles
+    pub state_trie_key_nibbles: [u8; 64],
+    //NOTE storage_trie_key_nibbles == aerius::key_nibbles
+    pub storage_trie_key_nibbles: [u8; 64],
     pub account_proof: Vec<Vec<u8>>, // eth_getProof::response.accountProof
     pub storage_proof: Vec<Vec<u8>>, // eth_getProof::response.storageProof.proof
     pub header_rlp: Vec<u8>,         // RLP-encoded header
