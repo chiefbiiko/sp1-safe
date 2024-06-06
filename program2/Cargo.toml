@@ -1,15 +1,21 @@
-[workspace]
 [package]
 version = "0.1.0"
 name = "sp1-safe-program2"
 edition = "2021"
 
 [dependencies]
-sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git" }
-alloy-primitives = { git = "https://github.com/succinctlabs/alloy-core-private.git" }
-rlp = "0.5.2"
-tiny-keccak = { version = "2.0", features = ["keccak"] }
-serde = { version = "1.0.196", features = ["derive"] }
+sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git",  tag = "v1.0.5-testnet" }
+sp1-safe-basics = { path = "../lib/basics2" }
+# ethereum-trie = { path = "../lib/ethereum-trie" }
+light-poseidon = "0.2.0"
+ark-bn254 = "0.4.0"
+ark-ff = "0.4.0"
 
-[patch.crates-io]
-tiny-keccak = { git = "https://github.com/succinctlabs/tiny-keccak-private.git", branch = "chris/test" }
+rlp = "0.5.2"
+# tiny-keccak = { git = "https://github.com/sp1-patches/tiny-keccak", branch = "patch-v2.0.2", features = ["keccak"] }
+
+# sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git" }
+# alloy-primitives = { git = "https://github.com/succinctlabs/alloy-core-private.git" }
+# tiny-keccak = { version = "2.0", features = ["keccak"] }
+
+# serde = { version = "1.0.196", features = ["derive"] }
