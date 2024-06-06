@@ -1,7 +1,7 @@
 [workspace]
 [package]
 version = "0.1.0"
-name = "sp1-evm-coprocessor"
+name = "sp1-safe-program2"
 edition = "2021"
 
 [dependencies]
