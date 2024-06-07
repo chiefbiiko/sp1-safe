@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git",  tag = "v1.0.5-testnet" }
-sp1-safe-basics = { path = "../lib/basics2" }
+sp1-safe-basics2 = { path = "../lib/basics2" }
 # ethereum-trie = { path = "../lib/ethereum-trie" }
 light-poseidon = "0.2.0"
 ark-bn254 = "0.4.0"

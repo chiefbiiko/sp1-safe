@@ -12,8 +12,8 @@ use rocket::{
     serde::json::{json, Json, Value},
     Config, Response,
 };
-use sp1_safe_basics::{Inputs, Sp1SafeParams, Sp1SafeResult};
-use sp1_safe_fetch::fetch_inputs;
+use sp1_safe_basics2::{Inputs, Sp1SafeParams, Sp1SafeResult};
+use sp1_safe_fetch2::fetch_inputs;
 use sp1_sdk::{HashableKey, ProverClient, SP1ProvingKey, SP1Stdin, SP1VerifyingKey};
 use std::env;
 use std::net::Ipv4Addr;

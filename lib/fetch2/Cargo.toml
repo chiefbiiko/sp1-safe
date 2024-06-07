@@ -8,5 +8,5 @@ anyhow = "1.0.81"
 const-hex = "1.11.1"
 ethers = "2.0.13"
 rlp = { version = "0.5", features = ["derive"] }
-sp1-safe-basics = { path = "../basics2" }
+sp1-safe-basics2 = { path = "../basics2" }
 zerocopy = "0.7.32"

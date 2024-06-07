@@ -2,8 +2,8 @@
 
 use const_hex;
 use serde_json::json;
-use sp1_safe_basics::{Inputs, Sp1SafeResult};
-use sp1_safe_fetch::fetch_inputs;
+use sp1_safe_basics2::{Inputs, Sp1SafeResult};
+use sp1_safe_fetch2::fetch_inputs;
 use sp1_sdk::{ProverClient, SP1Stdin/*, HashableKey*/};
 
 const ELF: &[u8] = include_bytes!("../../program2/elf/riscv32im-succinct-zkvm-elf");

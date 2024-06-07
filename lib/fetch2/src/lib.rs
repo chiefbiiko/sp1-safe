@@ -4,7 +4,7 @@ use ethers::{
     types::{Address, Block, H256},
 };
 use rlp::{RlpStream, Rlp};
-use sp1_safe_basics::{concat_bytes64, keccak256, Inputs, SAFE_SIGNED_MESSAGES_SLOT};
+use sp1_safe_basics2::{concat_bytes64, keccak256, Inputs, SAFE_SIGNED_MESSAGES_SLOT};
 use zerocopy::AsBytes;
 
 pub async fn fetch_inputs(
@@ -26,11 +26,11 @@ pub async fn fetch_inputs(
     let state_trie_key_nibbles = state_trie_key_hex
         .chars()
         .map(|x| x.to_digit(16).expect("failed parsing state nibble"))
-        .collect::<Vec<u8>>();
+        .collect::<Vec<usize>>();
     let storage_trie_key_nibbles = storage_trie_key_hex
         .chars()
         .map(|x| x.to_digit(16).expect("failed parsing storage nibble"))
-        .collect::<Vec<u8>>();
+        .collect::<Vec<usize>>();
 
     let state_trie_key_ptrs = get_key_ptrs(proof.account_proof.clone());
     let storage_trie_key_ptrs = get_key_ptrs(proof.storage_proof[0].proof.clone());

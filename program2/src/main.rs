@@ -8,7 +8,7 @@ use ark_bn254::Fr;
 use ark_ff::{BigInteger, PrimeField};
 // use ethereum_trie::{keccak::KeccakHasher, EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256};
 use light_poseidon::{Poseidon, PoseidonHasher};
-use sp1_safe_basics::{keccak256, lpad_bytes32, Inputs};
+use sp1_safe_basics2::{keccak256, lpad_bytes32, Inputs};
 
 // use serde::{Deserialize, Serialize};
 
@@ -33,7 +33,7 @@ pub fn main() {
     let inputs = sp1_zkvm::io::read::<Inputs>();
 
     // let mut current_hash = storage_root.clone();
-    let mut current_hash = inputs.storage_root.to_vec();
+    let mut current_hash = inputs.storage_root;
 
     let key_ptrs = inputs.storage_trie_key_ptrs;
     let account_key_ptrs = inputs.state_trie_key_ptrs;
@@ -79,8 +79,7 @@ pub fn main() {
             //PERF use `pub fn val_at<T>(&self, index: usize) -> Result<T, DecoderError>`
             current_hash = decoded_list.iter().collect::<Vec<_>>()[nibble]
                 .data()
-                .expect("strg node rlp.data() failed")
-                .to_vec();
+                .expect("strg node rlp.data() failed").try_into().expect("strg node tryinto");
         } else {
             // verify value
             //PERF use `pub fn val_at<T>(&self, index: usize) -> Result<T, DecoderError>`
@@ -102,7 +101,7 @@ pub fn main() {
     let mut state_root: [u8; 32] = [0; 32];
     let mut current_hash: [u8; 32] = [0; 32];
     // for (i, p) in sp.account_proof.iter().enumerate() {
-    for (i, bytes) in sp.account_proof.iter().enumerate() {
+    for (i, bytes) in inputs.account_proof.iter().enumerate() {
         // let bytes = hex::decode(&p).expect("Decoding proof failed");
 
         // let mut hasher = Keccak256::new();
@@ -131,8 +130,7 @@ pub fn main() {
             //PERF use `pub fn val_at<T>(&self, index: usize) -> Result<T, DecoderError>`
             current_hash = decoded_list.iter().collect::<Vec<_>>()[nibble]
                 .data()
-                .expect("acct node rlp.data() failed")
-                .into(),
+                .expect("acct node rlp.data() failed").try_into().expect("strg node tryinto");
         } else {
             // verify value
             let leaf_node = decoded_list.iter().collect::<Vec<_>>();
@@ -144,9 +142,10 @@ pub fn main() {
             //     storage_root,
             //     hex::encode(value_decoded.iter().collect::<Vec<_>>()[2].data().unwrap())
             // );
+            let decoded_storage_root: [u8; 32] = value_decoded.iter().collect::<Vec<_>>()[2].data().expect("acct leaf rlp.data() failed").try_into().expect("strg root tryinto");
             assert_eq!(
                 &inputs.storage_root,
-                &value_decoded.iter().collect::<Vec<_>>()[2].data().expect("acct leaf rlp.data() failed").into()
+                &decoded_storage_root
             );
         }
     }

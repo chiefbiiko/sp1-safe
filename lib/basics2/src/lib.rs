@@ -25,9 +25,9 @@ pub struct Inputs {
     // pub state_trie_key: [u8; 32],    // keccak256(safe)
     // pub storage_trie_key: [u8; 32],  // keccak256(msg_hash + uint256(7))
     //NOTE state_trie_key_nibbles == aerius::account_key_nibbles
-    pub state_trie_key_nibbles: [u8; 64],
+    pub state_trie_key_nibbles: Vec<usize>, //[u8; 64],
     //NOTE storage_trie_key_nibbles == aerius::key_nibbles
-    pub storage_trie_key_nibbles: [u8; 64],
+    pub storage_trie_key_nibbles: Vec<usize>, //[u8; 64],
     //NOTE state_trie_key_ptrs == aerius::account_key_ptrs
     pub state_trie_key_ptrs: Vec<usize>,
     //NOTE storage_trie_key_ptrs == aerius::key_ptrs
