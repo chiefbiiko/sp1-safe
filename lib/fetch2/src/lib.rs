@@ -25,15 +25,25 @@ pub async fn fetch_inputs(
     let storage_trie_key_hex = const_hex::encode(&keccak256(&storage_key));
     let state_trie_key_nibbles = state_trie_key_hex
         .chars()
-        .map(|x| x.to_digit(16).expect("failed parsing state nibble"))
+        .map(|x| x.to_digit(16).expect("failed parsing state nibble") as usize)
         .collect::<Vec<usize>>();
     let storage_trie_key_nibbles = storage_trie_key_hex
         .chars()
-        .map(|x| x.to_digit(16).expect("failed parsing storage nibble"))
+        .map(|x| x.to_digit(16).expect("failed parsing storage nibble") as usize)
         .collect::<Vec<usize>>();
 
-    let state_trie_key_ptrs = get_key_ptrs(proof.account_proof.clone());
-    let storage_trie_key_ptrs = get_key_ptrs(proof.storage_proof[0].proof.clone());
+    let state_trie_key_ptrs = get_key_ptrs(
+        proof.account_proof.clone()
+            .iter()
+            .map(|b| b.as_bytes().to_vec())
+            .collect()
+    );
+    let storage_trie_key_ptrs = get_key_ptrs(
+        proof.storage_proof[0].proof.clone()
+            .iter()
+            .map(|b| b.as_bytes().to_vec())
+            .collect()
+    );
 
     Ok((
         latest.as_u64(),
@@ -109,7 +119,7 @@ pub fn get_key_ptrs(proof: Vec<Vec<u8>>) -> Vec<usize> {
         for value in decoded_list.iter() {
             // let hex_representation = format!("0x{}", hex::encode(value.data().unwrap()));
             // in_res.push(hex_representation);
-            in_res.push(value.to_vec());
+            in_res.push(value.data().expect("key ptr rlp.data() failed").to_vec());
         }
 
         if in_res.len() > 2 {
