@@ -76,20 +76,20 @@ pub fn main() {
             //         .data()
             //         .unwrap(),
             // );
-            //FIXME use `pub fn val_at<T>(&self, index: usize) -> Result<T, DecoderError>`
+            //PERF use `pub fn val_at<T>(&self, index: usize) -> Result<T, DecoderError>`
             current_hash = decoded_list.iter().collect::<Vec<_>>()[nibble]
                 .data()
-                .expect("node rlp.data() failed")
+                .expect("strg node rlp.data() failed")
                 .to_vec();
         } else {
             // verify value
-            //FIXME use `pub fn val_at<T>(&self, index: usize) -> Result<T, DecoderError>`
+            //PERF use `pub fn val_at<T>(&self, index: usize) -> Result<T, DecoderError>`
             let leaf_node = decoded_list.iter().collect::<Vec<_>>();
             // assert_eq!(leaf_node.len(), 2);
-            let value_decoded = Rlp::new(leaf_node[1].data().unwrap());
+            let value_decoded = Rlp::new(leaf_node[1].data().expect("strg leaf node rlp.data() failed"));
             // assert!(value_decoded.is_data());
             // let value = hex::encode(value_decoded.data().unwrap());
-            let value = value_decoded.data().expect("leaf rlp.data() failed")[0];
+            let value = value_decoded.data().expect("strg leaf rlp.data() failed")[0];
 
             // sp1_zkvm::io::write(&value);
             // Safe's SignMessageLib marks messages as "signed" with a literal 1
@@ -97,41 +97,56 @@ pub fn main() {
         }
     }
     //TODOTODOTODOTODOTODOTODOTODOTODOTODO
-    let mut state_root: String = "".to_string();
-    let mut current_hash: String = "".to_string();
-    for (i, p) in sp.account_proof.iter().enumerate() {
-        let bytes = hex::decode(&p).expect("Decoding proof failed");
+    // let mut state_root: String = "".to_string();
+    // let mut current_hash: String = "".to_string();
+    let mut state_root: [u8; 32] = [0; 32];
+    let mut current_hash: [u8; 32] = [0; 32];
+    // for (i, p) in sp.account_proof.iter().enumerate() {
+    for (i, bytes) in sp.account_proof.iter().enumerate() {
+        // let bytes = hex::decode(&p).expect("Decoding proof failed");
 
-        let mut hasher = Keccak256::new();
-        hasher.update(&bytes);
-        let res = hasher.finalize();
+        // let mut hasher = Keccak256::new();
+        // hasher.update(&bytes);
+        // let res = hasher.finalize();
+        let res = keccak256(&bytes);
 
         if i == 0 {
-            state_root = hex::encode(res);
+            // state_root = hex::encode(res);
+            state_root = res;
         } else {
-            assert_eq!(&hex::encode(res), &current_hash);
+            // assert_eq!(&hex::encode(res), &current_hash);
+            assert_eq!(&res, &current_hash);
         }
 
         let decoded_list = Rlp::new(&bytes);
-        assert!(decoded_list.is_list());
+        // assert!(decoded_list.is_list());
 
         if i < depth_ap - 1 {
             let nibble = account_key_nibbles[account_key_ptrs[i]];
-            current_hash = hex::encode(
-                decoded_list.iter().collect::<Vec<_>>()[nibble]
-                    .data()
-                    .unwrap(),
-            );
+            // current_hash = hex::encode(
+            //     decoded_list.iter().collect::<Vec<_>>()[nibble]
+            //         .data()
+            //         .unwrap(),
+            // );
+            //PERF use `pub fn val_at<T>(&self, index: usize) -> Result<T, DecoderError>`
+            current_hash = decoded_list.iter().collect::<Vec<_>>()[nibble]
+                .data()
+                .expect("acct node rlp.data() failed")
+                .into(),
         } else {
             // verify value
             let leaf_node = decoded_list.iter().collect::<Vec<_>>();
-            assert_eq!(leaf_node.len(), 2);
-            let value_decoded = Rlp::new(leaf_node[1].data().unwrap());
-            assert!(value_decoded.is_list());
+            // assert_eq!(leaf_node.len(), 2);
+            let value_decoded = Rlp::new(leaf_node[1].data().expect("acct leaf node rlp.data() failed"));
+            // assert!(value_decoded.is_list());
 
+            // assert_eq!(
+            //     storage_root,
+            //     hex::encode(value_decoded.iter().collect::<Vec<_>>()[2].data().unwrap())
+            // );
             assert_eq!(
-                storage_root,
-                hex::encode(value_decoded.iter().collect::<Vec<_>>()[2].data().unwrap())
+                &inputs.storage_root,
+                &value_decoded.iter().collect::<Vec<_>>()[2].data().expect("acct leaf rlp.data() failed").into()
             );
         }
     }
