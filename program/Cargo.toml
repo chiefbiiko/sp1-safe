@@ -4,7 +4,7 @@ name = "sp1-safe-program"
 edition = "2021"
 
 [dependencies]
-sp1-zkvm = { git = "https://github.com/succinctlabs/sp1.git",  tag = "v1.0.5-testnet" }
+sp1-zkvm = { git = "https://github.com/chiefbiiko/sp1.git", branch = "parallel-prover" }
 # sp1-zkvm = { git = "https://github.com/chiefbiiko/sp1.git", branch = "wasm-compat" }
 sp1-safe-basics = { path = "../lib/basics" }
 ethereum-trie = { path = "../lib/ethereum-trie" }
