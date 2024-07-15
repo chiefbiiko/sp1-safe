@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
 use tiny_keccak::{Hasher, Keccak};
 
+pub use primitive_types::H256;
+
 pub const SAFE_SIGNED_MESSAGES_SLOT: [u8; 32] = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7,
 ];
@@ -59,7 +61,7 @@ extern crate alloc;
 
 use core::marker::PhantomData;
 use trie_db::TrieLayout;
-use primitive_types::H256;
+// use primitive_types::H256;
 use hash256_std_hasher::Hash256StdHasher;
 
 mod node_codec;
