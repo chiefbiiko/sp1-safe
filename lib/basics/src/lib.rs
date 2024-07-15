@@ -107,30 +107,48 @@ use trie_db::{
 	// TrieLayout,
 };
 
-/// Errors that may occur during proof verification. Most of the errors types simply indicate that
-/// the proof is invalid with respect to the statement being verified, and the exact error type can
-/// be used for debugging.
-#[derive(PartialEq, Eq)]
-#[cfg_attr(feature = "std", derive(Debug))]
-pub enum VerifyError<'a, HO, CE> {
-	/// The proof does not contain any value for the given key
-	/// the error carries the nibbles left after traversing the trie
-	NonExistingValue(NibbleSlice<'a>),
+// /// Errors that may occur during proof verification. Most of the errors types simply indicate that
+// /// the proof is invalid with respect to the statement being verified, and the exact error type can
+// /// be used for debugging.
+// #[derive(PartialEq, Eq)]
+// #[cfg_attr(feature = "std", derive(Debug))]
+// pub enum VerifyError<'a, HO, CE> {
+// 	/// The proof does not contain any value for the given key
+// 	/// the error carries the nibbles left after traversing the trie
+// 	NonExistingValue(NibbleSlice<'a>),
+// 	/// The proof contains a value for the given key
+// 	/// while we were expecting to find a non-existence proof
+// 	ExistingValue(Vec<u8>),
+// 	/// The proof indicates that the trie contains a different value.
+// 	/// the error carries the value contained in the trie
+// 	ValueMismatch(Vec<u8>),
+// 	/// The proof is missing trie nodes required to verify.
+// 	IncompleteProof,
+// 	/// The node hash computed from the proof is not matching.
+// 	HashMismatch(HO),
+// 	/// One of the proof nodes could not be decoded.
+// 	DecodeError(CE),
+// 	/// Error in converting a plain hash into a HO
+// 	HashDecodeError(&'a [u8]),
+// }
+
+/*
+0	NonExistingValue(NibbleSlice<'a>),
 	/// The proof contains a value for the given key
 	/// while we were expecting to find a non-existence proof
-	ExistingValue(Vec<u8>),
+1	ExistingValue(Vec<u8>),
 	/// The proof indicates that the trie contains a different value.
 	/// the error carries the value contained in the trie
-	ValueMismatch(Vec<u8>),
+2	ValueMismatch(Vec<u8>),
 	/// The proof is missing trie nodes required to verify.
-	IncompleteProof,
+3	IncompleteProof,
 	/// The node hash computed from the proof is not matching.
-	HashMismatch(HO),
+4	HashMismatch(HO),
 	/// One of the proof nodes could not be decoded.
-	DecodeError(CE),
+5	DecodeError(CE),
 	/// Error in converting a plain hash into a HO
-	HashDecodeError(&'a [u8]),
-}
+6	HashDecodeError(&'a [u8]),
+*/
 
 /// Verify a compact proof for key-value pairs in a trie given a root hash.
 pub fn verify_proof<'a, L>(
@@ -138,12 +156,13 @@ pub fn verify_proof<'a, L>(
 	proof: &'a [Vec<u8>],
 	raw_key: &'a [u8],
 	expected_value: Option<&[u8]>,
-) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+// ) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+) -> Result<(), u8>
 where
 	L: TrieLayout,
 {
 	if proof.is_empty() {
-		return Err(VerifyError::IncompleteProof)
+		return Err(3);//Err(VerifyError::IncompleteProof)
 	}
 	let key = NibbleSlice::new(raw_key);
 	process_node::<L>(Some(root), &proof[0], key, expected_value, &proof[1..])
@@ -155,7 +174,8 @@ fn process_node<'a, L>(
 	key: NibbleSlice<'a>,
 	expected_value: Option<&[u8]>,
 	proof: &'a [Vec<u8>],
-) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+// ) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+) -> Result<(), u8>
 where
 	L: TrieLayout,
 {
@@ -167,10 +187,10 @@ where
 	if let Some(expected) = expected_node_hash {
 		let calculated_node_hash = <L::Hash as HashDbHasher>::hash(encoded_node);
 		if calculated_node_hash != *expected {
-			return Err(VerifyError::HashMismatch(calculated_node_hash))
+			return Err(4);//Err(VerifyError::HashMismatch(calculated_node_hash))
 		}
 	}
-	let node = <L::Codec as NodeCodec>::decode(encoded_node).map_err(VerifyError::DecodeError)?;
+	let node = <L::Codec as NodeCodec>::decode(encoded_node).map_err(|_| 5)?;//.map_err(VerifyError::DecodeError)?;
 	match node {
 		Node::Empty => process_empty::<L>(key, expected_value, proof),
 		Node::Leaf(nib, data) => process_leaf::<L>(nib, data, key, expected_value, proof),
@@ -187,14 +207,15 @@ fn process_empty<'a, L>(
 	key: NibbleSlice<'a>,
 	expected_value: Option<&[u8]>,
 	_: &[Vec<u8>],
-) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+// ) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+) -> Result<(), u8>
 where
 	L: TrieLayout,
 {
 	if expected_value.is_none() {
 		Ok(())
 	} else {
-		Err(VerifyError::NonExistingValue(key))
+		Err(0)//Err(VerifyError::NonExistingValue(key))
 	}
 }
 
@@ -204,14 +225,15 @@ fn process_leaf<'a, L>(
 	key: NibbleSlice<'a>,
 	expected_value: Option<&[u8]>,
 	proof: &'a [Vec<u8>],
-) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+// ) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+) -> Result<(), u8>
 where
 	L: TrieLayout,
 {
 	if key != nib && expected_value.is_none() {
 		return Ok(())
 	} else if key != nib {
-		return Err(VerifyError::NonExistingValue(key))
+		return Err(0)//Err(VerifyError::NonExistingValue(key))
 	}
 	match_value::<L>(Some(data), key, expected_value, proof)
 }
@@ -221,14 +243,15 @@ fn process_extension<'a, L>(
 	mut key: NibbleSlice<'a>,
 	expected_value: Option<&[u8]>,
 	proof: &'a [Vec<u8>],
-) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+// ) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+) -> Result<(), u8>
 where
 	L: TrieLayout,
 {
 	if !key.starts_with(nib) && expected_value.is_none() {
 		return Ok(())
 	} else if !key.starts_with(nib) {
-		return Err(VerifyError::NonExistingValue(key))
+		return Err(0)//Err(VerifyError::NonExistingValue(key))
 	}
 	key.advance(nib.len());
 
@@ -237,7 +260,8 @@ where
 			process_node::<L>(None, encoded_node, key, expected_value, proof),
 		NodeHandle::Hash(plain_hash) => {
 			let new_root = decode_hash::<L::Hash>(plain_hash)
-				.ok_or(VerifyError::HashDecodeError(plain_hash))?;
+				// .ok_or(VerifyError::HashDecodeError(plain_hash))?;
+				.ok_or(6)?;
 			process_node::<L>(Some(&new_root), &proof[0], key, expected_value, &proof[1..])
 		},
 	}
@@ -250,14 +274,15 @@ fn process_nibbledbranch<'a, L>(
 	mut key: NibbleSlice<'a>,
 	expected_value: Option<&[u8]>,
 	proof: &'a [Vec<u8>],
-) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+// ) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+) -> Result<(), u8>
 where
 	L: TrieLayout,
 {
 	if !key.starts_with(&nib) && expected_value.is_none() {
 		return Ok(())
 	} else if !key.starts_with(&nib) && expected_value.is_some() {
-		return Err(VerifyError::NonExistingValue(key))
+		return Err(0)//Err(VerifyError::NonExistingValue(key))
 	}
 	key.advance(nib.len());
 
@@ -274,7 +299,8 @@ fn process_branch<'a, L>(
 	key: NibbleSlice<'a>,
 	expected_value: Option<&[u8]>,
 	proof: &'a [Vec<u8>],
-) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+// ) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+) -> Result<(), u8>
 where
 	L: TrieLayout,
 {
@@ -284,23 +310,27 @@ where
 		match_children::<L>(children, key, expected_value, proof)
 	}
 }
+
 fn match_children<'a, L>(
 	children: [Option<NodeHandle<'a>>; 16],
 	mut key: NibbleSlice<'a>,
 	expected_value: Option<&[u8]>,
 	proof: &'a [Vec<u8>],
-) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+// ) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+) -> Result<(), u8>
 where
 	L: TrieLayout,
 {
 	match children.get(key.at(0) as usize) {
 		Some(Some(NodeHandle::Hash(hash))) =>
 			if proof.is_empty() {
-				Err(VerifyError::IncompleteProof)
+				Err(3)//Err(VerifyError::IncompleteProof)
 			} else {
 				key.advance(1);
 				let new_root =
-					decode_hash::<L::Hash>(hash).ok_or(VerifyError::HashDecodeError(hash))?;
+					decode_hash::<L::Hash>(hash)
+					//   .ok_or(VerifyError::HashDecodeError(hash))?;
+					.ok_or(6)?;
 				process_node::<L>(Some(&new_root), &proof[0], key, expected_value, &proof[1..])
 			},
 		Some(Some(NodeHandle::Inline(encoded_node))) => {
@@ -311,7 +341,7 @@ where
 			if expected_value.is_none() {
 				Ok(())
 			} else {
-				Err(VerifyError::NonExistingValue(key))
+				Err(0)//Err(VerifyError::NonExistingValue(key))
 			},
 		None => panic!("key index is out of range in children array"),
 	}
@@ -322,35 +352,37 @@ fn match_value<'a, L>(
 	key: NibbleSlice<'a>,
 	expected_value: Option<&[u8]>,
 	proof: &'a [Vec<u8>],
-) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+// ) -> Result<(), VerifyError<'a, TrieHash<L>, CError<L>>>
+) -> Result<(), u8>
 where
 	L: TrieLayout,
 {
 	match (maybe_data, proof.first(), expected_value) {
 		(None, _, None) => Ok(()),
-		(None, _, Some(_)) => Err(VerifyError::NonExistingValue(key)),
+		(None, _, Some(_)) => Err(0),//Err(VerifyError::NonExistingValue(key)),
 		(Some(Value::Inline(inline_data)), _, Some(value)) =>
 			if inline_data == value {
 				Ok(())
 			} else {
-				Err(VerifyError::ValueMismatch(inline_data.to_vec()))
+				Err(2)//Err(VerifyError::ValueMismatch(inline_data.to_vec()))
 			},
 		(Some(Value::Inline(inline_data)), _, None) =>
-			Err(VerifyError::ExistingValue(inline_data.to_vec())),
+			Err(1),//Err(VerifyError::ExistingValue(inline_data.to_vec())),
 		(Some(Value::Node(plain_hash)), Some(next_proof_item), Some(value)) => {
 			let value_hash = L::Hash::hash(value);
 			let node_hash = decode_hash::<L::Hash>(plain_hash)
-				.ok_or(VerifyError::HashDecodeError(plain_hash))?;
+				// .ok_or(VerifyError::HashDecodeError(plain_hash))?;
+				.ok_or(6)?;
 			if node_hash != value_hash {
-				Err(VerifyError::HashMismatch(node_hash))
+				Err(4)//Err(VerifyError::HashMismatch(node_hash))
 			} else if next_proof_item != value {
-				Err(VerifyError::ValueMismatch(next_proof_item.to_vec()))
+				Err(2)//Err(VerifyError::ValueMismatch(next_proof_item.to_vec()))
 			} else {
 				Ok(())
 			}
 		},
-		(Some(Value::Node(_)), None, _) => Err(VerifyError::IncompleteProof),
+		(Some(Value::Node(_)), None, _) => Err(3),//Err(VerifyError::IncompleteProof),
 		(Some(Value::Node(_)), Some(proof_item), None) =>
-			Err(VerifyError::ExistingValue(proof_item.to_vec())),
+			Err(1),//Err(VerifyError::ExistingValue(proof_item.to_vec())),
 	}
 }
