@@ -5,16 +5,12 @@ edition = "2021"
 
 [dependencies]
 # ethereum-trie = { git = "https://github.com/polytope-labs/hyperbridge.git", tag= "v0.4.4"}
-serde = { version = "1.0.196", features = ["derive"], default-features = false }
+# serde = { version = "1.0.196", features = ["derive"], default-features = false }
+serde = { version = "1.0.196", features = ["derive"] }
 tiny-keccak = { git = "https://github.com/sp1-patches/tiny-keccak.git", branch = "patch-v2.0.2", features = ["keccak"] }
 
-
-
-
-
-trie-eip1186 = { git = "https://github.com/paritytech/trie.git", tag = "trie-db-v0.28.0" }
+trie-eip1186 = { git = "https://github.com/paritytech/trie.git", tag = "trie-db-v0.29.0" }
 primitive-types = { version = "0.12.0", default-features = false }
-
 trie-db = { version = "0.28.0", default-features = false }
 hash-db = { version = "0.16.0", default-features = false }
 rlp = { version = "0.5.1", default-features = false }
