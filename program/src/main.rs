@@ -19,11 +19,10 @@ sp1_zkvm::entrypoint!(main);
 use ark_bn254::Fr;
 use ark_ff::{BigInteger, PrimeField};
 // use ethereum_trie::{keccak::KeccakHasher, EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256};
-// use crate::{EIP1186Layout, KeccakHasher};
 use light_poseidon::{Poseidon, PoseidonHasher};
-use sp1_safe_basics::{keccak256, lpad_bytes32, Inputs, EIP1186Layout, KeccakHasher, verify_proof, H256};
-// use trie_eip1186::verify_proof;
-// use primitive_types::H256;
+use sp1_safe_basics::{
+    keccak256, lpad_bytes32, verify_proof, EIP1186Layout, Inputs, KeccakHasher, H256,
+};
 
 pub fn main() {
     let inputs = sp1_zkvm::io::read::<Inputs>();
@@ -39,12 +38,14 @@ pub fn main() {
     //     .expect("target storage node is none");
     // // Safe's SignMessageLib marks messages as "signed" with a literal 1
     // assert_eq!(storage_val[0], 1u8, "msg not signed");
-    //
-    // root: &<L::Hash as Hasher>::Out,
-	// proof: &'a [Vec<u8>],
-	// raw_key: &'a [u8],
-	// expected_value: Option<&[u8]>,
-    verify_proof::<EIP1186Layout<KeccakHasher>>(&storage_root, &inputs.storage_proof, &inputs.storage_trie_key, Some(&[1u8])).ok().unwrap(); //FIXME .expect("invalid storage proof");
+    verify_proof::<EIP1186Layout<KeccakHasher>>(
+        &storage_root,
+        &inputs.storage_proof,
+        &inputs.storage_trie_key,
+        Some(&[1u8]),
+    )
+    .ok()
+    .unwrap(); //FIXME .expect("invalid storage proof");
 
     // verify account proof ~ state_root
     let state_root = H256(inputs.state_root);
@@ -67,7 +68,7 @@ pub fn main() {
     let mut poseidon = Poseidon::<Fr>::new_circom(2).expect("poseidon init failed");
     // _mod_order might reduce fr2 i.e. it has 2 msg_hash preimages aka collision;
     // since the 20-byte Safe address cannot exceed bn254's scalar field _mod_order
-    // is always a noop for fr1, i.e. it has strictly 1 Safe address preimage: 
+    // is always a noop for fr1, i.e. it has strictly 1 Safe address preimage:
     // no collisions; consequently "cross-account" collisions can never occur
     let fr1 = Fr::from_be_bytes_mod_order(&lpad_bytes32(inputs.safe_address));
     let fr2 = Fr::from_be_bytes_mod_order(&inputs.msg_hash);
