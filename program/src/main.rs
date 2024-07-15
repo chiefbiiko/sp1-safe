@@ -21,9 +21,9 @@ use ark_ff::{BigInteger, PrimeField};
 // use ethereum_trie::{keccak::KeccakHasher, EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256};
 // use crate::{EIP1186Layout, KeccakHasher};
 use light_poseidon::{Poseidon, PoseidonHasher};
-use sp1_safe_basics::{keccak256, lpad_bytes32, Inputs, EIP1186Layout, KeccakHasher};
-use trie_eip1186::verify_proof;
-use primitive_types::H256;
+use sp1_safe_basics::{keccak256, lpad_bytes32, Inputs, EIP1186Layout, KeccakHasher, verify_proof, H256};
+// use trie_eip1186::verify_proof;
+// use primitive_types::H256;
 
 pub fn main() {
     let inputs = sp1_zkvm::io::read::<Inputs>();
@@ -44,7 +44,7 @@ pub fn main() {
 	// proof: &'a [Vec<u8>],
 	// raw_key: &'a [u8],
 	// expected_value: Option<&[u8]>,
-    verify_proof::<EIP1186Layout<KeccakHasher>>(&inputs.storage_root, &inputs.storage_proof, &inputs.storage_trie_key, Some(&[1u8])).expect("invalid storage proof");
+    verify_proof::<EIP1186Layout<KeccakHasher>>(&storage_root, &inputs.storage_proof, &inputs.storage_trie_key, Some(&[1u8])).ok().unwrap(); //FIXME .expect("invalid storage proof");
 
     // verify account proof ~ state_root
     let state_root = H256(inputs.state_root);
