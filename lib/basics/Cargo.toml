@@ -19,4 +19,3 @@ trie-db = { version = "0.28.0", default-features = false }
 hash-db = { version = "0.16.0", default-features = false }
 rlp = { version = "0.5.1", default-features = false }
 hash256-std-hasher = { version = "0.15.2" }
-# tiny-keccak = { git = "https://github.com/sp1-patches/tiny-keccak", branch = "patch-v2.0.2", features = ["keccak"] }

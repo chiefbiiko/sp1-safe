@@ -1,19 +1,6 @@
 use serde::{Deserialize, Serialize};
 use tiny_keccak::{Hasher, Keccak};
 
-extern crate alloc;
-
-use core::marker::PhantomData;
-// use hash_db::Hasher;
-use trie_db::TrieLayout;
-use primitive_types::H256;
-use hash256_std_hasher::Hash256StdHasher;
-// use tiny_keccak::{Hasher as TinyKeccakHasher, Keccak};
-
-mod node_codec;
-
-// pub use ethereum_trie::EIP1186Layout;
-
 pub const SAFE_SIGNED_MESSAGES_SLOT: [u8; 32] = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7,
 ];
@@ -66,29 +53,18 @@ pub fn keccak256<T: AsRef<[u8]>>(input: T) -> [u8; 32] {
     out
 }
 
-// /// Trie layout for EIP-1186 state proof nodes.
-// #[derive(Default, Clone)]
-// pub struct EIP1186Layout<H>(PhantomData<H>);
-
-// impl<H: Hasher<Out = H256>> TrieLayout for EIP1186Layout<H> {
-//     const USE_EXTENSION: bool = true;
-//     const ALLOW_EMPTY: bool = false;
-//     const MAX_INLINE_VALUE: Option<u32> = None;
-//     type Hash = H;
-//     type Codec = node_codec::RlpNodeCodec<H>;
-// }
-
 //WIP
 
+extern crate alloc;
+
+use core::marker::PhantomData;
+use trie_db::TrieLayout;
+use primitive_types::H256;
+use hash256_std_hasher::Hash256StdHasher;
+
+mod node_codec;
+
 // #![cfg_attr(not(feature = "std"), no_std)]
-
-
-// #[cfg(test)]
-// mod tests;
-
-// pub use primitive_types::H256;
-// pub use storage_proof::{MemoryDB, StorageProof};
-// pub use trie_db::{Trie, TrieDBBuilder};
 
 /// Trie layout for EIP-1186 state proof nodes.
 #[derive(Default, Clone)]
