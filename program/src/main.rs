@@ -18,34 +18,46 @@ sp1_zkvm::entrypoint!(main);
 
 use ark_bn254::Fr;
 use ark_ff::{BigInteger, PrimeField};
-use ethereum_trie::{keccak::KeccakHasher, EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256};
+// use ethereum_trie::{keccak::KeccakHasher, EIP1186Layout, StorageProof, Trie, TrieDBBuilder, H256};
+// use crate::{EIP1186Layout, KeccakHasher};
 use light_poseidon::{Poseidon, PoseidonHasher};
-use sp1_safe_basics::{keccak256, lpad_bytes32, Inputs};
+use sp1_safe_basics::{keccak256, lpad_bytes32, Inputs, EIP1186Layout, KeccakHasher};
+use trie_eip1186::verify_proof;
+use primitive_types::H256;
 
 pub fn main() {
     let inputs = sp1_zkvm::io::read::<Inputs>();
 
     // verify storage proof ~ storage_root
     let storage_root = H256(inputs.storage_root);
-    let storage_db = StorageProof::new(inputs.storage_proof).into_memory_db::<KeccakHasher>();
-    let storage_trie =
-        TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&storage_db, &storage_root).build();
-    let storage_val = storage_trie
-        .get(&inputs.storage_trie_key)
-        .expect("storage trie read failed")
-        .expect("target storage node is none");
-    // Safe's SignMessageLib marks messages as "signed" with a literal 1
-    assert_eq!(storage_val[0], 1u8, "msg not signed");
+    // let storage_db = StorageProof::new(inputs.storage_proof).into_memory_db::<KeccakHasher>();
+    // let storage_trie =
+    //     TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&storage_db, &storage_root).build();
+    // let storage_val = storage_trie
+    //     .get(&inputs.storage_trie_key)
+    //     .expect("storage trie read failed")
+    //     .expect("target storage node is none");
+    // // Safe's SignMessageLib marks messages as "signed" with a literal 1
+    // assert_eq!(storage_val[0], 1u8, "msg not signed");
+    //
+    // root: &<L::Hash as Hasher>::Out,
+	// proof: &'a [Vec<u8>],
+	// raw_key: &'a [u8],
+	// expected_value: Option<&[u8]>,
+    verify_proof::<EIP1186Layout<KeccakHasher>>(&inputs.storage_root, &inputs.storage_proof, &inputs.storage_trie_key, Some(&[1u8])).expect("invalid storage proof");
 
     // verify account proof ~ state_root
     let state_root = H256(inputs.state_root);
-    let state_db = StorageProof::new(inputs.account_proof).into_memory_db::<KeccakHasher>();
-    let state_trie =
-        TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&state_db, &state_root).build();
-    let proof_ok = state_trie
-        .contains(&inputs.state_trie_key)
-        .expect("account check failed");
-    assert!(proof_ok, "storage proof verification failed");
+    // let state_db = StorageProof::new(inputs.account_proof).into_memory_db::<KeccakHasher>();
+    // let state_trie =
+    //     TrieDBBuilder::<EIP1186Layout<KeccakHasher>>::new(&state_db, &state_root).build();
+    // let proof_ok = state_trie
+    //     .contains(&inputs.state_trie_key)
+    //     .expect("account check failed");
+    // assert!(proof_ok, "storage proof verification failed");
+    //TODO
+    // let expected_value = vec![]
+    // verify_proof(state_root, inputs.account_proof, inputs.state_trie_key, Some(vec![1u8])).expect("invalid storage proof");
 
     // recalc blockhash using header_rlp incl proven state_root
     let mut header_rlp = inputs.header_rlp;
